@@ -11,6 +11,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initDynamicExperience();
   initInteractiveCursor();
   initParticleCanvas();
   initThemeToggle();
@@ -627,3 +628,52 @@ function initBackToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
+
+/* ==========================================================================
+   13. DYNAMIC REAL-TIME CAREER EXPERIENCE CALCULATOR
+   ========================================================================== */
+function initDynamicExperience() {
+  // Career started November 2021 (AL-Mugni Information & Tech - ISP Operations)
+  const careerStartDate = new Date('2021-11-01');
+  const now = new Date();
+
+  // Total months difference
+  let totalMonths = (now.getFullYear() - careerStartDate.getFullYear()) * 12 + (now.getMonth() - careerStartDate.getMonth());
+  if (now.getDate() < careerStartDate.getDate()) {
+    totalMonths = Math.max(0, totalMonths - 1);
+  }
+
+  const rawYears = totalMonths / 12;
+  const exactYears = Math.max(4.0, parseFloat(rawYears.toFixed(1)));
+  const shortExp = `${exactYears}+`;
+  const textExp = `${exactYears}+ Years`;
+  const summaryExp = `${exactYears}+ years of experience`;
+  const badgeExp = `(${exactYears}+ Years)`;
+
+  // 1. Update counter target attribute before counter animation runs
+  const expCounter = document.querySelector('.dynamic-exp-counter');
+  if (expCounter) {
+    expCounter.setAttribute('data-target', exactYears.toString());
+  }
+
+  // 2. Update short labels (e.g. Hero Live Status Badge, Section 7 description)
+  document.querySelectorAll('.dynamic-exp-short').forEach(el => {
+    el.textContent = shortExp;
+  });
+
+  // 3. Update full text labels
+  document.querySelectorAll('.dynamic-exp-text').forEach(el => {
+    el.textContent = textExp;
+  });
+
+  // 4. Update CV Professional Summary
+  document.querySelectorAll('.dynamic-exp-summary').forEach(el => {
+    el.textContent = summaryExp;
+  });
+
+  // 5. Update CV Work Experience Header badge
+  document.querySelectorAll('.dynamic-exp-badge').forEach(el => {
+    el.textContent = badgeExp;
+  });
+}
+
