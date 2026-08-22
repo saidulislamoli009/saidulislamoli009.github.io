@@ -68,6 +68,17 @@ html:not(.dark) {
   --grid-line: rgba(15, 23, 42, 0.06);
 }
 
+/* Custom Selection Highlighting */
+::selection {
+  background: rgba(245, 158, 11, 0.45) !important;
+  color: #ffffff !important;
+}
+
+html:not(.dark) ::selection {
+  background: #fde68a !important;
+  color: #78350f !important;
+}
+
 /* Base Styles */
 html {
   scroll-behavior: smooth;
@@ -726,11 +737,55 @@ html:not(.dark) .border-white\/5 {
   border-color: rgba(226, 232, 240, 0.9) !important;
 }
 
-/* All Section & Container Dark Background Resets for Light Mode */
-html:not(.dark) section,
-html:not(.dark) section.bg-\[\#030610\],
-html:not(.dark) section.bg-\[\#070912\],
-html:not(.dark) section.bg-\[\#05070e\],
+/* ==========================================================================
+   ALTERNATING SECTION RHYTHM & THEME STYLING
+   ========================================================================== */
+
+/* 1. Clear / Transparent Background Sections (Hero, ERP Modules, Mobile Apps, Education) */
+#home,
+#erp-core,
+#apps,
+#education,
+html.dark #home,
+html.dark #erp-core,
+html.dark #apps,
+html.dark #education,
+html:not(.dark) #home,
+html:not(.dark) #erp-core,
+html:not(.dark) #apps,
+html:not(.dark) #education {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-top: 1px solid transparent !important;
+  border-bottom: 1px solid transparent !important;
+}
+
+/* 2. Blurry Frosted Glass Sections in Dark / Night Mode (Competencies, Networking, Experience, Contact) */
+html.dark #competencies,
+html.dark #networking,
+html.dark #experience,
+html.dark #contact {
+  background: rgba(6, 10, 22, 0.48) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* 3. Blurry Frosted Glass Sections in Light Mode (Competencies, Networking, Experience, Contact) */
+html:not(.dark) #competencies,
+html:not(.dark) #networking,
+html:not(.dark) #experience,
+html:not(.dark) #contact {
+  background: rgba(255, 255, 255, 0.52) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  border-top: 1px solid rgba(226, 232, 240, 0.90) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.90) !important;
+}
+
+/* 4. Global Dark Background Hex Resets */
 html:not(.dark) .bg-\[\#030610\],
 html:not(.dark) .bg-\[\#070912\],
 html:not(.dark) .bg-\[\#05070e\],
@@ -752,38 +807,45 @@ html:not(.dark) .bg-bg-deep {
   background-color: transparent !important;
 }
 
-html:not(.dark) section {
-  border-color: rgba(226, 232, 240, 0.6) !important;
+/* 5. Cards & Modules in Dark Mode */
+html.dark .competency-card,
+html.dark .bento-card,
+html.dark .erp-spec-card {
+  background: rgba(10, 16, 32, 0.55) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.12) !important;
 }
 
-/* Sections with subtle glass frosting in Light Mode */
-html:not(.dark) section.bg-\[\#030610\],
-html:not(.dark) section.bg-\[\#070912\],
-html:not(.dark) section.bg-\[\#05070e\] {
-  background: rgba(255, 255, 255, 0.45) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border-color: rgba(226, 232, 240, 0.8) !important;
+html.dark .competency-card:hover,
+html.dark .bento-card:hover,
+html.dark .erp-spec-card:hover {
+  background: rgba(16, 25, 48, 0.75) !important;
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  box-shadow: 0 20px 50px -10px rgba(245, 158, 11, 0.22), 0 0 25px rgba(245, 158, 11, 0.12), inset 0 1px 0 0 rgba(245, 158, 11, 0.25) !important;
 }
 
-/* Competency & Bento Cards in Light Mode */
+/* 6. Cards & Modules in Light Mode */
 html:not(.dark) .competency-card,
-html:not(.dark) .bento-card {
-  background: rgba(255, 255, 255, 0.82) !important;
+html:not(.dark) .bento-card,
+html:not(.dark) .erp-spec-card {
+  background: rgba(255, 255, 255, 0.85) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
-  border-color: rgba(226, 232, 240, 0.9) !important;
+  border: 1px solid rgba(226, 232, 240, 0.95) !important;
   box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(15, 23, 42, 0.03) !important;
 }
 
 html:not(.dark) .competency-card:hover,
-html:not(.dark) .bento-card:hover {
+html:not(.dark) .bento-card:hover,
+html:not(.dark) .erp-spec-card:hover {
   background: #ffffff !important;
   border-color: rgba(217, 119, 6, 0.5) !important;
   box-shadow: 0 20px 45px -10px rgba(217, 119, 6, 0.22), 0 4px 12px rgba(15, 23, 42, 0.06) !important;
 }
 
-/* Pill badges & chip items inside cards in Light Mode */
+/* 7. Badges, Text & Inputs in Light Mode */
 html:not(.dark) .competency-card span.bg-white\/\[0\.04\],
 html:not(.dark) .bento-card span.bg-white\/5,
 html:not(.dark) .bento-card span.bg-white\/10,
@@ -795,8 +857,13 @@ html:not(.dark) span.bg-white\/10 {
   color: #334155 !important;
 }
 
-html:not(.dark) span.text-slate-200 {
-  color: #1e293b !important;
+html:not(.dark) span.text-slate-200,
+html:not(.dark) p.text-slate-300 {
+  color: #334155 !important;
+}
+
+html:not(.dark) p.text-slate-400 {
+  color: #475569 !important;
 }
 
 html:not(.dark) input,
@@ -855,42 +922,7 @@ html:not(.dark) .shadow-2xl {
   box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.12) !important;
 }
 
-/* ==========================================================================
-   NIGHT / DARK MODE TRANSLUCENT FROSTED GLASS & LIVING AURA
-   ========================================================================== */
-html.dark section,
-html.dark section.bg-\[\#030610\],
-html.dark section.bg-\[\#05070e\],
-html.dark section.bg-\[\#040508\],
-html.dark section.bg-\[\#060810\],
-html.dark section.bg-\[\#070912\],
-html.dark section.bg-\[\#04060c\],
-html.dark section.bg-\[\#03050a\],
-html.dark section.bg-\[\#0a0d18\] {
-  background: rgba(6, 10, 22, 0.42) !important;
-  backdrop-filter: blur(28px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-html.dark .competency-card,
-html.dark .bento-card,
-html.dark .erp-spec-card {
-  background: rgba(10, 16, 32, 0.52) !important;
-  backdrop-filter: blur(24px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.10) !important;
-  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.12) !important;
-}
-
-html.dark .competency-card:hover,
-html.dark .bento-card:hover,
-html.dark .erp-spec-card:hover {
-  background: rgba(16, 25, 48, 0.72) !important;
-  border-color: rgba(245, 158, 11, 0.45) !important;
-  box-shadow: 0 20px 50px -10px rgba(245, 158, 11, 0.22), 0 0 25px rgba(245, 158, 11, 0.12), inset 0 1px 0 0 rgba(245, 158, 11, 0.25) !important;
-}
-
+/* 8. Sub-Containers in Dark Mode */
 html.dark [class*="via-[#0a0e1a]"] {
   background: linear-gradient(180deg, rgba(13, 20, 38, 0.65) 0%, rgba(8, 13, 26, 0.45) 100%) !important;
   backdrop-filter: blur(20px) !important;
