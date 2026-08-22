@@ -1,0 +1,603 @@
+/* ==========================================================================
+   SAIDUL ISLAM - SIGNATURE BESPOKE EXECUTIVE PORTFOLIO DESIGN SYSTEM
+   Unique Aesthetic: Deep Cosmic Obsidian, Prismatic Solar Amber & Electric Cyan
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* Default Dark Mode (Cosmic Obsidian & Solar Amber) */
+html.dark,
+:root {
+  --bg-deep: #020409;
+  --bg-surface: #060913;
+  --bg-section: #040710;
+  --bg-card: rgba(8, 13, 26, 0.78);
+  --bg-card-hover: rgba(13, 21, 40, 0.92);
+
+  --primary: #f59e0b;
+  --primary-glow: rgba(245, 158, 11, 0.45);
+  --accent-cyan: #00f0ff;
+  --accent-cyan-glow: rgba(0, 240, 255, 0.4);
+  --accent-indigo: #6366f1;
+  --accent-emerald: #10b981;
+  --accent-rose: #f43f5e;
+
+  --border-glass: rgba(255, 255, 255, 0.09);
+  --border-glass-hover: rgba(245, 158, 11, 0.55);
+
+  --text-heading: #ffffff;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  --nav-bg: rgba(4, 7, 15, 0.85);
+  --nav-border: rgba(255, 255, 255, 0.12);
+  --card-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  --card-shadow-hover: 0 25px 60px -12px rgba(245, 158, 11, 0.22), inset 0 1px 0 0 rgba(245, 158, 11, 0.5);
+  --grid-line: rgba(255, 255, 255, 0.035);
+}
+
+/* Light Mode (Platinum Ice & Imperial Gold) */
+html:not(.dark) {
+  --bg-deep: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-section: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, 0.90);
+  --bg-card-hover: #ffffff;
+
+  --primary: #d97706;
+  --primary-glow: rgba(217, 119, 6, 0.25);
+  --accent-cyan: #0284c7;
+  --accent-cyan-glow: rgba(2, 132, 199, 0.25);
+  --accent-indigo: #4f46e5;
+  --accent-emerald: #059669;
+  --accent-rose: #e11d48;
+
+  --border-glass: rgba(0, 0, 0, 0.08);
+  --border-glass-hover: rgba(217, 119, 6, 0.4);
+
+  --text-heading: #0f172a;
+  --text-main: #1e293b;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+
+  --nav-bg: rgba(255, 255, 255, 0.90);
+  --nav-border: rgba(0, 0, 0, 0.08);
+  --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --card-shadow-hover: 0 20px 45px -10px rgba(217, 119, 6, 0.15), 0 2px 6px rgba(0, 0, 0, 0.06);
+  --grid-line: rgba(0, 0, 0, 0.035);
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  overflow-x: hidden;
+  position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+  font-family: 'Outfit', sans-serif;
+}
+
+.font-mono-code {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom Interactive Cursor Canvas */
+#cursor-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99;
+}
+
+/* Custom Interactive Cursor Dot & Ring */
+#custom-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: #f59e0b;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background-color 0.2s;
+  box-shadow: 0 0 12px #f59e0b, 0 0 24px #f59e0b;
+}
+
+#custom-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(245, 158, 11, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease-out, height 0.25s ease-out, border-color 0.25s ease-out, background-color 0.25s;
+  backdrop-filter: blur(1px);
+}
+
+body.cursor-hover #custom-cursor-dot {
+  width: 12px;
+  height: 12px;
+  background: #00f0ff;
+  box-shadow: 0 0 15px #00f0ff;
+}
+
+body.cursor-hover #custom-cursor-ring {
+  width: 54px;
+  height: 54px;
+  border-color: #00f0ff;
+  background: rgba(0, 240, 255, 0.08);
+}
+
+/* Unique Multidimensional Signature Gradients */
+.gradient-text-primary,
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 35%, #00f0ff 85%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html:not(.dark) .gradient-text-primary,
+html:not(.dark) .text-gradient-cyan {
+  background: linear-gradient(135deg, #d97706 0%, #ea580c 45%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Ambient Cosmic Background */
+.aurora-bg {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(245, 158, 11, 0.20), transparent),
+    radial-gradient(circle at 10% 25%, rgba(0, 240, 255, 0.15), transparent 50%),
+    radial-gradient(circle at 90% 45%, rgba(99, 102, 241, 0.16), transparent 50%),
+    radial-gradient(circle at 20% 75%, rgba(244, 63, 94, 0.10), transparent 45%),
+    radial-gradient(circle at 80% 90%, rgba(16, 185, 129, 0.12), transparent 50%);
+}
+
+.grid-matrix {
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.07) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+/* Bento Card Design with Prismatic Refraction */
+.bento-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--card-shadow);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bento-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+  transform: skewX(-25deg);
+  transition: left 0.75s ease;
+  pointer-events: none;
+}
+
+.bento-card:hover::after {
+  left: 150%;
+}
+
+.bento-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-glass-hover);
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* Signature Gradient Buttons */
+.btn-signature-cyan,
+.btn-primary-orange {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  color: #050811;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 25px rgba(245, 158, 11, 0.4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-signature-cyan:hover,
+.btn-primary-orange:hover {
+  background: linear-gradient(135deg, #fde68a 0%, #fbbf24 50%, #f59e0b 100%);
+  box-shadow: 0 8px 35px rgba(245, 158, 11, 0.65);
+  transform: translateY(-2px) scale(1.03);
+  color: #000000;
+}
+
+/* Competency Interactive Matrix Card */
+.competency-card {
+  background: rgba(8, 13, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 1.25rem;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.competency-card:hover {
+  background: rgba(13, 20, 38, 0.90);
+  transform: translateY(-5px);
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7), 0 0 25px -5px rgba(245, 158, 11, 0.2);
+}
+
+.competency-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.competency-card:hover::before {
+  opacity: 1;
+}
+
+.btn-ghost-glass {
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-weight: 600;
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(16px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-ghost-glass:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 25px var(--primary-glow);
+}
+
+/* Orbit Animations */
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes reverseSpinSlow {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-orbit {
+  animation: spinSlow 35s linear infinite;
+}
+
+.animate-orbit-reverse {
+  animation: reverseSpinSlow 25s linear infinite;
+}
+
+@keyframes floatGentle {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float-1 {
+  animation: floatGentle 4s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: floatGentle 5s ease-in-out infinite 1s;
+}
+
+.animate-float-3 {
+  animation: floatGentle 4.5s ease-in-out infinite 0.5s;
+}
+
+/* Scroll Reveal */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-on-scroll.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Interactive Glowing Laser Timeline */
+.experience-vertical-timeline {
+  position: relative;
+}
+
+.experience-vertical-timeline::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+}
+
+.timeline-laser-track {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 50%;
+  width: 3px;
+  margin-left: -1.5px;
+  background: linear-gradient(180deg,
+      transparent 0%,
+      #f59e0b 20%,
+      #fbbf24 40%,
+      #00f0ff 60%,
+      #6366f1 80%,
+      transparent 100%);
+  background-size: 100% 300%;
+  animation: laserStream 3.5s linear infinite;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.9), 0 0 35px rgba(0, 240, 255, 0.5);
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes laserStream {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 0% 300%;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .experience-vertical-timeline::before,
+  .timeline-laser-track {
+    left: 24px;
+  }
+}
+
+.timeline-node {
+  position: absolute;
+  left: 50%;
+  top: 32px;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg-deep);
+  border: 3px solid #f59e0b;
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.95), inset 0 0 8px rgba(245, 158, 11, 0.6);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-node::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00f0ff;
+  box-shadow: 0 0 12px #00f0ff;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.6);
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 768px) {
+  .timeline-node {
+    left: 24px;
+  }
+}
+
+/* Modal */
+.modal-backdrop {
+  background: rgba(3, 5, 10, 0.92);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+}
+
+/* ==========================================================================
+   EXECUTIVE CV DOCUMENT STYLING & PERFECT 2-PAGE A4 EXPORT
+   ========================================================================== */
+#printable-cv-area {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  line-height: 1.45;
+}
+
+#printable-cv-area h1,
+#printable-cv-area h2,
+#printable-cv-area h3,
+/* ==========================================================================
+   Printable CV & html2pdf Strict 2-Page Engine Styles
+   ========================================================================== */
+#printable-cv-area {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: none !important;
+}
+
+#printable-cv-area h4,
+#printable-cv-area h5 {
+  color: #0f172a !important;
+  font-family: 'Outfit', sans-serif;
+}
+
+#printable-cv-area .avoid-break {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+.cv-page {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 7mm 10mm 5mm 10mm;
+  background: #ffffff;
+  min-height: 282mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.html2pdf__page-break {
+  page-break-before: always !important;
+  break-before: page !important;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Print Stylesheet */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #1e293b !important;
+    font-size: 9pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  header,
+  footer,
+  main,
+  #contact,
+  .no-print,
+  #back-to-top-btn,
+  #floating-theme-toggle,
+  #bio-modal,
+  #app-lightbox-modal,
+  #mobile-nav-menu,
+  #cursor-canvas,
+  #custom-cursor-dot,
+  #custom-cursor-ring {
+    display: none !important;
+  }
+
+  #resume-modal {
+    position: static !important;
+    display: block !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  #resume-modal>div {
+    max-width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+
+  #printable-cv-area {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #print-cv-btn,
+  #download-cv-pdf-btn,
+  #close-resume-btn {
+    display: none !important;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .html2pdf__page-break {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+}
