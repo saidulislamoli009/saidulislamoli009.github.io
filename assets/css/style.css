@@ -205,26 +205,72 @@ html:not(.dark) .text-gradient-cyan {
 
 html:not(.dark) .aurora-bg {
   background-image:
-    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(251, 191, 36, 0.35), transparent 60%),
-    radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.28), transparent 50%),
-    radial-gradient(circle at 90% 35%, rgba(192, 132, 252, 0.26), transparent 50%),
-    radial-gradient(circle at 20% 70%, rgba(251, 113, 133, 0.20), transparent 45%),
-    radial-gradient(circle at 85% 85%, rgba(52, 211, 153, 0.25), transparent 50%),
-    linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f8fafc 100%);
+    radial-gradient(ellipse 95% 65% at 50% -10%, rgba(251, 191, 36, 0.45), transparent 60%),
+    radial-gradient(circle at 10% 15%, rgba(56, 189, 248, 0.40), transparent 50%),
+    radial-gradient(circle at 90% 25%, rgba(192, 132, 252, 0.42), transparent 50%),
+    radial-gradient(circle at 25% 60%, rgba(251, 113, 133, 0.35), transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(52, 211, 153, 0.38), transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(244, 114, 182, 0.32), transparent 50%),
+    linear-gradient(135deg, #faf5ff 0%, #f0fdf4 35%, #ecfeff 70%, #fffbeb 100%);
   background-attachment: fixed;
-  animation: auroraFlowLight 20s ease-in-out infinite alternate;
+  animation: auroraFlowLight 14s ease-in-out infinite alternate;
 }
 
 @keyframes auroraFlowLight {
   0% {
-    filter: hue-rotate(0deg) saturate(1.1);
+    filter: hue-rotate(0deg) saturate(1.2);
   }
   50% {
-    filter: hue-rotate(18deg) saturate(1.25);
+    filter: hue-rotate(25deg) saturate(1.4);
   }
   100% {
-    filter: hue-rotate(-15deg) saturate(1.15);
+    filter: hue-rotate(-20deg) saturate(1.25);
   }
+}
+
+/* Glassy Luxury Floating Navbar */
+header {
+  background: rgba(7, 11, 20, 0.78) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 0 rgba(255, 255, 255, 0.15) !important;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+header:hover {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  box-shadow: 0 20px 50px -10px rgba(245, 158, 11, 0.22), 0 0 25px rgba(245, 158, 11, 0.15), inset 0 1px 0 0 rgba(245, 158, 11, 0.35) !important;
+}
+
+header nav a {
+  position: relative;
+  padding: 6px 12px;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+}
+
+header nav a:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--primary) !important;
+}
+
+html:not(.dark) header {
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 16px 40px -10px rgba(217, 119, 6, 0.14), 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+html:not(.dark) header:hover {
+  border-color: rgba(217, 119, 6, 0.5) !important;
+  box-shadow: 0 20px 50px -10px rgba(217, 119, 6, 0.25), 0 0 25px rgba(217, 119, 6, 0.15), inset 0 1px 0 0 rgba(217, 119, 6, 0.4) !important;
+}
+
+html:not(.dark) header nav a:hover {
+  background: rgba(217, 119, 6, 0.08);
+  color: #d97706 !important;
 }
 
 .grid-matrix {
@@ -680,12 +726,14 @@ html:not(.dark) .border-white\/5 {
   border-color: rgba(226, 232, 240, 0.9) !important;
 }
 
-html:not(.dark) .bg-white\/\[0\.04\],
-html:not(.dark) .bg-white\/5,
-html:not(.dark) .bg-white\/10 {
-  background-color: rgba(241, 245, 249, 0.85) !important;
-}
-
+/* All Section & Container Dark Background Resets for Light Mode */
+html:not(.dark) section,
+html:not(.dark) section.bg-\[\#030610\],
+html:not(.dark) section.bg-\[\#070912\],
+html:not(.dark) section.bg-\[\#05070e\],
+html:not(.dark) .bg-\[\#030610\],
+html:not(.dark) .bg-\[\#070912\],
+html:not(.dark) .bg-\[\#05070e\],
 html:not(.dark) .bg-\[\#070b14\],
 html:not(.dark) .bg-\[\#0a0e1a\],
 html:not(.dark) .bg-\[\#090d17\],
@@ -694,8 +742,61 @@ html:not(.dark) .bg-\[\#040710\],
 html:not(.dark) .bg-\[\#060913\],
 html:not(.dark) .bg-\[\#0b101e\],
 html:not(.dark) .bg-\[\#0d1424\],
-html:not(.dark) .bg-\[\#0f172a\] {
-  background-color: rgba(255, 255, 255, 0.88) !important;
+html:not(.dark) .bg-\[\#0f172a\],
+html:not(.dark) .bg-\[\#0b0f19\],
+html:not(.dark) .bg-\[\#090d18\],
+html:not(.dark) .bg-\[\#0a0d18\],
+html:not(.dark) .bg-\[\#06080e\],
+html:not(.dark) .bg-\[\#040508\],
+html:not(.dark) .bg-bg-deep {
+  background-color: transparent !important;
+}
+
+html:not(.dark) section {
+  border-color: rgba(226, 232, 240, 0.6) !important;
+}
+
+/* Sections with subtle glass frosting in Light Mode */
+html:not(.dark) section.bg-\[\#030610\],
+html:not(.dark) section.bg-\[\#070912\],
+html:not(.dark) section.bg-\[\#05070e\] {
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-color: rgba(226, 232, 240, 0.8) !important;
+}
+
+/* Competency & Bento Cards in Light Mode */
+html:not(.dark) .competency-card,
+html:not(.dark) .bento-card {
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(15, 23, 42, 0.03) !important;
+}
+
+html:not(.dark) .competency-card:hover,
+html:not(.dark) .bento-card:hover {
+  background: #ffffff !important;
+  border-color: rgba(217, 119, 6, 0.5) !important;
+  box-shadow: 0 20px 45px -10px rgba(217, 119, 6, 0.22), 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Pill badges & chip items inside cards in Light Mode */
+html:not(.dark) .competency-card span.bg-white\/\[0\.04\],
+html:not(.dark) .bento-card span.bg-white\/5,
+html:not(.dark) .bento-card span.bg-white\/10,
+html:not(.dark) span.bg-white\/\[0\.04\],
+html:not(.dark) span.bg-white\/5,
+html:not(.dark) span.bg-white\/10 {
+  background-color: rgba(241, 245, 249, 0.95) !important;
+  border-color: rgba(226, 232, 240, 0.95) !important;
+  color: #334155 !important;
+}
+
+html:not(.dark) span.text-slate-200 {
+  color: #1e293b !important;
 }
 
 html:not(.dark) input,
@@ -733,6 +834,16 @@ html:not(.dark) #app-lightbox-modal > div {
 html:not(.dark) #bio-modal .bg-\[\#06080e\] {
   background-color: #f1f5f9 !important;
   border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) [class*="via-[#0a0e1a]"] {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.8) 100%) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+}
+
+html:not(.dark) .aspect-\[9\/16\] {
+  background: #ffffff !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
 }
 
 html:not(.dark) footer {
