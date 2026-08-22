@@ -26,45 +26,71 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================================================
-   1. INTERACTIVE MOUSE CURSOR & TRAILING RING
+   1. INTERACTIVE MOUSE CURSOR, TRAILING RING & AMBIENT SPOTLIGHT
    ========================================================================== */
 function initInteractiveCursor() {
-  // Check if touch device; skip custom cursor if touch-only
-  if (window.matchMedia('(pointer: coarse)').matches) return;
-
-  const dot = document.createElement('div');
-  dot.id = 'custom-cursor-dot';
-  const ring = document.createElement('div');
-  ring.id = 'custom-cursor-ring';
-
-  document.body.appendChild(dot);
-  document.body.appendChild(ring);
+  const glowMesh = document.getElementById('mouse-glow-mesh');
 
   let mouseX = window.innerWidth / 2;
   let mouseY = window.innerHeight / 2;
+  let glowX = mouseX;
+  let glowY = mouseY;
+
+  // Check if touch device; skip custom cursor if touch-only
+  const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+  let dot = null;
+  let ring = null;
   let ringX = mouseX;
   let ringY = mouseY;
+
+  if (!isTouch) {
+    dot = document.createElement('div');
+    dot.id = 'custom-cursor-dot';
+    ring = document.createElement('div');
+    ring.id = 'custom-cursor-ring';
+
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+  }
 
   window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-    dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+
+    if (dot) {
+      dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+    }
   });
 
-  function renderRing() {
-    ringX += (mouseX - ringX) * 0.18;
-    ringY += (mouseY - ringY) * 0.18;
-    ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
-    requestAnimationFrame(renderRing);
+  function renderAnimationLoop() {
+    // Smooth lerp for background ambient spotlight
+    glowX += (mouseX - glowX) * 0.08;
+    glowY += (mouseY - glowY) * 0.08;
+    
+    if (glowMesh) {
+      glowMesh.style.setProperty('--mouse-x', `${glowX}px`);
+      glowMesh.style.setProperty('--mouse-y', `${glowY}px`);
+    }
+
+    if (ring && !isTouch) {
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+    }
+
+    requestAnimationFrame(renderAnimationLoop);
   }
-  renderRing();
+  renderAnimationLoop();
 
-  // Hover detection over interactive elements
-  const hoverTargets = document.querySelectorAll('a, button, input, textarea, .bento-card, .app-preview-trigger, .theme-toggle-btn');
-  hoverTargets.forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-  });
+  if (!isTouch) {
+    // Hover detection over interactive elements
+    const hoverTargets = document.querySelectorAll('a, button, input, textarea, .bento-card, .app-preview-trigger, .theme-toggle-btn');
+    hoverTargets.forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+  }
 }
 
 /* ==========================================================================
@@ -124,12 +150,16 @@ function initParticleCanvas() {
     }
 
     draw() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const goldColor = isDark ? '#f59e0b' : '#d97706';
+      const cyanColor = isDark ? '#00f0ff' : '#0284c7';
+
       ctx.save();
       ctx.globalAlpha = Math.max(0, this.life);
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = this.isGold ? '#f59e0b' : '#00f0ff';
-      ctx.shadowColor = this.isGold ? '#f59e0b' : '#00f0ff';
+      ctx.fillStyle = this.isGold ? goldColor : cyanColor;
+      ctx.shadowColor = this.isGold ? goldColor : cyanColor;
       ctx.shadowBlur = 8;
       ctx.fill();
       ctx.restore();
@@ -138,6 +168,7 @@ function initParticleCanvas() {
 
   function animate() {
     ctx.clearRect(0, 0, width, height);
+    const isDark = document.documentElement.classList.contains('dark');
 
     for (let i = 0; i < particles.length; i++) {
       particles[i].update();
@@ -154,9 +185,15 @@ function initParticleCanvas() {
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = particles[i].isGold 
+          
+          const goldRgba = isDark 
             ? `rgba(245, 158, 11, ${particles[i].life * 0.25})`
-            : `rgba(0, 240, 255, ${particles[i].life * 0.25})`;
+            : `rgba(217, 119, 6, ${particles[i].life * 0.25})`;
+          const cyanRgba = isDark
+            ? `rgba(0, 240, 255, ${particles[i].life * 0.25})`
+            : `rgba(2, 132, 199, ${particles[i].life * 0.25})`;
+
+          ctx.strokeStyle = particles[i].isGold ? goldRgba : cyanRgba;
           ctx.lineWidth = 0.8;
           ctx.stroke();
           ctx.restore();
