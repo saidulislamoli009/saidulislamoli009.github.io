@@ -744,14 +744,17 @@ html:not(.dark) .border-white\/5 {
 /* 1. Clear / Transparent Background Sections (Hero, ERP Modules, Mobile Apps, Education) */
 #home,
 #erp-core,
+#flutter-hub,
 #apps,
 #education,
 html.dark #home,
 html.dark #erp-core,
+html.dark #flutter-hub,
 html.dark #apps,
 html.dark #education,
 html:not(.dark) #home,
 html:not(.dark) #erp-core,
+html:not(.dark) #flutter-hub,
 html:not(.dark) #apps,
 html:not(.dark) #education {
   background: transparent !important;
