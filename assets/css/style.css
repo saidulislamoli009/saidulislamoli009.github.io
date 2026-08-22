@@ -845,7 +845,62 @@ html:not(.dark) .erp-spec-card:hover {
   box-shadow: 0 20px 45px -10px rgba(217, 119, 6, 0.22), 0 4px 12px rgba(15, 23, 42, 0.06) !important;
 }
 
-/* 7. Badges, Text & Inputs in Light Mode */
+/* 7. Comprehensive Text, Headings & Pill Badges in Light Mode */
+html:not(.dark) h1,
+html:not(.dark) h2,
+html:not(.dark) h3,
+html:not(.dark) h4,
+html:not(.dark) h5,
+html:not(.dark) .text-white,
+html:not(.dark) h1.text-white,
+html:not(.dark) h2.text-white,
+html:not(.dark) h3.text-white,
+html:not(.dark) h4.text-white {
+  color: #0f172a !important;
+}
+
+html:not(.dark) p.text-slate-400,
+html:not(.dark) .text-slate-400 {
+  color: #475569 !important;
+}
+
+html:not(.dark) p.text-slate-300,
+html:not(.dark) span.text-slate-300,
+html:not(.dark) .text-slate-300 {
+  color: #334155 !important;
+}
+
+html:not(.dark) span.text-slate-200 {
+  color: #1e293b !important;
+}
+
+/* Pill Badges in Light Mode */
+html:not(.dark) .inline-flex.rounded-full {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(203, 213, 225, 0.95) !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05) !important;
+}
+
+html:not(.dark) .inline-flex.rounded-full span.text-brand-cyan,
+html:not(.dark) .inline-flex.rounded-full span.text-brand-emerald,
+html:not(.dark) .inline-flex.rounded-full span.text-primary,
+html:not(.dark) .inline-flex.rounded-full .material-symbols-outlined,
+html:not(.dark) .inline-flex.rounded-full .fa-flutter {
+  color: #0284c7 !important;
+}
+
+html:not(.dark) .inline-flex.rounded-full .text-brand-cyan {
+  color: #0284c7 !important;
+}
+
+html:not(.dark) .inline-flex.rounded-full .text-brand-emerald {
+  color: #059669 !important;
+}
+
+html:not(.dark) .inline-flex.rounded-full .text-primary {
+  color: #d97706 !important;
+}
+
 html:not(.dark) .competency-card span.bg-white\/\[0\.04\],
 html:not(.dark) .bento-card span.bg-white\/5,
 html:not(.dark) .bento-card span.bg-white\/10,
@@ -857,13 +912,23 @@ html:not(.dark) span.bg-white\/10 {
   color: #334155 !important;
 }
 
-html:not(.dark) span.text-slate-200,
-html:not(.dark) p.text-slate-300 {
-  color: #334155 !important;
+html:not(.dark) .bento-card a.text-white,
+html:not(.dark) .bento-card span.text-white,
+html:not(.dark) #contact a.text-white,
+html:not(.dark) #contact span.text-white {
+  color: #0f172a !important;
 }
 
-html:not(.dark) p.text-slate-400 {
-  color: #475569 !important;
+html:not(.dark) .text-brand-cyan {
+  color: #0284c7 !important;
+}
+
+html:not(.dark) .text-purple-400 {
+  color: #7c3aed !important;
+}
+
+html:not(.dark) .text-brand-emerald {
+  color: #059669 !important;
 }
 
 html:not(.dark) input,
