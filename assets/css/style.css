@@ -881,24 +881,65 @@ html:not(.dark) .inline-flex.rounded-full {
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05) !important;
 }
 
-html:not(.dark) .inline-flex.rounded-full span.text-brand-cyan,
-html:not(.dark) .inline-flex.rounded-full span.text-brand-emerald,
-html:not(.dark) .inline-flex.rounded-full span.text-primary,
-html:not(.dark) .inline-flex.rounded-full .material-symbols-outlined,
-html:not(.dark) .inline-flex.rounded-full .fa-flutter {
-  color: #0284c7 !important;
+html:not(.dark) .inline-flex.rounded-full span,
+html:not(.dark) .inline-flex.rounded-full i,
+html:not(.dark) .inline-flex.rounded-full .material-symbols-outlined {
+  color: #0369a1 !important;
 }
 
-html:not(.dark) .inline-flex.rounded-full .text-brand-cyan {
-  color: #0284c7 !important;
+html:not(.dark) .inline-flex.rounded-full .text-brand-cyan,
+html:not(.dark) .inline-flex.rounded-full span.text-brand-cyan {
+  color: #0369a1 !important;
 }
 
-html:not(.dark) .inline-flex.rounded-full .text-brand-emerald {
-  color: #059669 !important;
+html:not(.dark) .inline-flex.rounded-full .text-brand-emerald,
+html:not(.dark) .inline-flex.rounded-full span.text-brand-emerald {
+  color: #047857 !important;
 }
 
-html:not(.dark) .inline-flex.rounded-full .text-primary {
-  color: #d97706 !important;
+html:not(.dark) .inline-flex.rounded-full .text-primary,
+html:not(.dark) .inline-flex.rounded-full span.text-primary {
+  color: #b45309 !important;
+}
+
+/* Comprehensive Brand-Cyan & Accent Color Contrast Overrides for Light Mode */
+html:not(.dark) .text-brand-cyan,
+html:not(.dark) [class*="text-brand-cyan"],
+html:not(.dark) .text-accent-cyan,
+html:not(.dark) [class*="text-accent-cyan"],
+html:not(.dark) span.text-brand-cyan,
+html:not(.dark) strong.text-brand-cyan,
+html:not(.dark) i.text-brand-cyan,
+html:not(.dark) a.text-brand-cyan,
+html:not(.dark) p.text-brand-cyan {
+  color: #0369a1 !important;
+}
+
+html:not(.dark) [class*="bg-brand-cyan"],
+html:not(.dark) .bg-brand-cyan\/10,
+html:not(.dark) .bg-brand-cyan\/15,
+html:not(.dark) .bg-brand-cyan\/20 {
+  background-color: rgba(2, 132, 199, 0.12) !important;
+  border-color: rgba(2, 132, 199, 0.35) !important;
+}
+
+html:not(.dark) [class*="border-brand-cyan"] {
+  border-color: rgba(2, 132, 199, 0.35) !important;
+}
+
+html:not(.dark) .text-purple-400,
+html:not(.dark) [class*="text-purple-400"] {
+  color: #6d28d9 !important;
+}
+
+html:not(.dark) .text-brand-emerald,
+html:not(.dark) [class*="text-brand-emerald"] {
+  color: #047857 !important;
+}
+
+html:not(.dark) .text-primary,
+html:not(.dark) [class*="text-primary"] {
+  color: #b45309 !important;
 }
 
 html:not(.dark) .competency-card span.bg-white\/\[0\.04\],
@@ -917,18 +958,6 @@ html:not(.dark) .bento-card span.text-white,
 html:not(.dark) #contact a.text-white,
 html:not(.dark) #contact span.text-white {
   color: #0f172a !important;
-}
-
-html:not(.dark) .text-brand-cyan {
-  color: #0284c7 !important;
-}
-
-html:not(.dark) .text-purple-400 {
-  color: #7c3aed !important;
-}
-
-html:not(.dark) .text-brand-emerald {
-  color: #059669 !important;
 }
 
 html:not(.dark) input,
