@@ -1056,6 +1056,7 @@ html.dark .bg-\[\#060810\] {
     margin: 0;
   }
 
+  html,
   body {
     background: #ffffff !important;
     color: #0f172a !important;
@@ -1063,6 +1064,8 @@ html.dark .bg-\[\#060810\] {
     font-size: 9pt !important;
     margin: 0 !important;
     padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
@@ -1089,10 +1092,13 @@ html.dark .bg-\[\#060810\] {
   #resume-modal {
     position: static !important;
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     background: #ffffff !important;
     padding: 0 !important;
     margin: 0 !important;
     max-height: none !important;
+    height: auto !important;
     overflow: visible !important;
     box-shadow: none !important;
     border: none !important;
@@ -1107,6 +1113,8 @@ html.dark .bg-\[\#060810\] {
     padding: 0 !important;
     margin: 0 !important;
     overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
     border-radius: 0 !important;
   }
 
@@ -1116,6 +1124,7 @@ html.dark .bg-\[\#060810\] {
     padding: 0 !important;
     margin: 0 !important;
     max-height: none !important;
+    height: auto !important;
     overflow: visible !important;
     width: 100% !important;
     -webkit-font-smoothing: antialiased !important;
@@ -1128,12 +1137,22 @@ html.dark .bg-\[\#060810\] {
     width: 100% !important;
     padding: 7mm 10mm 5mm 10mm !important;
     background: #ffffff !important;
-    min-height: 280mm !important;
+    min-height: 275mm !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    page-break-after: avoid !important;
-    break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .cv-page-1 {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .cv-page-2 {
+    page-break-before: always !important;
+    break-before: page !important;
   }
 
   .avoid-break {
@@ -1144,6 +1163,9 @@ html.dark .bg-\[\#060810\] {
   .html2pdf__page-break {
     page-break-before: always !important;
     break-before: page !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    display: block !important;
     height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
