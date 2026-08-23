@@ -1058,10 +1058,13 @@ html.dark .bg-\[\#060810\] {
 
   body {
     background: #ffffff !important;
-    color: #1e293b !important;
+    color: #0f172a !important;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
     font-size: 9pt !important;
     margin: 0 !important;
     padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   header,
@@ -1076,7 +1079,10 @@ html.dark .bg-\[\#060810\] {
   #mobile-nav-menu,
   #cursor-canvas,
   #custom-cursor-dot,
-  #custom-cursor-ring {
+  #custom-cursor-ring,
+  #print-cv-btn,
+  #download-cv-pdf-btn,
+  #close-resume-btn {
     display: none !important;
   }
 
@@ -1085,18 +1091,23 @@ html.dark .bg-\[\#060810\] {
     display: block !important;
     background: #ffffff !important;
     padding: 0 !important;
+    margin: 0 !important;
     max-height: none !important;
     overflow: visible !important;
     box-shadow: none !important;
     border: none !important;
   }
 
-  #resume-modal>div {
+  #resume-modal > div {
     max-width: 100% !important;
+    width: 100% !important;
     border: none !important;
     box-shadow: none !important;
     background: #ffffff !important;
     padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
   }
 
   #printable-cv-area {
@@ -1106,12 +1117,23 @@ html.dark .bg-\[\#060810\] {
     margin: 0 !important;
     max-height: none !important;
     overflow: visible !important;
+    width: 100% !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
   }
 
-  #print-cv-btn,
-  #download-cv-pdf-btn,
-  #close-resume-btn {
-    display: none !important;
+  .cv-page {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    padding: 7mm 10mm 5mm 10mm !important;
+    background: #ffffff !important;
+    min-height: 280mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 
   .avoid-break {
@@ -1122,5 +1144,8 @@ html.dark .bg-\[\#060810\] {
   .html2pdf__page-break {
     page-break-before: always !important;
     break-before: page !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 }
