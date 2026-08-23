@@ -595,33 +595,32 @@ html:not(.dark) header nav a:hover {
 }
 
 /* ==========================================================================
-   EXECUTIVE CV DOCUMENT STYLING & PERFECT 2-PAGE A4 EXPORT
+   EXECUTIVE CV DOCUMENT STYLING & ULTRA-CRISP 2-PAGE A4 EXPORT
    ========================================================================== */
 #printable-cv-area {
   background: #ffffff !important;
-  color: #1e293b !important;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #0f172a !important;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   line-height: 1.45;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: none !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  font-feature-settings: "kern" 1, "liga" 1;
 }
 
 #printable-cv-area h1,
 #printable-cv-area h2,
 #printable-cv-area h3,
-/* ==========================================================================
-   Printable CV & html2pdf Strict 2-Page Engine Styles
-   ========================================================================== */
-#printable-cv-area {
-  background: #ffffff !important;
-  color: #0f172a !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  max-height: none !important;
-}
-
 #printable-cv-area h4,
 #printable-cv-area h5 {
   color: #0f172a !important;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
 }
 
 #printable-cv-area .avoid-break {

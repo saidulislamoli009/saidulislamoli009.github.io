@@ -431,37 +431,50 @@ function initModals() {
 
   const downloadPdfBtn = document.getElementById('download-cv-pdf-btn');
   if (downloadPdfBtn) {
-    downloadPdfBtn.addEventListener('click', () => {
+    downloadPdfBtn.addEventListener('click', async () => {
       const element = document.getElementById('printable-cv-area');
       if (!element) return;
 
       const origText = downloadPdfBtn.innerHTML;
       downloadPdfBtn.disabled = true;
-      downloadPdfBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Generating PDF...';
+      downloadPdfBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Generating HD PDF...';
 
       // Ensure element is at top before capturing to ensure 100% identical render
       element.scrollTop = 0;
 
-      if (typeof html2pdf !== 'undefined') {
-        const opt = {
-          margin:       0,
-          filename:     'Saidul_Islam_Executive_CV.pdf',
-          image:        { type: 'jpeg', quality: 0.98 },
-          html2canvas:  { scale: 2, useCORS: true, logging: false, scrollY: 0, scrollX: 0 },
-          jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-          pagebreak:    { mode: 'css' }
-        };
+      try {
+        // Wait for all web fonts to load completely to avoid font blurriness / layout shifts
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
 
-        html2pdf().set(opt).from(element).save().then(() => {
-          downloadPdfBtn.disabled = false;
-          downloadPdfBtn.innerHTML = origText;
-        }).catch(() => {
+        if (typeof html2pdf !== 'undefined') {
+          const opt = {
+            margin:       0,
+            filename:     'Saidul_Islam_Executive_CV.pdf',
+            image:        { type: 'jpeg', quality: 1.0 },
+            html2canvas:  { 
+              scale: 3.5, 
+              useCORS: true, 
+              allowTaint: true,
+              letterRendering: true, 
+              logging: false, 
+              scrollY: 0, 
+              scrollX: 0,
+              windowWidth: 794
+            },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true, precision: 16 },
+            pagebreak:    { mode: 'css' }
+          };
+
+          await html2pdf().set(opt).from(element).save();
+        } else {
           window.print();
-          downloadPdfBtn.disabled = false;
-          downloadPdfBtn.innerHTML = origText;
-        });
-      } else {
+        }
+      } catch (err) {
+        console.error('PDF generation error, falling back to print:', err);
         window.print();
+      } finally {
         downloadPdfBtn.disabled = false;
         downloadPdfBtn.innerHTML = origText;
       }
