@@ -433,35 +433,43 @@ function initModals() {
   if (downloadPdfBtn) {
     downloadPdfBtn.addEventListener('click', async () => {
       const element = document.getElementById('printable-cv-area');
+      const resumeModalDiv = document.querySelector('#resume-modal > div');
       if (!element) return;
 
       const origText = downloadPdfBtn.innerHTML;
       downloadPdfBtn.disabled = true;
       downloadPdfBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Generating HD PDF...';
 
-      // Ensure element is at top before capturing to ensure 100% identical render
-      element.scrollTop = 0;
+      // Save previous inline styles to restore after export
+      const prevElementOverflow = element.style.overflow;
+      const prevElementMaxHeight = element.style.maxHeight;
+      const prevElementHeight = element.style.height;
+      const prevModalMaxHeight = resumeModalDiv ? resumeModalDiv.style.maxHeight : '';
+      const prevModalOverflow = resumeModalDiv ? resumeModalDiv.style.overflow : '';
 
-      let clone = null;
       try {
+        // Expand the element so html2canvas renders the FULL 2 pages without scroll clipping
+        if (resumeModalDiv) {
+          resumeModalDiv.style.maxHeight = 'none';
+          resumeModalDiv.style.overflow = 'visible';
+        }
+        element.style.overflow = 'visible';
+        element.style.maxHeight = 'none';
+        element.style.height = 'auto';
+        element.scrollTop = 0;
+
         // Wait for all web fonts to load completely to avoid font blurriness / layout shifts
         if (document.fonts && document.fonts.ready) {
           await document.fonts.ready;
         }
 
         if (typeof html2pdf !== 'undefined') {
-          // Clone CV into an unconstrained off-screen A4 container to prevent modal scroll clipping
-          clone = element.cloneNode(true);
-          clone.id = 'printable-cv-export-clone';
-          clone.className = 'pdf-export-container text-slate-800 text-xs leading-normal bg-white font-sans';
-          document.body.appendChild(clone);
-
           const opt = {
             margin:       0,
             filename:     'Saidul_Islam_Executive_CV.pdf',
-            image:        { type: 'jpeg', quality: 1.0 },
+            image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { 
-              scale: 3, 
+              scale: 2.5, 
               useCORS: true, 
               allowTaint: true,
               letterRendering: true, 
@@ -469,11 +477,11 @@ function initModals() {
               scrollY: 0, 
               scrollX: 0
             },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak:    { mode: ['css', 'legacy'] }
           };
 
-          await html2pdf().set(opt).from(clone).save();
+          await html2pdf().set(opt).from(element).save();
         } else {
           window.print();
         }
@@ -481,9 +489,15 @@ function initModals() {
         console.error('PDF generation error, falling back to print:', err);
         window.print();
       } finally {
-        if (clone && clone.parentNode) {
-          clone.parentNode.removeChild(clone);
+        // Restore previous modal scroll styles
+        if (resumeModalDiv) {
+          resumeModalDiv.style.maxHeight = prevModalMaxHeight;
+          resumeModalDiv.style.overflow = prevModalOverflow;
         }
+        element.style.overflow = prevElementOverflow;
+        element.style.maxHeight = prevElementMaxHeight;
+        element.style.height = prevElementHeight;
+
         downloadPdfBtn.disabled = false;
         downloadPdfBtn.innerHTML = origText;
       }
