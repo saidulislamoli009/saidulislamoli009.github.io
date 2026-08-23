@@ -459,7 +459,7 @@ function initModals() {
           const opt = {
             margin:       0,
             filename:     'Saidul_Islam_Executive_CV.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
+            image:        { type: 'jpeg', quality: 1.0 },
             html2canvas:  { 
               scale: 3, 
               useCORS: true, 
@@ -470,7 +470,7 @@ function initModals() {
               scrollX: 0
             },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
-            pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+            pagebreak:    { mode: ['css', 'legacy'] }
           };
 
           await html2pdf().set(opt).from(clone).save();
