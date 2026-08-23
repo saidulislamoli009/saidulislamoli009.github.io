@@ -442,6 +442,7 @@ function initModals() {
       // Ensure element is at top before capturing to ensure 100% identical render
       element.scrollTop = 0;
 
+      let clone = null;
       try {
         // Wait for all web fonts to load completely to avoid font blurriness / layout shifts
         if (document.fonts && document.fonts.ready) {
@@ -449,25 +450,30 @@ function initModals() {
         }
 
         if (typeof html2pdf !== 'undefined') {
+          // Clone CV into an unconstrained off-screen A4 container to prevent modal scroll clipping
+          clone = element.cloneNode(true);
+          clone.id = 'printable-cv-export-clone';
+          clone.className = 'pdf-export-container text-slate-800 text-xs leading-normal bg-white font-sans';
+          document.body.appendChild(clone);
+
           const opt = {
             margin:       0,
             filename:     'Saidul_Islam_Executive_CV.pdf',
-            image:        { type: 'jpeg', quality: 1.0 },
+            image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { 
-              scale: 3.5, 
+              scale: 3, 
               useCORS: true, 
               allowTaint: true,
               letterRendering: true, 
               logging: false, 
               scrollY: 0, 
-              scrollX: 0,
-              windowWidth: 794
+              scrollX: 0
             },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true, precision: 16 },
-            pagebreak:    { mode: 'css' }
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+            pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
           };
 
-          await html2pdf().set(opt).from(element).save();
+          await html2pdf().set(opt).from(clone).save();
         } else {
           window.print();
         }
@@ -475,6 +481,9 @@ function initModals() {
         console.error('PDF generation error, falling back to print:', err);
         window.print();
       } finally {
+        if (clone && clone.parentNode) {
+          clone.parentNode.removeChild(clone);
+        }
         downloadPdfBtn.disabled = false;
         downloadPdfBtn.innerHTML = origText;
       }

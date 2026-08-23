@@ -639,6 +639,31 @@ html:not(.dark) header nav a:hover {
   justify-content: space-between;
 }
 
+.pdf-export-container {
+  box-sizing: border-box !important;
+  width: 794px !important;
+  max-width: 794px !important;
+  min-width: 794px !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  background: #ffffff !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+  top: 0 !important;
+  z-index: -9999 !important;
+}
+
+.pdf-export-container .cv-page {
+  width: 794px !important;
+  min-height: 1120px !important;
+  padding: 26px 36px 20px 36px !important;
+  box-sizing: border-box !important;
+  background: #ffffff !important;
+}
+
 .html2pdf__page-break {
   page-break-before: always !important;
   break-before: page !important;
