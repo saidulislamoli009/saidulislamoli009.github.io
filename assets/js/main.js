@@ -11,11 +11,15 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  if (typeof hydratePortfolioContent === 'function') {
+    hydratePortfolioContent();
+  }
   initDynamicExperience();
   initInteractiveCursor();
   initParticleCanvas();
   initThemeToggle();
   initMobileNav();
+  initScrollSpy();
   initCounters();
   init3DTilt();
   initScrollReveal();
@@ -666,21 +670,67 @@ function initBackToTop() {
 }
 
 /* ==========================================================================
+   12.5. ACTIVE SCROLL-SPY NAVBAR HIGHLIGHT
+   ========================================================================== */
+function initScrollSpy() {
+  const sections = document.querySelectorAll('section[id], header[id]');
+  const navLinks = document.querySelectorAll('.nav-link-pill[href^="#"]');
+  if (navLinks.length === 0) return;
+
+  const onScroll = () => {
+    const scrollPos = window.scrollY + 200;
+    let currentId = '';
+
+    sections.forEach(section => {
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      if (scrollPos >= top && scrollPos < top + height) {
+        currentId = section.getAttribute('id');
+      }
+    });
+
+    if (!currentId && window.scrollY < 250) {
+      currentId = 'home';
+    }
+
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href').replace('#', '');
+      if (href === currentId) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+/* ==========================================================================
    13. DYNAMIC REAL-TIME CAREER EXPERIENCE CALCULATOR
    ========================================================================== */
 function initDynamicExperience() {
-  // Career started November 2021 (AL-Mugni Information & Tech - ISP Operations)
-  const careerStartDate = new Date('2021-11-01');
-  const now = new Date();
+  const data = typeof getPortfolioData === 'function' ? getPortfolioData() : null;
+  const careerStartDateStr = data?.stats?.careerStartDate || '2021-11-01';
+  const autoCalc = data?.stats?.autoCalcExp !== false;
+  const manualYears = data?.stats?.manualYearsExp || '4.8';
 
-  // Total months difference
-  let totalMonths = (now.getFullYear() - careerStartDate.getFullYear()) * 12 + (now.getMonth() - careerStartDate.getMonth());
-  if (now.getDate() < careerStartDate.getDate()) {
-    totalMonths = Math.max(0, totalMonths - 1);
+  let exactYears = 4.8;
+
+  if (autoCalc) {
+    const careerStartDate = new Date(careerStartDateStr);
+    const now = new Date();
+    let totalMonths = (now.getFullYear() - careerStartDate.getFullYear()) * 12 + (now.getMonth() - careerStartDate.getMonth());
+    if (now.getDate() < careerStartDate.getDate()) {
+      totalMonths = Math.max(0, totalMonths - 1);
+    }
+    const rawYears = totalMonths / 12;
+    exactYears = Math.max(1.0, parseFloat(rawYears.toFixed(1)));
+  } else {
+    exactYears = parseFloat(manualYears) || 4.8;
   }
 
-  const rawYears = totalMonths / 12;
-  const exactYears = Math.max(4.0, parseFloat(rawYears.toFixed(1)));
   const shortExp = `${exactYears}+`;
   const textExp = `${exactYears}+ Years`;
   const summaryExp = `${exactYears}+ years of experience`;
@@ -712,4 +762,328 @@ function initDynamicExperience() {
     el.textContent = badgeExp;
   });
 }
+
+/* ==========================================================================
+   14. DYNAMIC PORTFOLIO CONTENT HYDRATION ENGINE
+   ========================================================================== */
+function hydratePortfolioContent() {
+  if (typeof getPortfolioData !== 'function') return;
+  const data = getPortfolioData();
+  if (!data) return;
+
+  // 1. Profile & Hero
+  if (data.profile) {
+    const p = data.profile;
+    
+    // Page Title
+    if (p.name && p.primaryTitle) {
+      document.title = `${p.name} | ${p.primaryTitle}`;
+    }
+
+    // Hero Live Status Badge
+    const liveBadge = document.querySelector('#home .inline-flex.items-center.gap-3 span.font-mono');
+    if (liveBadge && p.heroBadge) {
+      liveBadge.innerHTML = `${p.heroBadge} &bull; <span class="dynamic-exp-short">4.8+</span> Yrs Exp`;
+    }
+
+    // Hero Headline
+    const heroH1 = document.querySelector('#home h1');
+    if (heroH1) {
+      heroH1.innerHTML = `
+        ${p.heroHeadlinePart1 || 'Architecting Scalable'} <br/>
+        <span class="text-gradient-cyan">${p.heroHeadlineGradient || 'ERP Systems & Networks'}</span> <br/>
+        ${p.heroHeadlinePart2 || 'For Enterprise Agility.'}
+      `;
+    }
+
+    // Hero Summary
+    const heroSummary = document.querySelector('#home p.text-slate-300');
+    if (heroSummary && p.heroSummary) {
+      heroSummary.innerHTML = p.heroSummary;
+    }
+
+    // Avatar Images
+    if (p.avatar) {
+      document.querySelectorAll('img[alt*="Saidul Islam"], img[src*="saidul-avatar"]').forEach(img => {
+        img.src = p.avatar;
+      });
+    }
+
+    // WhatsApp Button
+    if (p.whatsapp) {
+      document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
+        a.href = `https://wa.me/${p.whatsapp.replace(/[^0-9]/g, '')}`;
+      });
+    }
+
+    // Contact Section Info
+    if (p.email) {
+      document.querySelectorAll('a[href*="mailto:"]').forEach(a => {
+        a.href = `mailto:${p.email}`;
+        a.textContent = p.email;
+      });
+      document.querySelectorAll('button[data-copy*="@"]').forEach(b => {
+        b.setAttribute('data-copy', p.email);
+      });
+    }
+
+    if (p.phone1) {
+      document.querySelectorAll('a[href*="tel:"]').forEach((a, idx) => {
+        if (idx === 0) {
+          a.href = `tel:${p.phone1.replace(/\s+/g, '')}`;
+          a.textContent = p.phone1;
+        } else if (p.phone2) {
+          a.href = `tel:${p.phone2.replace(/\s+/g, '')}`;
+          a.textContent = p.phone2;
+        }
+      });
+      document.querySelectorAll('button[data-copy*="+880"]').forEach(b => {
+        b.setAttribute('data-copy', p.phone1);
+      });
+    }
+
+    if (p.location) {
+      const locEl = document.querySelector('#contact .bento-card:nth-child(3) span.font-bold');
+      if (locEl) locEl.textContent = p.location;
+    }
+
+    if (p.linkedin) {
+      document.querySelectorAll('a[href*="linkedin.com"]').forEach(a => {
+        a.href = p.linkedin;
+      });
+    }
+  }
+
+  // 2. Stats & Counters
+  if (data.stats) {
+    const s = data.stats;
+    const counters = document.querySelectorAll('#home .bento-card .counter');
+    if (counters.length >= 4) {
+      if (s.projectsCount) counters[1].setAttribute('data-target', s.projectsCount);
+      if (s.goLiveRate) counters[2].setAttribute('data-target', s.goLiveRate);
+      if (s.uptimeRate) counters[3].setAttribute('data-target', s.uptimeRate);
+    }
+  }
+
+  // 3. ERP Modules Grid
+  if (data.erpModules && data.erpModules.length > 0) {
+    const erpGrid = document.querySelector('#erp-core .grid');
+    if (erpGrid) {
+      erpGrid.innerHTML = data.erpModules.map(mod => {
+        const themeMap = {
+          'primary': { text: 'text-primary', border: 'border-primary/40', bg: 'bg-primary/10', glow: 'rgba(245,158,11,0.2)', hover: 'hover:border-primary/50' },
+          'accent-cyan': { text: 'text-accent-cyan', border: 'border-accent-cyan/40', bg: 'bg-accent-cyan/10', glow: 'rgba(0,240,255,0.2)', hover: 'hover:border-accent-cyan/50' },
+          'emerald': { text: 'text-emerald-400', border: 'border-emerald-500/40', bg: 'bg-emerald-500/10', glow: 'rgba(16,185,129,0.2)', hover: 'hover:border-emerald-500/50' },
+          'purple': { text: 'text-purple-400', border: 'border-purple-500/40', bg: 'bg-purple-500/10', glow: 'rgba(168,85,247,0.2)', hover: 'hover:border-purple-500/50' },
+          'sky': { text: 'text-sky-400', border: 'border-sky-500/40', bg: 'bg-sky-500/10', glow: 'rgba(56,189,248,0.2)', hover: 'hover:border-sky-500/50' },
+          'amber': { text: 'text-amber-400', border: 'border-amber-500/40', bg: 'bg-amber-500/10', glow: 'rgba(245,158,11,0.2)', hover: 'hover:border-amber-500/50' }
+        };
+        const th = themeMap[mod.colorTheme] || themeMap['primary'];
+
+        const checksHtml = (mod.checks || []).map(c => `
+          <div class="flex items-center gap-1.5 text-slate-300">
+            <span class="material-symbols-outlined text-emerald-400 text-sm">check_circle</span>
+            <span>${c}</span>
+          </div>
+        `).join('');
+
+        const tagsHtml = (mod.tags || []).map((t, idx) => `
+          <span class="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-white/5 ${idx === 0 ? th.text : 'text-slate-300'}">${t}</span>
+        `).join('');
+
+        return `
+          <div class="bento-card p-6 sm:p-7 rounded-3xl flex flex-col gap-4 border border-white/10 ${th.hover} group">
+            <div class="flex items-center justify-between">
+              <div class="size-12 rounded-2xl bg-gradient-to-br from-white/10 to-transparent ${th.border} border flex items-center justify-center ${th.text} shadow-[0_0_20px_${th.glow}] group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-2xl">${mod.icon || 'warehouse'}</span>
+              </div>
+              <span class="text-[10px] font-mono font-bold px-3 py-1 rounded-full ${th.bg} ${th.text} border ${th.border} uppercase tracking-wider">${mod.category || 'ERP'}</span>
+            </div>
+            <h3 class="text-xl font-bold text-white font-heading group-hover:${th.text} transition-colors">${mod.title}</h3>
+            <p class="text-xs sm:text-[13px] text-slate-400 font-light leading-relaxed">
+              ${mod.description}
+            </p>
+            <div class="grid grid-cols-2 gap-2 pt-2 text-xs">
+              ${checksHtml}
+            </div>
+            <div class="mt-auto pt-3 border-t border-white/5 flex flex-wrap gap-1.5">
+              ${tagsHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  // 4. Flutter Mobile Apps
+  if (data.apps && data.apps.length > 0) {
+    const appsGrid = document.querySelector('#flutter-hub .grid');
+    if (appsGrid) {
+      appsGrid.innerHTML = data.apps.map(app => {
+        const tagsHtml = (app.tags || []).map((t, idx) => `
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 ${idx === 0 ? 'text-brand-cyan' : 'text-slate-300'}">${t}</span>
+        `).join('');
+
+        return `
+          <div class="bento-card rounded-3xl p-6 flex flex-col gap-5 border border-white/10 hover:border-brand-cyan/40 group app-preview-trigger cursor-pointer" data-img="${app.image || 'assets/images/app-zenpdf.jpg'}" data-title="${app.modalTitle || app.name}" data-desc="${app.modalSubtitle || app.description}">
+            <div class="relative w-full aspect-[9/16] rounded-2xl overflow-hidden border border-white/15 bg-[#0b0f19] shadow-2xl group-hover:scale-[1.02] transition-all duration-500">
+              <img src="${app.image || 'assets/images/app-zenpdf.jpg'}" alt="${app.name}" class="w-full h-full object-cover object-top">
+              <div class="absolute inset-0 bg-gradient-to-t from-bg-deep/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-4">
+                <span class="text-xs font-mono font-bold text-brand-cyan bg-brand-cyan/10 px-3 py-1.5 rounded-lg border border-brand-cyan/30 backdrop-blur-md">
+                  Click to Enlarge
+                </span>
+                <span class="material-symbols-outlined text-brand-cyan bg-white/10 rounded-full p-1 text-sm">fullscreen</span>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="size-8 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300">
+                    <span class="material-symbols-outlined text-base">${app.icon || 'picture_as_pdf'}</span>
+                  </div>
+                  <h3 class="text-xl font-bold text-white font-heading">${app.name}</h3>
+                </div>
+                <span class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/30">
+                  ${app.badge || 'App'}
+                </span>
+              </div>
+              <p class="text-xs text-slate-400 font-light leading-relaxed">
+                ${app.description}
+              </p>
+            </div>
+            <div class="mt-auto pt-3 border-t border-white/5 flex flex-wrap gap-1.5">
+              ${tagsHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  // 5. Work Experience Timeline
+  if (data.experience && data.experience.length > 0) {
+    const timeline = document.querySelector('#experience .experience-vertical-timeline');
+    if (timeline) {
+      const itemsHtml = data.experience.map((exp, idx) => {
+        const isLeft = idx % 2 === 0;
+        const respHtml = (exp.responsibilities || []).map(r => `
+          <p class="flex items-start gap-2">
+            <span class="material-symbols-outlined text-primary text-base shrink-0 mt-0.5">check_circle</span>
+            <span>${r}</span>
+          </p>
+        `).join('');
+
+        const promotionHtml = exp.promotion ? `
+          <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-3 mb-3">
+            <span class="material-symbols-outlined text-emerald-400 text-xl">workspace_premium</span>
+            <p class="text-xs text-emerald-300 font-semibold">
+              <strong>Promotion / Milestone:</strong> ${exp.promotion}
+            </p>
+          </div>
+        ` : '';
+
+        const tagsHtml = (exp.tags || []).map(t => `
+          <span class="px-2.5 py-1 bg-white/5 rounded-lg text-[10px] font-mono text-slate-300">${t}</span>
+        `).join('');
+
+        const isFlutter = exp.isFontAwesome || exp.icon === 'flutter' || (exp.role && exp.role.toLowerCase().includes('mobile')) || (exp.company && exp.company.toLowerCase().includes('flutter'));
+        const iconHtml = isFlutter 
+          ? `<svg class="size-6 text-brand-cyan" viewBox="0 0 24 24" fill="currentColor"><path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.37zM6.02 15.688L2.316 19.39 6.923 24h7.371l-4.57-4.609 3.704-3.703H6.02z"/></svg>`
+          : `<span class="material-symbols-outlined text-2xl">${exp.icon || 'apartment'}</span>`;
+
+        const cardContent = `
+          <div class="bento-card p-6 md:p-8 rounded-3xl border border-white/10 hover:border-primary/50 shadow-2xl relative overflow-hidden group">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="size-12 rounded-xl bg-gradient-to-br from-primary/20 via-brand-cyan/20 to-transparent border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_20px_rgba(245,158,11,0.2)] shrink-0">
+                  ${iconHtml}
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-white font-heading group-hover:text-primary transition-colors">${exp.role}</h3>
+                  <div class="text-primary text-xs font-bold font-mono uppercase">${exp.company}</div>
+                </div>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-mono font-bold text-primary whitespace-nowrap">
+                ${exp.duration}
+              </span>
+            </div>
+            <div class="space-y-2.5 text-slate-300 text-xs sm:text-sm font-light leading-relaxed mb-5">
+              ${respHtml}
+            </div>
+            ${promotionHtml}
+            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-white/5">
+              ${tagsHtml}
+            </div>
+          </div>
+        `;
+
+        if (isLeft) {
+          return `
+            <div class="relative flex flex-col md:flex-row items-center justify-between w-full group">
+              <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-10 md:pl-0">
+                ${cardContent}
+              </div>
+              <div class="timeline-node"></div>
+              <div class="w-full md:w-[45%] hidden md:block"></div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="relative flex flex-col md:flex-row items-center justify-between w-full group">
+              <div class="w-full md:w-[45%] hidden md:block"></div>
+              <div class="timeline-node"></div>
+              <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-10 md:pl-0">
+                ${cardContent}
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+
+      timeline.innerHTML = `
+        <div class="timeline-laser-track"></div>
+        ${itemsHtml}
+      `;
+    }
+  }
+
+  // 6. Bio Modal & CV Modal Hydration
+  if (data.bioData) {
+    const b = data.bioData;
+    const setText = (id, val) => {
+      const el = document.getElementById(id);
+      if (el && val) el.textContent = val;
+    };
+    setText('cv-name', b.fullName || data.profile?.name);
+    setText('cv-title', data.profile?.primaryTitle);
+    setText('cv-phone1', data.profile?.phone1);
+    setText('cv-phone2', data.profile?.phone2);
+    setText('cv-email', data.profile?.email);
+    setText('cv-portfolio', data.profile?.portfolioUrl?.replace('https://', ''));
+    setText('cv-address', b.address || data.profile?.location);
+    setText('cv-summary-text', b.cvSummary);
+    setText('cv-declaration-text', b.declaration);
+    setText('cv-sign-name', b.fullName || data.profile?.name);
+
+    setText('modal-bio-name', b.fullName || data.profile?.name);
+    setText('modal-bio-father', b.fatherName);
+    setText('modal-bio-mother', b.motherName);
+    setText('modal-bio-dob', b.dob);
+    setText('modal-bio-nid', b.nid);
+    setText('modal-bio-marital', b.maritalStatus);
+    setText('modal-bio-nationality', b.nationality);
+    setText('modal-bio-address', b.address);
+
+    setText('cv-personal-name', b.fullName || data.profile?.name);
+    setText('cv-personal-father', b.fatherName);
+    setText('cv-personal-mother', b.motherName);
+    setText('cv-personal-dob', b.dob);
+    setText('cv-personal-gender', b.gender);
+    setText('cv-personal-nationality', b.nationality);
+    setText('cv-personal-marital', b.maritalStatus);
+    setText('cv-personal-nid', b.nid);
+    setText('cv-personal-address', b.address);
+  }
+}
+
 

@@ -253,49 +253,203 @@ html:not(.dark) .aurora-bg {
   }
 }
 
-/* Glassy Luxury Floating Navbar */
-header {
-  background: rgba(7, 11, 20, 0.78) !important;
+/* ==========================================================================
+   SIGNATURE FLOATING CYBER-GLASS EXECUTIVE NAVBAR
+   ========================================================================== */
+.portfolio-navbar-capsule {
+  background: rgba(6, 10, 22, 0.72) !important;
   backdrop-filter: blur(24px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 0 rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.11) !important;
+  border-radius: 1.25rem !important;
+  box-shadow: 
+    0 20px 45px -12px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15) !important;
+  position: relative;
+  overflow: hidden;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-header:hover {
-  border-color: rgba(245, 158, 11, 0.45) !important;
-  box-shadow: 0 20px 50px -10px rgba(245, 158, 11, 0.22), 0 0 25px rgba(245, 158, 11, 0.15), inset 0 1px 0 0 rgba(245, 158, 11, 0.35) !important;
+/* Subtle top prismatic accent highlight */
+.portfolio-navbar-capsule::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.7), rgba(0, 240, 255, 0.7), transparent);
+  pointer-events: none;
+  z-index: 2;
 }
 
-header nav a {
+.portfolio-navbar-capsule:hover {
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  box-shadow: 
+    0 25px 55px -10px rgba(0, 0, 0, 0.85),
+    0 0 30px rgba(245, 158, 11, 0.12),
+    inset 0 1px 0 0 rgba(245, 158, 11, 0.4) !important;
+}
+
+/* Brand Monogram Badge */
+.nav-brand-badge {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.16), rgba(0, 240, 255, 0.12));
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.22);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-brand-badge:hover {
+  transform: scale(1.08) rotate(4deg);
+  border-color: #00f0ff;
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.45);
+}
+
+/* Navigation Links */
+.nav-link-pill {
   position: relative;
-  padding: 6px 12px;
-  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+  padding: 0.42rem 0.75rem;
+  border-radius: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link-pill:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.06);
+}
+
+.nav-link-pill.active {
+  color: #f59e0b !important;
+  background: rgba(245, 158, 11, 0.14) !important;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.2) !important;
+}
+
+.nav-link-pill:active {
+  transform: scale(0.96);
+}
+
+/* Action Buttons */
+.nav-action-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
   transition: all 0.25s ease;
 }
 
-header nav a:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--primary) !important;
+.nav-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
 }
 
-html:not(.dark) header {
-  background: rgba(255, 255, 255, 0.78) !important;
-  backdrop-filter: blur(24px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 16px 40px -10px rgba(217, 119, 6, 0.14), 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.9) !important;
+.nav-action-btn:hover .theme-icon {
+  transform: rotate(30deg) scale(1.1);
 }
 
-html:not(.dark) header:hover {
-  border-color: rgba(217, 119, 6, 0.5) !important;
-  box-shadow: 0 20px 50px -10px rgba(217, 119, 6, 0.25), 0 0 25px rgba(217, 119, 6, 0.15), inset 0 1px 0 0 rgba(217, 119, 6, 0.4) !important;
+.nav-cv-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.25s ease;
 }
 
-html:not(.dark) header nav a:hover {
-  background: rgba(217, 119, 6, 0.08);
+.nav-cv-btn:hover {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.45);
+  color: #f59e0b;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.2);
+  transform: translateY(-1px);
+}
+
+.nav-contact-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: 
+    0 4px 18px rgba(245, 158, 11, 0.4),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-contact-btn:hover {
+  transform: translateY(-1.5px) scale(1.02);
+  box-shadow: 
+    0 8px 24px rgba(245, 158, 11, 0.55),
+    0 0 25px rgba(245, 158, 11, 0.35);
+}
+
+.nav-contact-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Light Mode Adaptations */
+html:not(.dark) .portfolio-navbar-capsule {
+  background: rgba(255, 255, 255, 0.84) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  box-shadow: 
+    0 16px 40px -10px rgba(15, 23, 42, 0.08),
+    0 0 0 1px rgba(226, 232, 240, 0.7),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.95) !important;
+}
+
+html:not(.dark) .portfolio-navbar-capsule::before {
+  background: linear-gradient(90deg, transparent, rgba(217, 119, 6, 0.5), rgba(2, 132, 199, 0.5), transparent);
+}
+
+html:not(.dark) .nav-brand-badge {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.12), rgba(2, 132, 199, 0.08));
+  border-color: rgba(217, 119, 6, 0.3);
+  box-shadow: 0 0 15px rgba(217, 119, 6, 0.15);
+}
+
+html:not(.dark) .nav-link-pill {
+  color: #475569;
+}
+
+html:not(.dark) .nav-link-pill:hover {
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.05);
+}
+
+html:not(.dark) .nav-link-pill.active {
   color: #d97706 !important;
+  background: rgba(217, 119, 6, 0.1) !important;
+  box-shadow: 0 0 14px rgba(217, 119, 6, 0.15) !important;
+}
+
+html:not(.dark) .nav-action-btn,
+html:not(.dark) .nav-cv-btn {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #1e293b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+html:not(.dark) .nav-cv-btn:hover {
+  background: #fffbeb;
+  border-color: #d97706;
+  color: #d97706;
+}
+
+html:not(.dark) .nav-contact-btn {
+  background: linear-gradient(135deg, #d97706 0%, #ea580c 100%);
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.35);
 }
 
 .grid-matrix {
