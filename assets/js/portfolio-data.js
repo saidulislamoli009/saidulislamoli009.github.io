@@ -174,6 +174,19 @@ const DEFAULT_PORTFOLIO_DATA = {
       tags: ["NVR / DVR", "Access Control"]
     }
   ],
+  topologyShowcase: {
+    title: "Enterprise Multi-Area Network Architecture (Cisco Packet Tracer)",
+    badge: "Dual-WAN • Server Farm • Multi-VLAN Routing",
+    image: "assets/images/enterprise-network-topology.jpg",
+    description: "High-availability enterprise network architecture engineered in Cisco Packet Tracer. Features dual-ISP automatic WAN failover, dynamic Multi-Area OSPF routing, a dedicated DMZ server farm (ERP/DNS/DHCP), 3-tier switching, and department VLANs with VoIP QoS.",
+    highlights: [
+      { icon: "alt_route", label: "Dual-WAN OSPF", desc: "Dual ISP WAN Redundancy & Load Balancing" },
+      { icon: "dns", label: "DMZ Server Farm", desc: "ERP, Web, DNS & DHCP Server Clusters" },
+      { icon: "hub", label: "3-Tier Multi-VLAN", desc: "Core, Distribution & Access Layer Switching" },
+      { icon: "security", label: "VoIP & Security", desc: "IP Telephony, ACL Filtering & Redundancy" }
+    ],
+    tags: ["Cisco Packet Tracer", "Dual-WAN Failover", "OSPF Multi-Area", "DMZ Server Farm", "VLAN Segmentation", "VoIP Telephony"]
+  },
   apps: [
     {
       id: "app-1",
@@ -216,6 +229,26 @@ const DEFAULT_PORTFOLIO_DATA = {
       description: "High-speed BDIX video streaming app with integrated Free BD VPN, IMDb Top 250 collection, multi-genre filtering (English, Hindi, Bangla, Animation, South Indian).",
       tags: ["BDIX Ultra-Speed", "Free BD VPN", "IMDb Top 250"],
       stackBadge: "Flutter • BDIX APIs • ExoPlayer"
+    },
+    {
+      id: "app-4",
+      name: "FixBD",
+      badge: "Home Services BD",
+      category: "On-Demand",
+      icon: "home_repair_service",
+      iconColor: "emerald",
+      image: "assets/images/app-fixbd.jpg",
+      screenshots: [
+        "assets/images/app-fixbd.jpg",
+        "assets/images/app-fixbd-tracking.jpg",
+        "assets/images/app-fixbd-payment.jpg",
+        "assets/images/app-fixbd-success.jpg"
+      ],
+      modalTitle: "FixBD (On-Demand Home Services & Live Tracking)",
+      modalSubtitle: "Live GPS Tracking • 24/7 Emergency Dispatch • bKash/Nagad/Rocket Payment • Flutter & Firebase",
+      description: "On-demand home services & emergency handyman booking platform featuring real-time technician GPS tracking, 24/7 emergency dispatch, Bangla language support, and digital payments (bKash/Nagad/Rocket).",
+      tags: ["Live GPS Tracking", "24/7 Emergency", "bKash / Nagad Pay"],
+      stackBadge: "Flutter • Google Maps • Firebase"
     }
   ],
   experience: [
@@ -254,7 +287,8 @@ const DEFAULT_PORTFOLIO_DATA = {
       promotion: null,
       achievements: [
         "Improved network uptime and service reliability.",
-        "Successfully deployed multiple GPON network segments."
+        "Successfully deployed multiple GPON network segments.",
+        "Maintained 99.9% uptime for core network infrastructure."
       ],
       tags: ["GPON / EPON", "FTTx Fiber", "BDIX Peering", "MikroTik BGP"]
     },
@@ -267,7 +301,7 @@ const DEFAULT_PORTFOLIO_DATA = {
       isFontAwesome: true,
       colorTheme: "primary",
       responsibilities: [
-        "Architected production mobile applications: ZenPDF (Doc Scanner & OCR), ZenWalls (4K Wallpaper Hub), and Zen Movie (DhakaFlix BDIX Streaming).",
+        "Architected production mobile applications: ZenPDF (Doc Scanner & OCR), ZenWalls (4K Wallpaper Hub), Zen Movie (DhakaFlix BDIX Streaming), and FixBD (On-Demand Home Services & Live Tracking).",
         "Integrated Cloud Firestore real-time database, Firebase Authentication, Cloud Storage, and REST APIs."
       ],
       promotion: null,

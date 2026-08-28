@@ -517,63 +517,240 @@ function initModals() {
 }
 
 /* ==========================================================================
-   9. APP LIGHTBOX / ZOOM VIEWER
+   9. APP LIGHTBOX / ZOOM VIEWER WITH FULL GALLERY SUPPORT & ARROW CONTROLS
    ========================================================================== */
+const LightboxGalleryState = {
+  screenshots: [],
+  currentIndex: 0,
+  titles: {
+    'enterprise-network-topology.jpg': 'Enterprise Multi-Area Network Architecture • Cisco Packet Tracer',
+    'app-fixbd.jpg': 'Screen 1/4 • Home Categories & 24/7 Emergency Dispatch',
+    'app-fixbd-tracking.jpg': 'Screen 2/4 • Real-time Live GPS Map & Technician Tracking',
+    'app-fixbd-payment.jpg': 'Screen 3/4 • Digital Payment (bKash / Nagad / Rocket / Cash)',
+    'app-fixbd-success.jpg': 'Screen 4/4 • Payment Confirmation & Digital Service Receipt',
+    'app-zenservice.jpg': 'Screen 1/4 • Home Categories & 24/7 Emergency Dispatch',
+    'app-zenservice-tracking.jpg': 'Screen 2/4 • Real-time Live GPS Map & Technician Tracking',
+    'app-zenservice-payment.jpg': 'Screen 3/4 • Digital Payment (bKash / Nagad / Rocket / Cash)',
+    'app-zenservice-success.jpg': 'Screen 4/4 • Payment Confirmation & Digital Service Receipt'
+  },
+  pillNames: ['1. Home', '2. Live Tracking', '3. Payment', '4. Receipt']
+};
+
 function initAppLightbox() {
+  let lightbox = document.getElementById('app-lightbox-modal');
+  if (!lightbox) {
+    lightbox = document.createElement('div');
+    lightbox.id = 'app-lightbox-modal';
+    lightbox.className = 'fixed inset-0 z-[120] hidden items-center justify-center p-3 sm:p-5 modal-backdrop bg-black/90 backdrop-blur-2xl transition-all duration-300';
+    lightbox.innerHTML = `
+      <div id="lightbox-dialog-box" class="relative max-w-md md:max-w-lg w-full max-h-[96vh] bg-[#070b14] border border-white/20 rounded-3xl p-4 sm:p-5 shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col items-center gap-3 overflow-hidden" onclick="event.stopPropagation()">
+        
+        <!-- Top Action Bar -->
+        <div class="w-full flex items-center justify-between pb-1 border-b border-white/10">
+          <div class="flex items-center gap-2">
+            <span class="size-2.5 rounded-full bg-brand-emerald animate-pulse"></span>
+            <span id="lightbox-badge" class="text-[11px] font-mono font-bold text-brand-cyan tracking-wider uppercase">Architecture Preview</span>
+          </div>
+          <button id="close-lightbox" class="size-8 sm:size-9 rounded-full bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center cursor-pointer transition-all active:scale-90" title="Close Viewer (Esc)">
+            <span class="material-symbols-outlined text-xl pointer-events-none">close</span>
+          </button>
+        </div>
+        
+        <!-- Image Stage with Floating Arrows -->
+        <div class="relative w-full h-[60vh] sm:h-[65vh] rounded-2xl overflow-hidden bg-black/60 flex items-center justify-center select-none border border-white/10">
+          <img id="lightbox-img" src="" alt="App Preview" class="w-full h-full object-contain max-h-[60vh] sm:max-h-[65vh] transition-all duration-200">
+          
+          <!-- Previous Arrow Button -->
+          <button id="lb-prev-btn" type="button" class="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 size-10 sm:size-11 rounded-full bg-black/75 hover:bg-brand-cyan hover:text-black text-white border border-white/30 flex items-center justify-center cursor-pointer shadow-2xl z-40 transition-all active:scale-90" title="Previous Screenshot" aria-label="Previous">
+            <span class="material-symbols-outlined text-2xl pointer-events-none -ml-0.5">chevron_left</span>
+          </button>
+          
+          <!-- Next Arrow Button -->
+          <button id="lb-next-btn" type="button" class="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 size-10 sm:size-11 rounded-full bg-black/75 hover:bg-brand-cyan hover:text-black text-white border border-white/30 flex items-center justify-center cursor-pointer shadow-2xl z-40 transition-all active:scale-90" title="Next Screenshot" aria-label="Next">
+            <span class="material-symbols-outlined text-2xl pointer-events-none -mr-0.5">chevron_right</span>
+          </button>
+        </div>
+
+        <!-- Interactive Screen Switcher Pills -->
+        <div id="lb-gallery-tabs" class="w-full flex items-center justify-center gap-1.5 flex-wrap py-0.5"></div>
+
+        <!-- Title & Subtitle -->
+        <div class="w-full text-center px-2">
+          <h4 id="lightbox-title" class="text-white font-bold font-heading text-base sm:text-lg"></h4>
+          <p id="lightbox-desc" class="text-xs text-brand-cyan font-mono mt-0.5 max-w-sm mx-auto line-clamp-1"></p>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(lightbox);
+
+    // Global Key Listener for Lightbox (Esc, Left, Right)
+    window.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('app-lightbox-modal');
+      if (modal && !modal.classList.contains('hidden')) {
+        if (e.key === 'Escape') closeLightboxModal();
+        if (e.key === 'ArrowLeft') changeLightboxScreen(LightboxGalleryState.currentIndex - 1);
+        if (e.key === 'ArrowRight') changeLightboxScreen(LightboxGalleryState.currentIndex + 1);
+      }
+    });
+  }
+
+  // Setup click listener on backdrop
+  lightbox.onclick = closeLightboxModal;
+
+  const closeLb = document.getElementById('close-lightbox');
+  if (closeLb) closeLb.onclick = closeLightboxModal;
+
+  const prevBtn = document.getElementById('lb-prev-btn');
+  const nextBtn = document.getElementById('lb-next-btn');
+
+  if (prevBtn) {
+    prevBtn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      changeLightboxScreen(LightboxGalleryState.currentIndex - 1);
+    };
+  }
+
+  if (nextBtn) {
+    nextBtn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      changeLightboxScreen(LightboxGalleryState.currentIndex + 1);
+    };
+  }
+
+  // Attach card triggers
   const appCards = document.querySelectorAll('.app-preview-trigger');
-  if (appCards.length === 0) return;
+  appCards.forEach(card => {
+    card.onclick = (e) => {
+      e.preventDefault();
+      const src = card.getAttribute('data-img');
+      const rawScreenshots = card.getAttribute('data-screenshots');
+      const title = card.getAttribute('data-title') || 'Architecture & Mobile Solutions';
+      const desc = card.getAttribute('data-desc') || 'Engineered by Saidul Islam';
 
-  const lightbox = document.createElement('div');
-  lightbox.id = 'app-lightbox-modal';
-  lightbox.className = 'fixed inset-0 z-[110] hidden items-center justify-center p-4 modal-backdrop';
-  lightbox.innerHTML = `
-    <div class="relative max-w-lg w-full max-h-[90vh] bg-[#070b14] border border-white/15 rounded-3xl p-5 shadow-2xl flex flex-col items-center gap-4 overflow-hidden">
-      <button id="close-lightbox" class="absolute top-4 right-4 size-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer z-20">
-        <span class="material-symbols-outlined text-lg">close</span>
-      </button>
-      <div class="w-full h-auto max-h-[70vh] rounded-2xl overflow-hidden bg-black flex items-center justify-center">
-        <img id="lightbox-img" src="" alt="App Preview" class="w-full h-full object-contain max-h-[68vh]">
-      </div>
-      <div class="w-full text-center">
-        <h4 id="lightbox-title" class="text-white font-bold font-heading text-lg"></h4>
-        <p id="lightbox-desc" class="text-xs text-primary font-mono mt-0.5"></p>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(lightbox);
+      let screenshots = [];
+      try {
+        screenshots = rawScreenshots ? JSON.parse(rawScreenshots) : (src ? [src] : []);
+      } catch (err) {
+        screenshots = src ? [src] : [];
+      }
+      if (!screenshots || screenshots.length === 0) {
+        screenshots = src ? [src] : [];
+      }
 
-  const lbImg = document.getElementById('lightbox-img');
+      openLightboxModal(screenshots, 0, title, desc);
+    };
+  });
+}
+
+function openLightboxModal(screenshots, initialIndex, title, desc) {
+  const lightbox = document.getElementById('app-lightbox-modal');
+  const dialogBox = document.getElementById('lightbox-dialog-box');
   const lbTitle = document.getElementById('lightbox-title');
   const lbDesc = document.getElementById('lightbox-desc');
-  const closeLb = document.getElementById('close-lightbox');
+  const prevBtn = document.getElementById('lb-prev-btn');
+  const nextBtn = document.getElementById('lb-next-btn');
+  const galleryTabs = document.getElementById('lb-gallery-tabs');
 
-  const close = () => {
+  LightboxGalleryState.screenshots = screenshots;
+  LightboxGalleryState.modalTitle = title;
+  LightboxGalleryState.modalDesc = desc;
+
+  if (lbTitle) lbTitle.textContent = title;
+  if (lbDesc) lbDesc.textContent = desc;
+
+  // Auto adjust width for landscape diagrams vs portrait mobile screens
+  if (dialogBox) {
+    const isLandscape = screenshots.some(s => s.toLowerCase().includes('topology') || s.toLowerCase().includes('network'));
+    if (isLandscape) {
+      dialogBox.className = 'relative max-w-4xl lg:max-w-6xl w-full max-h-[96vh] bg-[#070b14] border border-white/20 rounded-3xl p-4 sm:p-5 shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col items-center gap-3 overflow-hidden';
+    } else {
+      dialogBox.className = 'relative max-w-md md:max-w-lg w-full max-h-[96vh] bg-[#070b14] border border-white/20 rounded-3xl p-4 sm:p-5 shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col items-center gap-3 overflow-hidden';
+    }
+  }
+
+  if (screenshots.length > 1) {
+    if (prevBtn) prevBtn.style.display = 'flex';
+    if (nextBtn) nextBtn.style.display = 'flex';
+    if (galleryTabs) {
+      galleryTabs.style.display = 'flex';
+      galleryTabs.innerHTML = screenshots.map((url, i) => {
+        const label = LightboxGalleryState.pillNames[i] || `Screen ${i+1}`;
+        return `
+          <button type="button" class="gallery-pill-btn text-[11px] font-mono px-3 py-1 rounded-full border transition-all cursor-pointer ${i === 0 ? 'bg-brand-cyan text-black font-bold border-brand-cyan' : 'bg-white/5 text-slate-300 border-white/10 hover:border-brand-cyan/50'}" data-index="${i}">
+            ${label}
+          </button>
+        `;
+      }).join('');
+
+      galleryTabs.querySelectorAll('.gallery-pill-btn').forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          const targetIdx = parseInt(btn.getAttribute('data-index'), 10);
+          changeLightboxScreen(targetIdx);
+        };
+      });
+    }
+  } else {
+    if (prevBtn) prevBtn.style.display = 'none';
+    if (nextBtn) nextBtn.style.display = 'none';
+    if (galleryTabs) {
+      galleryTabs.style.display = 'none';
+      galleryTabs.innerHTML = '';
+    }
+  }
+
+  changeLightboxScreen(initialIndex);
+
+  if (lightbox) {
+    lightbox.classList.remove('hidden');
+    lightbox.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function changeLightboxScreen(newIndex) {
+  const screenshots = LightboxGalleryState.screenshots;
+  if (!screenshots || screenshots.length === 0) return;
+
+  const total = screenshots.length;
+  LightboxGalleryState.currentIndex = (newIndex + total) % total;
+  const currentUrl = screenshots[LightboxGalleryState.currentIndex];
+
+  const lbImg = document.getElementById('lightbox-img');
+  const lbBadge = document.getElementById('lightbox-badge');
+  const galleryTabs = document.getElementById('lb-gallery-tabs');
+
+  if (lbImg) {
+    lbImg.src = currentUrl;
+  }
+
+  if (lbBadge) {
+    const fileName = currentUrl.split('/').pop();
+    const screenTitle = LightboxGalleryState.titles[fileName] || `Screen ${LightboxGalleryState.currentIndex + 1} of ${total}`;
+    lbBadge.textContent = screenTitle;
+  }
+
+  if (galleryTabs) {
+    const pills = galleryTabs.querySelectorAll('.gallery-pill-btn');
+    pills.forEach((pill, idx) => {
+      if (idx === LightboxGalleryState.currentIndex) {
+        pill.className = 'gallery-pill-btn text-[11px] font-mono px-3 py-1 rounded-full border transition-all cursor-pointer bg-brand-cyan text-black font-bold border-brand-cyan shadow-[0_0_15px_rgba(0,240,255,0.4)]';
+      } else {
+        pill.className = 'gallery-pill-btn text-[11px] font-mono px-3 py-1 rounded-full border transition-all cursor-pointer bg-white/5 text-slate-300 border-white/10 hover:border-brand-cyan/50';
+      }
+    });
+  }
+}
+
+function closeLightboxModal() {
+  const lightbox = document.getElementById('app-lightbox-modal');
+  if (lightbox) {
     lightbox.classList.add('hidden');
     lightbox.classList.remove('flex');
     document.body.style.overflow = '';
-  };
-
-  appCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const src = card.getAttribute('data-img');
-      const title = card.getAttribute('data-title') || 'Mobile Application';
-      const desc = card.getAttribute('data-desc') || 'Engineered with Flutter & Firebase';
-
-      if (src && lbImg) {
-        lbImg.src = src;
-        lbTitle.textContent = title;
-        lbDesc.textContent = desc;
-        lightbox.classList.remove('hidden');
-        lightbox.classList.add('flex');
-        document.body.style.overflow = 'hidden';
-      }
-    });
-  });
-
-  if (closeLb) closeLb.addEventListener('click', close);
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) close();
-  });
+  }
 }
 
 /* ==========================================================================
@@ -918,32 +1095,52 @@ function hydratePortfolioContent() {
   // 4. Flutter Mobile Apps
   if (data.apps && data.apps.length > 0) {
     const appsGrid = document.querySelector('#flutter-hub .grid');
+    const appsBadge = document.querySelector('#flutter-hub .flex.items-center.gap-3 span.font-mono');
+    if (appsBadge) {
+      appsBadge.textContent = `${data.apps.length} Featured Apps • Android / iOS`;
+    }
+
     if (appsGrid) {
+      if (data.apps.length >= 4) {
+        appsGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6';
+      } else {
+        appsGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8';
+      }
+
+      const colorMap = {
+        'purple': { bg: 'bg-purple-500/20', border: 'border-purple-500/40', text: 'text-purple-300', tag: 'text-brand-cyan', hover: 'hover:border-brand-cyan/40', btn: 'text-brand-cyan bg-brand-cyan/10 border-brand-cyan/30' },
+        'pink': { bg: 'bg-pink-500/20', border: 'border-pink-500/40', text: 'text-pink-300', tag: 'text-purple-400', hover: 'hover:border-purple-500/40', btn: 'text-purple-400 bg-purple-500/10 border-purple-500/30' },
+        'amber': { bg: 'bg-amber-500/20', border: 'border-brand-amber/40', text: 'text-brand-amber', tag: 'text-brand-amber', hover: 'hover:border-brand-amber/40', btn: 'text-brand-amber bg-brand-amber/10 border-brand-amber/30' },
+        'emerald': { bg: 'bg-emerald-500/20', border: 'border-emerald-500/40', text: 'text-emerald-400', tag: 'text-brand-emerald', hover: 'hover:border-brand-emerald/40', btn: 'text-brand-emerald bg-brand-emerald/10 border-brand-emerald/30' }
+      };
+
       appsGrid.innerHTML = data.apps.map(app => {
+        const c = colorMap[app.iconColor] || colorMap['purple'];
+        const screenshotsAttr = encodeURIComponent(JSON.stringify(app.screenshots || [app.image]));
         const tagsHtml = (app.tags || []).map((t, idx) => `
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 ${idx === 0 ? 'text-brand-cyan' : 'text-slate-300'}">${t}</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 ${idx === 0 ? c.tag : 'text-slate-300'}">${t}</span>
         `).join('');
 
         return `
-          <div class="bento-card rounded-3xl p-6 flex flex-col gap-5 border border-white/10 hover:border-brand-cyan/40 group app-preview-trigger cursor-pointer" data-img="${app.image || 'assets/images/app-zenpdf.jpg'}" data-title="${app.modalTitle || app.name}" data-desc="${app.modalSubtitle || app.description}">
+          <div class="bento-card rounded-3xl p-6 flex flex-col gap-5 border border-white/10 ${c.hover} group app-preview-trigger cursor-pointer" data-img="${app.image || 'assets/images/app-zenpdf.jpg'}" data-screenshots='${JSON.stringify(app.screenshots || [app.image])}' data-title="${app.modalTitle || app.name}" data-desc="${app.modalSubtitle || app.description}">
             <div class="relative w-full aspect-[9/16] rounded-2xl overflow-hidden border border-white/15 bg-[#0b0f19] shadow-2xl group-hover:scale-[1.02] transition-all duration-500">
               <img src="${app.image || 'assets/images/app-zenpdf.jpg'}" alt="${app.name}" class="w-full h-full object-cover object-top">
               <div class="absolute inset-0 bg-gradient-to-t from-bg-deep/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-4">
-                <span class="text-xs font-mono font-bold text-brand-cyan bg-brand-cyan/10 px-3 py-1.5 rounded-lg border border-brand-cyan/30 backdrop-blur-md">
+                <span class="text-xs font-mono font-bold ${c.btn} px-3 py-1.5 rounded-lg border backdrop-blur-md">
                   Click to Enlarge
                 </span>
-                <span class="material-symbols-outlined text-brand-cyan bg-white/10 rounded-full p-1 text-sm">fullscreen</span>
+                <span class="material-symbols-outlined ${c.tag} bg-white/10 rounded-full p-1 text-sm">fullscreen</span>
               </div>
             </div>
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                  <div class="size-8 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300">
+                  <div class="size-8 rounded-lg ${c.bg} border ${c.border} flex items-center justify-center ${c.text}">
                     <span class="material-symbols-outlined text-base">${app.icon || 'picture_as_pdf'}</span>
                   </div>
                   <h3 class="text-xl font-bold text-white font-heading">${app.name}</h3>
                 </div>
-                <span class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/30">
+                <span class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full ${c.btn} border">
                   ${app.badge || 'App'}
                 </span>
               </div>
@@ -957,6 +1154,11 @@ function hydratePortfolioContent() {
           </div>
         `;
       }).join('');
+
+      // Reinitialize app lightbox listeners for dynamically rendered cards
+      if (typeof initAppLightbox === 'function') {
+        initAppLightbox();
+      }
     }
   }
 

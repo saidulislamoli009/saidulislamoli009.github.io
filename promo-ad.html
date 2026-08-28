@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html class="dark" lang="bn">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Portfolio Ads Studio | Live Working Demo & 60s Video Promo (৳৯৯৯)</title>
+    
+    <!-- Google Fonts & Modern Icons -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "brand-cyan": "#00f0ff",
+              "brand-amber": "#f59e0b",
+              "brand-emerald": "#10b981",
+              "brand-purple": "#a855f7",
+              "brand-rose": "#f43f5e",
+              "bg-deep": "#04060d",
+              "bg-surface": "#080c18"
+            },
+            fontFamily: {
+              "bangla": ["Hind Siliguri", "sans-serif"],
+              "sans": ["Plus Jakarta Sans", "sans-serif"],
+              "heading": ["Outfit", "sans-serif"],
+              "mono": ["JetBrains Mono", "monospace"]
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      body {
+        font-family: 'Hind Siliguri', 'Plus Jakarta Sans', sans-serif;
+        background-color: #04060d;
+        color: #f1f5f9;
+        overflow-x: hidden;
+      }
+
+      /* Studio Stage Glass & Canvas */
+      .video-screen-container {
+        position: relative;
+        background: radial-gradient(circle at 50% 10%, rgba(245, 158, 11, 0.18), rgba(0, 240, 255, 0.1) 40%, #03050a 90%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.95), 0 0 50px rgba(245, 158, 11, 0.2);
+        overflow: hidden;
+        border-radius: 1.5rem;
+      }
+
+      /* Floating Mockup Devices */
+      .device-laptop-frame {
+        background: #0d1322;
+        border: 2px solid rgba(255, 255, 255, 0.18);
+        border-radius: 1rem;
+        box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 240, 255, 0.2);
+        overflow: hidden;
+        position: relative;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .device-mobile-frame {
+        width: 220px;
+        height: 420px;
+        background: #000000;
+        border: 4px solid #1e293b;
+        border-radius: 2rem;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(245, 158, 11, 0.25);
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Dynamic Overlay Badge animations */
+      .scene-overlay-card {
+        background: rgba(4, 7, 16, 0.88);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 1.25rem;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(245, 158, 11, 0.15);
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .gradient-text-gold {
+        background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #ea580c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .gradient-text-cyan {
+        background: linear-gradient(135deg, #67e8f9 0%, #00f0ff 50%, #3b82f6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      /* Audio Visualizer Wave */
+      .visualizer-bar {
+        width: 3.5px;
+        background: #00f0ff;
+        border-radius: 9999px;
+        animation: audioWave 1.2s ease-in-out infinite alternate;
+      }
+
+      @keyframes audioWave {
+        0% { height: 4px; opacity: 0.3; }
+        50% { height: 20px; opacity: 0.9; background: #f59e0b; }
+        100% { height: 32px; opacity: 1; background: #00f0ff; }
+      }
+
+      .pulse-glow {
+        animation: pulseRing 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes pulseRing {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.04); opacity: 0.9; filter: drop-shadow(0 0 30px #f59e0b); }
+      }
+    </style>
+</head>
+<body class="min-h-screen p-3 sm:p-6 lg:p-8 flex flex-col items-center">
+
+    <!-- Top Header Bar -->
+    <header class="w-full max-w-[1400px] flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-3.5">
+            <div class="size-12 rounded-2xl bg-gradient-to-br from-brand-amber/20 via-brand-cyan/20 to-transparent border border-brand-amber/40 flex items-center justify-center text-brand-amber shadow-[0_0_25px_rgba(245,158,11,0.3)]">
+                <span class="material-symbols-outlined text-2xl">featured_video</span>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xl sm:text-2xl font-black font-heading tracking-tight text-white">
+                        PORTFOLIO ADS STUDIO
+                    </h1>
+                    <span class="text-[10px] font-mono font-bold bg-brand-amber/20 text-brand-amber border border-brand-amber/40 px-2.5 py-0.5 rounded-full uppercase">Live Demo & Video Studio</span>
+                </div>
+                <p class="text-xs text-slate-400 font-bangla">আপনার মূল পোর্টফোলিওকে লাইভ উদাহরণ হিসেবে রেখে ফেসবুক ও ইউটিউব ভিডিও বিজ্ঞাপনের জন্য ১-মিনিটের শোকেস</p>
+            </div>
+        </div>
+
+        <!-- Mode & Controls -->
+        <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
+            
+            <!-- Device Mockup Mode Selector -->
+            <div class="flex bg-white/5 p-1 rounded-xl border border-white/10 text-xs font-mono">
+                <button id="view-split" class="px-3 py-1.5 rounded-lg bg-brand-cyan/20 text-brand-cyan font-bold flex items-center gap-1.5 transition-all">
+                    <span class="material-symbols-outlined text-sm">devices</span> Split Live Demo
+                </button>
+                <button id="view-laptop" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-bold flex items-center gap-1.5 transition-all">
+                    <span class="material-symbols-outlined text-sm">laptop_mac</span> Full Laptop
+                </button>
+                <button id="view-mobile" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-bold flex items-center gap-1.5 transition-all">
+                    <span class="material-symbols-outlined text-sm">smartphone</span> Mobile Reel
+                </button>
+            </div>
+
+            <!-- Open Real Site -->
+            <a href="index.html" target="_blank" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-brand-amber/20 to-brand-cyan/20 hover:from-brand-amber/30 hover:to-brand-cyan/30 border border-brand-amber/40 text-xs font-bold font-mono text-white flex items-center gap-1.5 transition-all shadow-md">
+                <span class="material-symbols-outlined text-sm text-brand-cyan">open_in_new</span> Open Live Website
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Studio Grid -->
+    <div class="w-full max-w-[1400px] grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- Left Video & Live Example Stage (8 Cols) -->
+        <div class="lg:col-span-8 flex flex-col gap-4">
+            
+            <!-- Video Stage Container with Embedded Live Portfolio -->
+            <div id="video-stage" class="video-screen-container w-full aspect-[16/10] sm:aspect-video flex items-center justify-center relative select-none">
+                
+                <!-- Ambient Backdrop -->
+                <div class="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px]"></div>
+                
+                <!-- Top Status Badge Overlay -->
+                <div class="absolute top-3 left-4 right-4 flex items-center justify-between z-30 pointer-events-none">
+                    <div class="flex items-center gap-2 bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 text-xs font-mono shadow-lg">
+                        <span class="size-2.5 rounded-full bg-rose-500 animate-ping"></span>
+                        <span class="text-white font-bold tracking-wider">LIVE SHOWCASE AD</span>
+                        <span class="text-slate-500">&bull;</span>
+                        <span id="timer-display" class="text-brand-cyan font-bold">00:00 / 01:00</span>
+                    </div>
+
+                    <div class="flex items-center gap-2 bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-full border border-brand-amber/40 text-xs font-bold text-brand-amber shadow-lg">
+                        <span class="material-symbols-outlined text-sm">verified</span>
+                        <span>Working Portfolio Example</span>
+                    </div>
+                </div>
+
+                <!-- Main Live Portfolio Working Window (Interactive & Visual) -->
+                <div id="portfolio-device-container" class="relative w-[92%] h-[82%] mt-6 flex items-center justify-center transition-all duration-500">
+                    
+                    <!-- Laptop Mockup Frame -->
+                    <div id="laptop-frame" class="device-laptop-frame w-full h-full flex flex-col">
+                        <!-- Browser Window Header -->
+                        <div class="h-7 bg-[#080d1a] border-b border-white/10 px-3 flex items-center justify-between shrink-0">
+                            <div class="flex items-center gap-1.5">
+                                <div class="size-2.5 rounded-full bg-rose-500/80"></div>
+                                <div class="size-2.5 rounded-full bg-amber-500/80"></div>
+                                <div class="size-2.5 rounded-full bg-emerald-500/80"></div>
+                            </div>
+                            <div class="flex items-center gap-1 bg-black/40 border border-white/10 px-3 py-0.5 rounded-md text-[10px] font-mono text-slate-300">
+                                <span class="material-symbols-outlined text-[11px] text-emerald-400">lock</span>
+                                <span>https://saidulislamoli009.github.io</span>
+                            </div>
+                            <div class="flex items-center gap-1 text-slate-400 text-xs">
+                                <span class="material-symbols-outlined text-sm">refresh</span>
+                            </div>
+                        </div>
+
+                        <!-- Embedded Live Working Portfolio IFrame -->
+                        <div class="flex-1 w-full h-full relative overflow-hidden bg-[#04060d]">
+                            <iframe id="live-portfolio-iframe" src="index.html" class="w-full h-full border-0 select-auto" title="Live Working Portfolio Example"></iframe>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Dynamic Scene Overlay Floating Card (Moves & Updates Automatically with Time) -->
+                <div id="promo-floating-overlay" class="scene-overlay-card absolute bottom-4 left-6 right-6 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 z-40">
+                    
+                    <div class="flex items-center gap-3.5">
+                        <div id="overlay-icon-container" class="size-12 rounded-2xl bg-gradient-to-br from-brand-amber/20 to-brand-cyan/20 border border-brand-amber/40 text-brand-amber flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(245,158,11,0.3)]">
+                            <span id="overlay-icon" class="material-symbols-outlined text-2xl">badge</span>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span id="overlay-tag" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30 uppercase">
+                                    00:00 - 00:12 &bull; Digital Identity
+                                </span>
+                            </div>
+                            <h3 id="overlay-heading" class="text-base sm:text-lg font-black text-white font-heading mt-0.5">
+                                চাকরি বা ফ্রিল্যান্সিংয়ে আপনার নিজস্ব লাইভ পোর্টফোলিও!
+                            </h3>
+                            <p id="overlay-subtext" class="text-xs text-slate-300 font-bangla line-clamp-1 sm:line-clamp-none">
+                                কাগজের সিভির দিন শেষ — যেকোনো ক্লায়েন্ট বা রিক্রুটারকে মুগ্ধ করতে চাই লাইভ পোর্টফোলিও ওয়েবসাইট।
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 shrink-0">
+                        <div class="text-right">
+                            <div class="text-[10px] font-mono text-slate-400 line-through">রেগুলার: ২৫০০৳</div>
+                            <div class="text-lg sm:text-xl font-black text-white font-heading">
+                                অফার: <span class="gradient-text-gold">৳৯৯৯</span>/-
+                            </div>
+                        </div>
+                        <a href="https://wa.me/8801799239023" target="_blank" class="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-amber to-amber-600 hover:scale-105 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-amber-500/25 transition-transform">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Order 999৳
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- Bottom Progress Bar -->
+                <div class="absolute bottom-0 left-0 right-0 h-1.5 bg-white/10 z-50">
+                    <div id="video-progress-bar" class="h-full bg-gradient-to-r from-brand-amber via-brand-cyan to-brand-emerald w-0 transition-all duration-100"></div>
+                </div>
+
+            </div>
+
+            <!-- Player Controls Toolbar -->
+            <div class="p-4 rounded-2xl bg-black/60 border border-white/10 flex flex-wrap items-center justify-between gap-4 backdrop-blur-xl">
+                <div class="flex items-center gap-3">
+                    <button id="play-pause-btn" class="size-11 rounded-xl bg-gradient-to-r from-brand-amber to-amber-600 text-white flex items-center justify-center hover:scale-105 transition-transform cursor-pointer shadow-lg shadow-amber-500/30">
+                        <span id="play-icon" class="material-symbols-outlined text-2xl">play_arrow</span>
+                    </button>
+
+                    <button id="restart-btn" class="size-10 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white flex items-center justify-center cursor-pointer transition-colors" title="Restart Video">
+                        <span class="material-symbols-outlined text-lg">replay</span>
+                    </button>
+
+                    <!-- Scene Jumper Tabs -->
+                    <div class="hidden sm:flex items-center gap-1 bg-white/5 p-1 rounded-xl text-[11px] font-mono">
+                        <button class="scene-nav-btn px-2.5 py-1 rounded-lg bg-brand-cyan/20 text-brand-cyan font-bold" data-scene="1">1. Hero</button>
+                        <button class="scene-nav-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white" data-scene="2">2. Projects</button>
+                        <button class="scene-nav-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white" data-scene="3">3. Admin CMS</button>
+                        <button class="scene-nav-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white" data-scene="4">4. ৳৯৯৯ Offer</button>
+                        <button class="scene-nav-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white" data-scene="5">5. CTA</button>
+                    </div>
+                </div>
+
+                <!-- Sound FX Synthesizer Toggle -->
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-1 h-6">
+                        <div class="visualizer-bar" style="animation-delay: 0.1s;"></div>
+                        <div class="visualizer-bar" style="animation-delay: 0.3s;"></div>
+                        <div class="visualizer-bar" style="animation-delay: 0.5s;"></div>
+                        <div class="visualizer-bar" style="animation-delay: 0.2s;"></div>
+                        <div class="visualizer-bar" style="animation-delay: 0.4s;"></div>
+                    </div>
+
+                    <button id="audio-synth-btn" class="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono font-bold text-slate-300 flex items-center gap-1.5 cursor-pointer">
+                        <span class="material-symbols-outlined text-sm text-brand-cyan">volume_up</span>
+                        <span id="audio-label">Sound FX: ON</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Side: Complete Ad Script, Storyboard & Copywriting (4 Cols) -->
+        <div class="lg:col-span-4 space-y-5">
+            
+            <!-- Quick Copy Ads Caption Card -->
+            <div class="p-5 rounded-2xl bg-black/60 border border-white/10 backdrop-blur-xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-bold text-white font-heading flex items-center gap-2 text-brand-amber">
+                        <span class="material-symbols-outlined text-base">campaign</span> Facebook & YouTube Ad Caption
+                    </h3>
+                    <button id="copy-caption-btn" class="px-2.5 py-1 rounded-lg bg-brand-amber/15 text-brand-amber text-[11px] font-mono font-bold flex items-center gap-1 hover:bg-brand-amber/25 cursor-pointer">
+                        <span class="material-symbols-outlined text-xs">content_copy</span> Copy Caption
+                    </button>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 text-xs text-slate-300 font-bangla leading-relaxed max-h-52 overflow-y-auto space-y-2">
+                    <p class="font-bold text-white">🚀 মাত্র ৯৯৯ টাকায় বানিয়ে নিন নিজের প্রিমিয়াম পার্সোনাল পোর্টফোলিও ওয়েবসাইট!</p>
+                    <p>💼 চাকরির ইন্টারভিউ, ফ্রিল্যান্সিং ক্লায়েন্ট কিংবা ডিজিটাল পরিচিতি — একটি লাইভ পোর্টফোলিও ওয়েবসাইট আপনার ক্যারিয়ারকে নিয়ে যাবে অন্য উচ্চতায়!</p>
+                    <p>✨ <strong>আমাদের প্যাকেজে যা যা পাচ্ছেন:</strong><br/>
+                    ✔️ Ultra-Modern Cyber-Glass Design (Dark & Light Mode)<br/>
+                    ✔️ প্রাইভেট অ্যাডমিন প্যানেল (যেকোনো সময় নিজেই এডিট করতে পারবেন)<br/>
+                    ✔️ ১-ক্লিক ফুল এইচডি প্রফেশনাল ২-পেজ সিভি এক্সপোর্টার<br/>
+                    ✔️ লাইফটাইম ফ্রি হোস্টিং ও ইনস্ট্যান্ট আপলোড<br/>
+                    ✔️ ২৪/৭ টেকনিক্যাল সাপোর্ট</p>
+                    <p class="font-bold text-brand-amber">🔥 অফার প্রাইস: মাত্র ৯৯৯ টাকা (সীমিত সময়ের জন্য!)</p>
+                    <p>👉 এখনই ইনবক্স করুন অথবা WhatsApp করুন: <strong>01799-239023</strong><br/>
+                    🌐 লাইভ ডেমো লিংক: <strong>https://saidulislamoli009.github.io</strong></p>
+                </div>
+            </div>
+
+            <!-- 60-Second Video Script Breakdown -->
+            <div class="p-5 rounded-2xl bg-black/60 border border-white/10 backdrop-blur-xl space-y-4">
+                <h3 class="text-sm font-bold text-white font-heading flex items-center gap-2 text-brand-cyan">
+                    <span class="material-symbols-outlined text-base">mic</span> ১-মিনিটের সম্পূর্ণ ভয়েসওভার স্ক্রিপ্ট
+                </h3>
+
+                <div class="space-y-3 text-xs text-slate-300 font-bangla max-h-80 overflow-y-auto pr-1">
+                    <div class="p-3 rounded-xl bg-white/[0.02] border-l-2 border-rose-500 space-y-1">
+                        <span class="text-[10px] font-mono font-bold text-rose-400">00:00 - 00:12 (Scene 1: Hook)</span>
+                        <p class="leading-relaxed">"চাকরির বাজারে শুধুমাত্র কাগজের সিভি দিয়ে আর ভিড় থেকে আলাদা হওয়া যাচ্ছে না? আপনার দক্ষতা ও প্রজেক্টগুলোকে প্রফেশনালি তুলে ধরতে ২০২৬ সালে আপনার প্রয়োজন একটি আল্ট্রা-মডার্ন ডিজিটাল পোর্টফোলিও ওয়েবসাইট!"</p>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-white/[0.02] border-l-2 border-brand-cyan space-y-1">
+                        <span class="text-[10px] font-mono font-bold text-brand-cyan">00:12 - 00:26 (Scene 2: Projects & Live UI)</span>
+                        <p class="leading-relaxed">"আমাদের স্পেশাল সাইবার-গ্লাস ডিজাইনে থাকছে ডার্ক ও লাইট মোড, ৩ডি ইন্টারঅ্যাক্টিভ অ্যানিমেশন, মোবাইল অ্যাপস ও ইআরপি প্রজেক্ট শোকেস এবং ১-ক্লিকেই প্রফেশনাল দুই পেজের এক্সিকিউটিভ সিভি ডাউনলোড সুবিধা!"</p>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-white/[0.02] border-l-2 border-purple-400 space-y-1">
+                        <span class="text-[10px] font-mono font-bold text-purple-400">00:26 - 00:40 (Scene 3: Admin & Control)</span>
+                        <p class="leading-relaxed">"সবচেয়ে দারুণ বিষয় — সাথে পাচ্ছেন একটি ডেডিকেটেড অ্যাডমিন প্যানেল! যার মাধ্যমে যেকোনো সময় কোনো কোডিং ছাড়াই নিজের ফোন বা কম্পিউটার থেকে তথ্য এডিট করে এক ক্লিকেই লাইভ আপডেট করে নিতে পারবেন।"</p>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-white/[0.02] border-l-2 border-brand-amber space-y-1">
+                        <span class="text-[10px] font-mono font-bold text-brand-amber">00:40 - 00:50 (Scene 4: Mega Offer 999৳)</span>
+                        <p class="leading-relaxed">"২৫০০ টাকার এই প্রিমিয়াম পোর্টফোলিও ওয়েবসাইট পাচ্ছেন সীমিত সময়ের স্পেশাল অফারে — মাত্র ৯৯৯ টাকায়! সম্পূর্ণ ফ্রি ক্লাউড আপলোড, লাইফটাইম হোস্টিং ও সার্বক্ষণিক সাপোর্ট সহ!"</p>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-white/[0.02] border-l-2 border-emerald-400 space-y-1">
+                        <span class="text-[10px] font-mono font-bold text-emerald-400">00:50 - 01:00 (Scene 5: Urgent CTA)</span>
+                        <p class="leading-relaxed">"দেরি না করে আজই নিজের ডিজিটাল পরিচয় তৈরি করুন। এখনই স্ক্রিনের নম্বরে হোয়াটসঅ্যাপ করুন অথবা পেইজে সরাসরি ইনবক্স করুন!"</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Script: Interactive Video Controller & Live Portfolio Showcase Engine -->
+    <script>
+      let isPlaying = false;
+      let currentTime = 0;
+      const totalDuration = 60; // 60 Seconds
+      let timerInterval = null;
+      let soundEnabled = true;
+
+      // Audio Synthesizer Context
+      let audioCtx = null;
+
+      function playBeep(freq = 440, type = 'sine', duration = 0.15) {
+        if (!soundEnabled) return;
+        try {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {}
+      }
+
+      const sceneData = [
+        {
+          start: 0,
+          end: 12,
+          tag: "00:00 - 00:12 • Digital Identity",
+          heading: "চাকরি বা ফ্রিল্যান্সিংয়ে আপনার নিজস্ব লাইভ পোর্টফোলিও!",
+          subtext: "কাগজের সিভির দিন শেষ — যেকোনো ক্লায়েন্ট বা রিক্রুটারকে মুগ্ধ করতে চাই লাইভ পোর্টফোলিও ওয়েবসাইট।",
+          icon: "badge",
+          targetSection: "#home"
+        },
+        {
+          start: 12,
+          end: 26,
+          tag: "00:12 - 00:26 • Live Projects & UI",
+          heading: "Cyber-Glass ডিজাইন, ERP & মোবাইল অ্যাপস শোকেস",
+          subtext: "ডার্ক ও লাইট মোড, ৩ডি অ্যানিমেশন এবং ১-ক্লিকেই প্রফেশনাল এক্সিকিউটিভ ২-পেজ সিভি এক্সপোর্টার!",
+          icon: "devices",
+          targetSection: "#erp-core"
+        },
+        {
+          start: 26,
+          end: 40,
+          tag: "00:26 - 00:40 • Full Control & CMS",
+          heading: "প্রাইভেট অ্যাডমিন প্যানেল — নিজেই তথ্য এডিট করুন!",
+          subtext: "কোনো কোডিং ছাড়াই যেকোনো সময় চাকরি, অভিজ্ঞতা বা প্রজেক্ট এডিট করে ১-ক্লিকে লাইভ আপডেট করুন।",
+          icon: "admin_panel_settings",
+          targetSection: "#experience"
+        },
+        {
+          start: 40,
+          end: 50,
+          tag: "00:40 - 00:50 • Limited Offer",
+          heading: "সীমিত সময়ের স্পেশাল অফারে — মাত্র ৳৯৯৯/-",
+          subtext: "২৫০০ টাকার প্রিমিয়াম পোর্টফোলিও সম্পূর্ণ ফ্রি ক্লাউড হোস্টিং, আপলোড ও ২৪/৭ সাপোর্ট সহ মাত্র ৯৯৯ টাকায়!",
+          icon: "local_fire_department",
+          targetSection: "#contact"
+        },
+        {
+          start: 50,
+          end: 60,
+          tag: "00:50 - 01:00 • Order Now",
+          heading: "আজই নিজের ডিজিটাল পরিচিতি তৈরি করুন!",
+          subtext: "দেরি না করে এখনই মেসেজ দিন বা WhatsApp-এ নক করুন: 01799-239023",
+          icon: "rocket_launch",
+          targetSection: "#home"
+        }
+      ];
+
+      function updateSceneDisplay() {
+        const timerEl = document.getElementById('timer-display');
+        const progressEl = document.getElementById('video-progress-bar');
+        const iframe = document.getElementById('live-portfolio-iframe');
+        
+        const mins = Math.floor(currentTime / 60).toString().padStart(2, '0');
+        const secs = (currentTime % 60).toString().padStart(2, '0');
+        timerEl.textContent = `${mins}:${secs} / 01:00`;
+
+        const pct = (currentTime / totalDuration) * 100;
+        progressEl.style.width = `${pct}%`;
+
+        // Find active scene
+        let activeIdx = 0;
+        sceneData.forEach((sc, idx) => {
+          if (currentTime >= sc.start && currentTime < sc.end) {
+            activeIdx = idx;
+          }
+        });
+
+        const currentScene = sceneData[activeIdx];
+        document.getElementById('overlay-tag').textContent = currentScene.tag;
+        document.getElementById('overlay-heading').textContent = currentScene.heading;
+        document.getElementById('overlay-subtext').textContent = currentScene.subtext;
+        document.getElementById('overlay-icon').textContent = currentScene.icon;
+
+        // Auto navigate iframe smoothly if applicable
+        if (iframe && iframe.contentWindow) {
+          try {
+            const targetEl = iframe.contentDocument.querySelector(currentScene.targetSection);
+            if (targetEl) {
+              targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          } catch(e) {}
+        }
+
+        // Update scene nav buttons
+        document.querySelectorAll('.scene-nav-btn').forEach((btn, idx) => {
+          if (idx === activeIdx) {
+            btn.className = 'scene-nav-btn px-2.5 py-1 rounded-lg bg-brand-cyan/20 text-brand-cyan font-bold';
+          } else {
+            btn.className = 'scene-nav-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white';
+          }
+        });
+
+        if (currentTime >= totalDuration) {
+          pauseVideo();
+          currentTime = 0;
+          updateSceneDisplay();
+        }
+      }
+
+      function playVideo() {
+        isPlaying = true;
+        document.getElementById('play-icon').textContent = 'pause';
+        playBeep(520, 'triangle', 0.2);
+        timerInterval = setInterval(() => {
+          currentTime += 1;
+          updateSceneDisplay();
+        }, 1000);
+      }
+
+      function pauseVideo() {
+        isPlaying = false;
+        document.getElementById('play-icon').textContent = 'play_arrow';
+        if (timerInterval) clearInterval(timerInterval);
+      }
+
+      document.getElementById('play-pause-btn').addEventListener('click', () => {
+        if (isPlaying) pauseVideo();
+        else playVideo();
+      });
+
+      document.getElementById('restart-btn').addEventListener('click', () => {
+        currentTime = 0;
+        updateSceneDisplay();
+        if (!isPlaying) playVideo();
+      });
+
+      document.querySelectorAll('.scene-nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const scNum = parseInt(btn.getAttribute('data-scene'));
+          currentTime = sceneData[scNum - 1].start;
+          updateSceneDisplay();
+        });
+      });
+
+      // Sound toggle
+      document.getElementById('audio-synth-btn').addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        document.getElementById('audio-label').textContent = soundEnabled ? 'Sound FX: ON' : 'Sound FX: OFF';
+      });
+
+      // Device View Mode Switchers
+      const devContainer = document.getElementById('portfolio-device-container');
+      const laptopFrame = document.getElementById('laptop-frame');
+      const viewSplit = document.getElementById('view-split');
+      const viewLaptop = document.getElementById('view-laptop');
+      const viewMobile = document.getElementById('view-mobile');
+
+      viewSplit.addEventListener('click', () => {
+        laptopFrame.className = 'device-laptop-frame w-full h-full flex flex-col';
+        viewSplit.className = 'px-3 py-1.5 rounded-lg bg-brand-cyan/20 text-brand-cyan font-bold flex items-center gap-1.5 transition-all';
+        viewLaptop.className = 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-bold flex items-center gap-1.5 transition-all';
+        viewMobile.className = 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-bold flex items-center gap-1.5 transition-all';
+      });
+
+      viewLaptop.addEventListener('click', () => {
+        laptopFrame.className = 'device-laptop-frame w-full h-full flex flex-col scale-[1.02] shadow-2xl';
+        viewLaptop.className = 'px-3 py-1.5 rounded-lg bg-brand-cyan/20 text-brand-cyan font-bold flex items-center gap-1.5 transition-all';
+        viewSplit.className = 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-bold flex items-center gap-1.5 transition-all';
+        viewMobile.className = 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-bold flex items-center gap-1.5 transition-all';
+      });
+
+      viewMobile.addEventListener('click', () => {
+        laptopFrame.className = 'device-mobile-frame mx-auto flex flex-col';
+        viewMobile.className = 'px-3 py-1.5 rounded-lg bg-brand-cyan/20 text-brand-cyan font-bold flex items-center gap-1.5 transition-all';
+        viewSplit.className = 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-bold flex items-center gap-1.5 transition-all';
+        viewLaptop.className = 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-bold flex items-center gap-1.5 transition-all';
+      });
+
+      // Copy Caption Button
+      document.getElementById('copy-caption-btn').addEventListener('click', () => {
+        const text = `🚀 মাত্র ৯৯৯ টাকায় বানিয়ে নিন নিজের প্রিমিয়াম পার্সোনাল পোর্টফোলিও ওয়েবসাইট!
+
+💼 চাকরির ইন্টারভিউ, ফ্রিল্যান্সিং ক্লায়েন্ট কিংবা ডিজিটাল পরিচিতি — একটি লাইভ পোর্টফোলিও ওয়েবসাইট আপনার ক্যারিয়ারকে নিয়ে যাবে অন্য উচ্চতায়!
+
+✨ আমাদের প্যাকেজে যা যা পাচ্ছেন:
+✔️ Ultra-Modern Cyber-Glass Design (Dark & Light Mode)
+✔️ প্রাইভেট অ্যাডমিন প্যানেল (যেকোনো সময় নিজেই এডিট করতে পারবেন)
+✔️ ১-ক্লিক ফুল এইচডি প্রফেশনাল ২-পেজ সিভি এক্সপোর্টার
+✔️ লাইফটাইম ফ্রি হোস্টিং ও ইনস্ট্যান্ট আপলোড
+✔️ ২৪/৭ টেকনিক্যাল সাপোর্ট
+
+🔥 অফার প্রাইস: মাত্র ৯৯৯ টাকা (সীমিত সময়ের জন্য!)
+
+👉 এখনই ইনবক্স করুন অথবা WhatsApp করুন: 01799-239023
+🌐 লাইভ ডেমো দেখুন: https://saidulislamoli009.github.io`;
+        navigator.clipboard.writeText(text);
+        alert('বিজ্ঞাপনের ক্যাপশনটি সফলভাবে কপি হয়েছে!');
+      });
+    </script>
+</body>
+</html>

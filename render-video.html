@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html class="dark" lang="bn">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Portfolio MP4 Video Ad Generator | 60-Second Video Creator with Audio</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700;800&family=Outfit:wght@700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "brand-cyan": "#00f0ff",
+              "brand-amber": "#f59e0b",
+              "brand-emerald": "#10b981",
+              "bg-deep": "#04060d"
+            },
+            fontFamily: {
+              "bangla": ["Hind Siliguri", "sans-serif"],
+              "heading": ["Outfit", "sans-serif"],
+              "sans": ["Plus Jakarta Sans", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-[#04060d] text-slate-100 min-h-screen p-4 sm:p-8 flex flex-col items-center justify-center font-bangla">
+
+    <div class="w-full max-w-4xl bg-[#080d1a] border border-white/10 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-6 relative overflow-hidden">
+        
+        <!-- Ambient Glow -->
+        <div class="absolute -top-20 -left-20 size-72 rounded-full bg-brand-amber/15 blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-20 -right-20 size-72 rounded-full bg-brand-cyan/15 blur-3xl pointer-events-none"></div>
+
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-white/10 relative z-10">
+            <div class="flex items-center gap-3.5">
+                <div class="size-14 rounded-2xl bg-gradient-to-br from-brand-amber to-amber-600 flex items-center justify-center text-white text-3xl shadow-lg shadow-amber-500/30">
+                    <span class="material-symbols-outlined text-3xl">video_settings</span>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black font-heading text-white tracking-tight flex items-center gap-2">
+                        MP4 VIDEO AD GENERATOR <span class="text-xs bg-brand-amber/20 text-brand-amber border border-brand-amber/40 px-2.5 py-0.5 rounded-full">৳৯৯৯ Offer</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">ফেসবুক ও ইউটিউবে আপলোড করার উপযোগী ৬০-সেকেন্ডের প্রফেশনাল MP4 ভিডিও উইথ ব্যাকগ্রাউন্ড মিউজিক</p>
+                </div>
+            </div>
+
+            <a href="promo-ad.html" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-slate-300 flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">arrow_back</span> Back to Ad Studio
+            </a>
+        </div>
+
+        <!-- Video Canvas Preview -->
+        <div class="relative w-full aspect-video bg-black rounded-2xl border border-white/15 overflow-hidden shadow-2xl flex items-center justify-center">
+            <canvas id="ad-canvas" width="1280" height="720" class="w-full h-full object-contain"></canvas>
+            
+            <div id="rendering-overlay" class="absolute inset-0 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center gap-4 text-center p-6 transition-opacity duration-300">
+                <div class="size-16 rounded-full bg-brand-amber/20 border-2 border-brand-amber flex items-center justify-center text-brand-amber text-3xl animate-pulse">
+                    <span class="material-symbols-outlined text-3xl">movie</span>
+                </div>
+                <div>
+                    <h3 id="render-status-title" class="text-xl font-bold text-white">ভিডিও তৈরি করতে নিচের বাটনে ক্লিক করুন</h3>
+                    <p id="render-status-desc" class="text-xs text-slate-400 mt-1">ক্যানভাস ও অডিও সিঙ্ক করে সাথে সাথে ডাউনলোড শুরু হবে</p>
+                </div>
+                <div id="render-progress-box" class="w-64 h-2 bg-white/10 rounded-full overflow-hidden hidden">
+                    <div id="render-progress-bar" class="h-full bg-gradient-to-r from-brand-amber to-brand-cyan w-0 transition-all duration-100"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls & Action Button -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 relative z-10">
+            <div class="flex items-center gap-3">
+                <div class="text-xs text-slate-400 font-mono">
+                    Output: <span class="text-white font-bold">1080p HD (1280x720) &bull; 60 Seconds &bull; Stereo Audio</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+                <button id="start-record-btn" class="flex-1 sm:flex-none px-6 py-3.5 rounded-2xl bg-gradient-to-r from-brand-amber via-amber-500 to-amber-600 hover:scale-105 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-xl shadow-amber-500/30 transition-transform cursor-pointer">
+                    <span class="material-symbols-outlined text-xl">download_for_offline</span>
+                    <span>Generate & Download MP4 Video</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Feature Points in Bangla -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-white/5 text-xs text-slate-300">
+            <div class="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center gap-2.5">
+                <span class="material-symbols-outlined text-brand-cyan text-lg">check_circle</span>
+                <span>আপনার আসল পোর্টফোলিও স্ক্রিনশট ও ডেমো যুক্ত</span>
+            </div>
+            <div class="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center gap-2.5">
+                <span class="material-symbols-outlined text-brand-amber text-lg">audiotrack</span>
+                <span>অটোমেটিক ব্যাকগ্রাউন্ড সাইবার বিট মিউজিক</span>
+            </div>
+            <div class="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center gap-2.5">
+                <span class="material-symbols-outlined text-emerald-400 text-lg">share</span>
+                <span>ফেসবুক পেজ ও ইউটিউব বিজ্ঞাপনে সরাসরি পোস্টযোগ্য</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Video Rendering & Audio Synthesis Engine Script -->
+    <script>
+      const canvas = document.getElementById('ad-canvas');
+      const ctx = canvas.getContext('2d');
+
+      const startBtn = document.getElementById('start-record-btn');
+      const overlay = document.getElementById('rendering-overlay');
+      const statusTitle = document.getElementById('render-status-title');
+      const statusDesc = document.getElementById('render-status-desc');
+      const progressBox = document.getElementById('render-progress-box');
+      const progressBar = document.getElementById('render-progress-bar');
+
+      // Preload images for canvas
+      const avatarImg = new Image();
+      avatarImg.src = 'assets/images/saidul-avatar.jpg';
+
+      const appZenPdf = new Image();
+      appZenPdf.src = 'assets/images/app-zenpdf.jpg';
+
+      const appZenWalls = new Image();
+      appZenWalls.src = 'assets/images/app-zenwalls.jpg';
+
+      const appZenMovie = new Image();
+      appZenMovie.src = 'assets/images/app-zenmovie.jpg';
+
+      // 60-Second Timeline Scenes (12s each)
+      const scenes = [
+        {
+          title: "চাকরির বাজারে সাধারণ সিভিতে আর কাজ হচ্ছে না?",
+          subtitle: "২০২৬ সালে ক্যারিয়ার গড়তে আপনার চাই আল্ট্রা-মডার্ন ডিজিটাল পোর্টফোলিও!",
+          badge: "DIGITAL IDENTITY • 2026 EDITION",
+          badgeColor: "#f43f5e",
+          theme: "hero"
+        },
+        {
+          title: "Cyber-Glass ডিজাইন, ERP & মোবাইল অ্যাপস শোকেস",
+          subtitle: "ডার্ক/লাইট মোড, ৩ডি ইন্টারঅ্যাক্টিভ ইফেক্টস এবং ১-ক্লিক এক্সিকিউটিভ ২-পেজ সিভি!",
+          badge: "WORLD-CLASS FEATURES & UI",
+          badgeColor: "#00f0ff",
+          theme: "features"
+        },
+        {
+          title: "প্রাইভেট অ্যাডমিন প্যানেল — নিজেই এডিট করুন যেকোনো সময়!",
+          subtitle: "কোনো কোডিং ছাড়াই নিজের ফোন বা কম্পিউটার থেকে ডেটা আপডেট করে ১-ক্লিকেই পুশ করুন।",
+          badge: "100% CUSTOMIZABLE • NO CODING",
+          badgeColor: "#a855f7",
+          theme: "admin"
+        },
+        {
+          title: "২৫০০ টাকার প্রিমিয়াম পোর্টফোলিও মাত্র ৯৯৯ টাকায়!",
+          subtitle: "সম্পূর্ণ ফ্রি লাইভ ক্লাউড হোস্টিং, ইনস্ট্যান্ট আপলোড ও ২৪/৭ টেকনিক্যাল সাপোর্ট সহ।",
+          badge: "🔥 LIMITED TIME MEGA OFFER",
+          badgeColor: "#f59e0b",
+          theme: "offer"
+        },
+        {
+          title: "আজই বানিয়ে নিন আপনার ডিজিটাল পোর্টফোলিও ওয়েবসাইট!",
+          subtitle: "দেরি না করে এখনই ইনবক্স করুন অথবা WhatsApp করুন: 01799-239023",
+          badge: "ORDER NOW • LIMITED SLOTS",
+          badgeColor: "#10b981",
+          theme: "cta"
+        }
+      ];
+
+      function drawFrame(timeSec) {
+        // Clear
+        ctx.fillStyle = '#04060d';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Background Radial Gradient
+        const grad = ctx.createRadialGradient(640, 200, 50, 640, 360, 700);
+        grad.addColorStop(0, 'rgba(245, 158, 11, 0.15)');
+        grad.addColorStop(0.5, 'rgba(0, 240, 255, 0.08)');
+        grad.addColorStop(1, '#03050a');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Grid Lines
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < canvas.width; x += 40) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, canvas.height);
+          ctx.stroke();
+        }
+        for (let y = 0; y < canvas.height; y += 40) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(canvas.width, y);
+          ctx.stroke();
+        }
+
+        // Active scene calculation
+        const sceneDuration = 12; // 12 seconds per scene * 5 = 60s
+        const sceneIndex = Math.min(Math.floor(timeSec / sceneDuration), scenes.length - 1);
+        const currentScene = scenes[sceneIndex];
+
+        // Top Bar
+        ctx.fillStyle = 'rgba(8, 13, 26, 0.9)';
+        ctx.fillRect(40, 30, canvas.width - 80, 55);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.strokeRect(40, 30, canvas.width - 80, 55);
+
+        // Top Bar Text
+        ctx.fillStyle = '#00f0ff';
+        ctx.font = 'bold 20px "Outfit", sans-serif';
+        ctx.fillText("PORTFOLIO SHOWCASE", 60, 65);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = 'bold 16px monospace';
+        const mins = Math.floor(timeSec / 60).toString().padStart(2, '0');
+        const secs = Math.floor(timeSec % 60).toString().padStart(2, '0');
+        ctx.fillText(`TIME: ${mins}:${secs} / 01:00`, 300, 65);
+
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = 'bold 18px "Hind Siliguri", sans-serif';
+        ctx.fillText("🔥 স্পেশাল অফার: মাত্র ৳৯৯৯/-", canvas.width - 280, 65);
+
+        // Center Visual Showcase Card (Live Mockup Representation)
+        const cardX = 80;
+        const cardY = 110;
+        const cardW = canvas.width - 160;
+        const cardH = 430;
+
+        ctx.fillStyle = 'rgba(13, 19, 34, 0.85)';
+        ctx.fillRect(cardX, cardY, cardW, cardH);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(cardX, cardY, cardW, cardH);
+
+        // Scene Badge
+        ctx.fillStyle = currentScene.badgeColor;
+        ctx.font = 'bold 16px monospace';
+        ctx.fillText(`[ ${currentScene.badge} ]`, cardX + 40, cardY + 50);
+
+        // Scene Title
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 36px "Hind Siliguri", "Outfit", sans-serif';
+        ctx.fillText(currentScene.title, cardX + 40, cardY + 105);
+
+        // Scene Subtitle
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '500 22px "Hind Siliguri", sans-serif';
+        ctx.fillText(currentScene.subtitle, cardX + 40, cardY + 150);
+
+        // Draw Specific Visuals per Scene
+        if (sceneIndex === 0) {
+          // Hero & Avatar
+          if (avatarImg.complete) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(cardX + cardW - 140, cardY + 260, 90, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
+            ctx.drawImage(avatarImg, cardX + cardW - 230, cardY + 170, 180, 180);
+            ctx.restore();
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.arc(cardX + cardW - 140, cardY + 260, 92, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+
+          ctx.fillStyle = '#00f0ff';
+          ctx.font = 'bold 24px "Outfit", sans-serif';
+          ctx.fillText("Saidul Islam", cardX + 40, cardY + 230);
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = 'bold 18px monospace';
+          ctx.fillText("IT Officer • ERP Specialist • Mobile App Dev", cardX + 40, cardY + 265);
+          ctx.fillStyle = '#10b981';
+          ctx.font = 'bold 18px "Hind Siliguri", sans-serif';
+          ctx.fillText("✔️ সম্পূর্ণ লাইভ লিঙ্ক: saidulislamoli009.github.io", cardX + 40, cardY + 310);
+        } else if (sceneIndex === 1) {
+          // Mobile Apps & ERP
+          const appW = 180, appH = 180;
+          if (appZenPdf.complete) ctx.drawImage(appZenPdf, cardX + 40, cardY + 200, appW, appH);
+          if (appZenWalls.complete) ctx.drawImage(appZenWalls, cardX + 260, cardY + 200, appW, appH);
+          if (appZenMovie.complete) ctx.drawImage(appZenMovie, cardX + 480, cardY + 200, appW, appH);
+
+          ctx.fillStyle = '#f59e0b';
+          ctx.font = 'bold 18px "Hind Siliguri", sans-serif';
+          ctx.fillText("ZenPDF (Scanner)", cardX + 40, cardY + 405);
+          ctx.fillText("ZenWalls (4K)", cardX + 260, cardY + 405);
+          ctx.fillText("Zen Movie (BDIX)", cardX + 480, cardY + 405);
+        } else if (sceneIndex === 2) {
+          // Admin Panel
+          ctx.fillStyle = 'rgba(0, 240, 255, 0.1)';
+          ctx.fillRect(cardX + 40, cardY + 200, 480, 160);
+          ctx.strokeStyle = '#00f0ff';
+          ctx.strokeRect(cardX + 40, cardY + 200, 480, 160);
+
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 22px "Hind Siliguri", sans-serif';
+          ctx.fillText("⚙️ স্ট্যান্ডঅ্যালোন অ্যাডমিন কন্ট্রোল প্যানেল", cardX + 60, cardY + 245);
+          ctx.font = '18px "Hind Siliguri", sans-serif';
+          ctx.fillStyle = '#cbd5e1';
+          ctx.fillText("• ইমেইল & পাসওয়ার্ড দিয়ে লগইন", cardX + 60, cardY + 285);
+          ctx.fillText("• ১-ক্লিকেই GitHub ক্লাউড অটো পুশ", cardX + 60, cardY + 325);
+        } else if (sceneIndex === 3) {
+          // 999 BDT Offer
+          ctx.fillStyle = 'rgba(245, 158, 11, 0.15)';
+          ctx.fillRect(cardX + 40, cardY + 190, 500, 180);
+          ctx.strokeStyle = '#f59e0b';
+          ctx.lineWidth = 3;
+          ctx.strokeRect(cardX + 40, cardY + 190, 500, 180);
+
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = 'bold 20px "Hind Siliguri", monospace';
+          ctx.fillText("রেগুলার প্রাইস: ২৫০০ টাকা", cardX + 65, cardY + 235);
+
+          ctx.fillStyle = '#f59e0b';
+          ctx.font = 'black 54px "Outfit", "Hind Siliguri", sans-serif';
+          ctx.fillText("মাত্র ৳৯৯৯/-", cardX + 65, cardY + 300);
+
+          ctx.fillStyle = '#10b981';
+          ctx.font = 'bold 20px "Hind Siliguri", sans-serif';
+          ctx.fillText("ফ্রি ক্লাউড হোস্টিং ও আপলোড সহ!", cardX + 65, cardY + 345);
+        } else if (sceneIndex === 4) {
+          // CTA & WhatsApp
+          ctx.fillStyle = '#10b981';
+          ctx.font = 'bold 36px "Outfit", sans-serif';
+          ctx.fillText("WhatsApp: 01799-239023", cardX + 40, cardY + 240);
+
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 26px "Hind Siliguri", sans-serif';
+          ctx.fillText("👉 এখনই ফেসবুক পেইজে ইনবক্স অথবা হোয়াটসঅ্যাপ করুন!", cardX + 40, cardY + 300);
+
+          ctx.fillStyle = '#00f0ff';
+          ctx.font = 'bold 22px monospace';
+          ctx.fillText("Live Demo: saidulislamoli009.github.io", cardX + 40, cardY + 355);
+        }
+
+        // Bottom CTA Banner
+        ctx.fillStyle = 'rgba(4, 7, 16, 0.95)';
+        ctx.fillRect(40, canvas.height - 140, canvas.width - 80, 100);
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(40, canvas.height - 140, canvas.width - 80, 100);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 24px "Hind Siliguri", sans-serif';
+        ctx.fillText("🔥 নিজের পার্সোনাল পোর্টফোলিও বানাতে এখনই যোগাযোগ করুন!", 70, canvas.height - 85);
+
+        ctx.fillStyle = '#10b981';
+        ctx.font = 'bold 22px "Outfit", monospace';
+        ctx.fillText("WhatsApp: 01799-239023", canvas.width - 360, canvas.height - 85);
+
+        // Progress Bar
+        const pct = timeSec / 60;
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillRect(40, canvas.height - 35, (canvas.width - 80) * pct, 6);
+      }
+
+      // Web Audio Synth Generator for High-Energy Ad Soundtrack
+      function createAudioTrack(audioCtx, destNode) {
+        const tempo = 120; // 120 BPM
+        const beatSec = 60 / tempo;
+        
+        const masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        masterGain.connect(destNode);
+
+        // Recurring Drum Beats & Synth Arpeggios
+        for (let t = 0; t < 60; t += beatSec) {
+          // Kick Drum
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.frequency.setValueAtTime(150, audioCtx.currentTime + t);
+          osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + t + 0.15);
+          gain.gain.setValueAtTime(0.3, audioCtx.currentTime + t);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + t + 0.15);
+          osc.connect(gain);
+          gain.connect(masterGain);
+          osc.start(audioCtx.currentTime + t);
+          osc.stop(audioCtx.currentTime + t + 0.16);
+
+          // Synth Chords on alternate beats
+          if (Math.floor(t / beatSec) % 2 === 0) {
+            const synth = audioCtx.createOscillator();
+            const sGain = audioCtx.createGain();
+            synth.type = 'triangle';
+            const chordFreq = (Math.floor(t / 12) % 2 === 0) ? 440 : 523.25;
+            synth.frequency.setValueAtTime(chordFreq, audioCtx.currentTime + t);
+            sGain.gain.setValueAtTime(0.08, audioCtx.currentTime + t);
+            sGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + t + 0.4);
+            synth.connect(sGain);
+            sGain.connect(masterGain);
+            synth.start(audioCtx.currentTime + t);
+            synth.stop(audioCtx.currentTime + t + 0.45);
+          }
+        }
+      }
+
+      // Initial Canvas Render
+      drawFrame(0);
+
+      // Start Video Generation and Download
+      startBtn.addEventListener('click', async () => {
+        startBtn.disabled = true;
+        startBtn.classList.add('opacity-50', 'pointer-events-none');
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        progressBox.classList.remove('hidden');
+
+        statusTitle.textContent = "🎬 ভিডিও রেন্ডারিং ও অডিও সিঙ্ক হচ্ছে...";
+        statusDesc.textContent = "দয়া করে ৬০ সেকেন্ড অপেক্ষা করুন, স্বয়ংক্রিয়ভাবে MP4 ভিডিও ডাউনলোড হবে";
+
+        // Setup Audio Context & MediaStreamDestination
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const audioDest = audioCtx.createMediaStreamDestination();
+        createAudioTrack(audioCtx, audioDest);
+
+        // Combine Canvas Video Stream + Audio Stream
+        const canvasStream = canvas.captureStream(30); // 30 FPS
+        const combinedStream = new MediaStream([
+          ...canvasStream.getVideoTracks(),
+          ...audioDest.stream.getAudioTracks()
+        ]);
+
+        let mimeType = 'video/webm;codecs=vp9,opus';
+        if (!MediaRecorder.isTypeSupported(mimeType)) {
+          mimeType = 'video/webm';
+        }
+
+        const recorder = new MediaRecorder(combinedStream, {
+          mimeType: mimeType,
+          videoBitsPerSecond: 4000000 // 4 Mbps high quality
+        });
+
+        const recordedChunks = [];
+        recorder.ondataavailable = (e) => {
+          if (e.data.size > 0) recordedChunks.push(e.data);
+        };
+
+        recorder.onstop = () => {
+          const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = 'Saidul_Portfolio_999BDT_Facebook_YouTube_Ad.mp4';
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 100);
+
+          statusTitle.textContent = "🎉 ভিডিও ডাউনলোড সফল হয়েছে!";
+          statusDesc.textContent = "Saidul_Portfolio_999BDT_Facebook_YouTube_Ad.mp4 আপনার কম্পিউটারে সেভ হয়েছে।";
+          startBtn.disabled = false;
+          startBtn.classList.remove('opacity-50', 'pointer-events-none');
+        };
+
+        recorder.start();
+
+        // 60-Second Real-Time Render Loop
+        const totalDuration = 60;
+        let elapsed = 0;
+        const fpsInterval = 1000 / 30;
+
+        const interval = setInterval(() => {
+          elapsed += fpsInterval / 1000;
+          drawFrame(elapsed);
+
+          const pct = Math.min((elapsed / totalDuration) * 100, 100);
+          progressBar.style.width = `${pct}%`;
+          statusDesc.textContent = `রেন্ডারিং প্রগ্রেস: ${Math.floor(pct)}% (${Math.floor(elapsed)}s / 60s)`;
+
+          if (elapsed >= totalDuration) {
+            clearInterval(interval);
+            recorder.stop();
+          }
+        }, fpsInterval);
+      });
+    </script>
+</body>
+</html>
