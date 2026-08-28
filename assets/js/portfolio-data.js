@@ -394,7 +394,8 @@ const DEFAULT_PORTFOLIO_DATA = {
   ]
 };
 
-const STORAGE_KEY = 'saidul_portfolio_custom_data';
+const STORAGE_KEY = 'saidul_portfolio_custom_data_v3';
+const LEGACY_STORAGE_KEYS = ['saidul_portfolio_custom_data', 'saidul_portfolio_custom_data_v2'];
 const PIN_STORAGE_KEY = 'saidul_admin_pin';
 const DEFAULT_PIN = '1234';
 
@@ -403,9 +404,22 @@ const DEFAULT_PIN = '1234';
  */
 function getPortfolioData() {
   try {
+    // Auto-clean legacy storage keys so old app lists don't override new FixBD data
+    LEGACY_STORAGE_KEYS.forEach(key => {
+      try { localStorage.removeItem(key); } catch (err) {}
+    });
+
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
+      // Ensure apps list is up-to-date with FixBD
+      if (parsed && parsed.apps) {
+        const hasFixBD = parsed.apps.some(a => a.name === 'FixBD');
+        const hasZenService = parsed.apps.some(a => a.name === 'ZenService');
+        if (!hasFixBD || hasZenService || parsed.apps.length < 4) {
+          parsed.apps = JSON.parse(JSON.stringify(DEFAULT_PORTFOLIO_DATA.apps));
+        }
+      }
       return deepMerge(DEFAULT_PORTFOLIO_DATA, parsed);
     }
   } catch (e) {
