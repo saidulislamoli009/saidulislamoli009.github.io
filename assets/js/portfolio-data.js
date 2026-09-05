@@ -18,7 +18,7 @@ const DEFAULT_PORTFOLIO_DATA = {
     phone1: "+880 1799-239023",
     phone2: "+880 1755-520859",
     whatsapp: "8801799239023",
-    location: "Uttar Lamchori, Charbaria, Barishal Sadar, Barishal",
+    location: "Hazibari, North Lamchori, Barishal Sadar, Barishal",
     portfolioUrl: "https://saidulislamoli009.github.io",
     linkedin: "https://www.linkedin.com/in/saidul-islam-8673ba303",
     github: "https://github.com/saidulislamoli009"
@@ -364,7 +364,7 @@ const DEFAULT_PORTFOLIO_DATA = {
     nationality: "Bangladeshi",
     maritalStatus: "Married",
     nid: "5562375013",
-    address: "Vill: Uttar Lamchori, P.O: Charbaria, P.S: Barisal Sadar, Dist: Barisal, Bangladesh",
+    address: "House: Hazibari, Vill: North Lamchori, P.S: Barishal Sadar, Dist: Barishal, P.O: 8200",
     cvSummary: "IT Professional with 4.8+ years of experience in ERP Support, Network Administration, System Administration, ISP Operations, CCTV Systems, Fiber Optic Network Design, and Mobile Application Development. Experienced in MikroTik RouterOS, GPON OLT/ONU Management, ERP Implementation, Network Security, VPN Configuration, and Flutter/Firebase Solutions. Proven ability to troubleshoot complex technical issues and support business operations efficiently.",
     declaration: "I hereby declare that all the information provided is accurate to the best of my knowledge."
   },

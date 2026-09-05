@@ -452,6 +452,12 @@ function initModals() {
       const prevModalOverflow = resumeModalDiv ? resumeModalDiv.style.overflow : '';
 
       try {
+        // Ensure avatar image uses non-tainting Base64 data URI to support file:// and offline export
+        const avatarImg = document.getElementById('cv-avatar-img') || element.querySelector('img');
+        if (avatarImg && typeof CV_AVATAR_BASE64 !== 'undefined') {
+          avatarImg.src = CV_AVATAR_BASE64;
+        }
+
         // Expand the element so html2canvas renders the FULL 2 pages without scroll clipping
         if (resumeModalDiv) {
           resumeModalDiv.style.maxHeight = 'none';
@@ -475,7 +481,6 @@ function initModals() {
             html2canvas:  { 
               scale: 2.5, 
               useCORS: true, 
-              allowTaint: true,
               letterRendering: true, 
               logging: false, 
               scrollY: 0, 
@@ -1005,18 +1010,28 @@ function hydratePortfolioContent() {
     }
 
     if (p.phone1) {
-      document.querySelectorAll('a[href*="tel:"]').forEach((a, idx) => {
-        if (idx === 0) {
-          a.href = `tel:${p.phone1.replace(/\s+/g, '')}`;
-          a.textContent = p.phone1;
-        } else if (p.phone2) {
-          a.href = `tel:${p.phone2.replace(/\s+/g, '')}`;
-          a.textContent = p.phone2;
-        }
-      });
+      const contactPhone = document.getElementById('contact-phone');
+      if (contactPhone) {
+        contactPhone.href = `tel:${p.phone1.replace(/\s+/g, '')}`;
+        contactPhone.textContent = p.phone1;
+      }
+      const cvPhone1 = document.getElementById('cv-phone1');
+      if (cvPhone1) {
+        cvPhone1.href = `tel:${p.phone1.replace(/\s+/g, '')}`;
+      }
+      const cvPhone2 = document.getElementById('cv-phone2');
+      if (cvPhone2 && p.phone2) {
+        cvPhone2.href = `tel:${p.phone2.replace(/\s+/g, '')}`;
+      }
+      
       document.querySelectorAll('button[data-copy*="+880"]').forEach(b => {
         b.setAttribute('data-copy', p.phone1);
       });
+    }
+
+    const cvAvatar = document.getElementById('cv-avatar-img');
+    if (cvAvatar && typeof CV_AVATAR_BASE64 !== 'undefined') {
+      cvAvatar.src = CV_AVATAR_BASE64;
     }
 
     if (p.location) {
