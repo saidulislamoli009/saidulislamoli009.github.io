@@ -1019,10 +1019,6 @@ function hydratePortfolioContent() {
       if (cvPhone1) {
         cvPhone1.href = `tel:${p.phone1.replace(/\s+/g, '')}`;
       }
-      const cvPhone2 = document.getElementById('cv-phone2');
-      if (cvPhone2 && p.phone2) {
-        cvPhone2.href = `tel:${p.phone2.replace(/\s+/g, '')}`;
-      }
       
       document.querySelectorAll('button[data-copy*="+880"]').forEach(b => {
         b.setAttribute('data-copy', p.phone1);
@@ -1274,7 +1270,6 @@ function hydratePortfolioContent() {
     setText('cv-name', b.fullName || data.profile?.name);
     setText('cv-title', data.profile?.primaryTitle);
     setText('cv-phone1', data.profile?.phone1);
-    setText('cv-phone2', data.profile?.phone2);
     setText('cv-email', data.profile?.email);
     setText('cv-portfolio', data.profile?.portfolioUrl?.replace('https://', ''));
     setText('cv-address', b.address || data.profile?.location);
