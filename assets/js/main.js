@@ -16,12 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   initDynamicExperience();
   initInteractiveCursor();
+  initHero3DNetwork();
   initParticleCanvas();
   initThemeToggle();
   initMobileNav();
   initScrollSpy();
   initCounters();
   init3DTilt();
+  initExperienceCurvedTrack();
   initScrollReveal();
   initModals();
   initAppLightbox();
@@ -29,6 +31,637 @@ document.addEventListener('DOMContentLoaded', () => {
   initClipboardActions();
   initBackToTop();
 });
+
+/* ==========================================================================
+   1.2. DYNAMIC S-CURVE ANIMATED LASER TRACK & STEP-BY-STEP EXPERIENCE ENGINE
+   ========================================================================== */
+let experienceCometAnimationId = null;
+let currentActiveStep = 1;
+
+function initExperienceCurvedTrack() {
+  updateExperienceLaserPath();
+  initStepProgressionGuide();
+
+  window.addEventListener('resize', () => {
+    updateExperienceLaserPath();
+  }, { passive: true });
+  
+  window.addEventListener('scroll', () => {
+    updateExperienceLaserPath();
+  }, { passive: true });
+}
+
+function updateExperienceLaserPath() {
+  const container = document.querySelector('.experience-vertical-timeline');
+  if (!container) return;
+
+  const cards = container.querySelectorAll('.experience-step-card, .bento-card');
+  if (cards.length < 3) return;
+
+  const isDesktop = window.innerWidth >= 768;
+  const containerRect = container.getBoundingClientRect();
+
+  const c1Rect = cards[0].getBoundingClientRect();
+  const c2Rect = cards[1].getBoundingClientRect();
+  const c3Rect = cards[2].getBoundingClientRect();
+
+  let d = '';
+
+  if (isDesktop) {
+    // Exact S-curve matching user's architecture:
+    // Starts from right side of Card 1 (MEP Group)
+    const startX = c1Rect.right - containerRect.left;
+    const startY = (c1Rect.top + c1Rect.bottom) / 2 - containerRect.top + 30;
+
+    // Sweeps to the right side of Card 2 (System Admin)
+    const c2LeftX = c2Rect.left - containerRect.left;
+    const c2RightX = c2Rect.right - containerRect.left;
+    const c2TopY = c2Rect.top - containerRect.top;
+    const c2CenterY = (c2Rect.top + c2Rect.bottom) / 2 - containerRect.top;
+    const c2BottomY = c2Rect.bottom - containerRect.top;
+
+    const loopRight = Math.min(containerRect.width - 20, c2RightX + 65);
+    const underC2Y = c2BottomY + 40;
+
+    // Sweeps to the left side of Card 3 (Mobile Apps)
+    const c3LeftX = c3Rect.left - containerRect.left;
+    const c3CenterY = (c3Rect.top + c3Rect.bottom) / 2 - containerRect.top;
+    const c3BottomY = c3Rect.bottom - containerRect.top;
+
+    const loopLeft = Math.max(15, c3LeftX - 60);
+    const endX = c3LeftX;
+    const endY = c3BottomY - 25;
+
+    // Smooth bezier coordinates
+    const cp1x = startX + (loopRight - startX) * 0.65;
+    const cp1y = startY;
+    const cp2x = loopRight;
+    const cp2y = c2TopY - 25;
+    const p2x = loopRight;
+    const p2y = c2CenterY;
+
+    const cp3x = loopRight;
+    const cp3y = c2BottomY + 15;
+    const cp4x = (c2LeftX + loopRight) / 2;
+    const cp4y = underC2Y;
+    const p3x = c2LeftX - 25;
+    const p3y = underC2Y;
+
+    const cp5x = loopLeft;
+    const cp5y = underC2Y + 25;
+    const cp6x = loopLeft;
+    const cp6y = c3CenterY - 25;
+    const p4x = loopLeft;
+    const p4y = c3CenterY + 15;
+
+    const cp7x = loopLeft;
+    const cp7y = endY + 15;
+    const cp8x = endX - 25;
+    const cp8y = endY;
+
+    d = `M ${startX} ${startY} ` +
+        `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2x} ${p2y} ` +
+        `C ${cp3x} ${cp3y}, ${cp4x} ${cp4y}, ${p3x} ${p3y} ` +
+        `C ${cp5x} ${cp5y}, ${cp6x} ${cp6y}, ${p4x} ${p4y} ` +
+        `C ${cp7x} ${cp7y}, ${cp8x} ${cp8y}, ${endX} ${endY}`;
+  } else {
+    // Mobile left laser line with subtle pulse curve
+    const leftX = 24;
+    const y1 = (c1Rect.top + c1Rect.bottom) / 2 - containerRect.top;
+    const y2 = (c2Rect.top + c2Rect.bottom) / 2 - containerRect.top;
+    const y3 = (c3Rect.top + c3Rect.bottom) / 2 - containerRect.top;
+
+    d = `M ${leftX} ${y1} ` +
+        `C ${leftX + 25} ${(y1 + y2) / 2}, ${leftX - 25} ${(y1 + y2) / 2}, ${leftX} ${y2} ` +
+        `C ${leftX + 25} ${(y2 + y3) / 2}, ${leftX - 25} ${(y2 + y3) / 2}, ${leftX} ${y3}`;
+  }
+
+  const pathBase = document.getElementById('snake-laser-base-path');
+  const pathDots = document.getElementById('snake-laser-dots-path');
+  const pathGlow = document.getElementById('snake-laser-glow-path');
+  const pathCore = document.getElementById('snake-laser-core-path');
+  const pathPulse = document.getElementById('snake-laser-pulse-path');
+
+  if (pathBase) pathBase.setAttribute('d', d);
+  if (pathDots) pathDots.setAttribute('d', d);
+  if (pathGlow) pathGlow.setAttribute('d', d);
+  if (pathCore) pathCore.setAttribute('d', d);
+  if (pathPulse) pathPulse.setAttribute('d', d);
+}
+
+/**
+ * Step-by-Step Interactive Guide:
+ * Glides a glowing photon comet along the exact laser line from Card 1 -> Card 2 -> Card 3.
+ * Activates each milestone node and card as the beam moves across them.
+ */
+function initStepProgressionGuide() {
+  const cometGroup = document.getElementById('snake-laser-comet-group');
+  const pathPulse = document.getElementById('snake-laser-pulse-path') || document.getElementById('snake-laser-core-path');
+  const stepPills = document.querySelectorAll('#experience-step-nav .step-phase-pill, .step-phase-pill');
+  const stepNodes = document.querySelectorAll('.step-milestone-node');
+  const stepCards = document.querySelectorAll('.experience-step-card, .bento-card[data-step]');
+
+  // 1. Interactive Phase Pill & Node Click Handlers
+  const setActiveStep = (stepNum, shouldScroll = false) => {
+    currentActiveStep = stepNum;
+
+    // Update Pills
+    stepPills.forEach((pill, idx) => {
+      const pStep = parseInt(pill.getAttribute('data-step') || (idx + 1));
+      if (pStep === stepNum) {
+        pill.classList.add('active');
+        const ping = pill.querySelector('.animate-ping');
+        if (!ping) {
+          const dot = pill.querySelector('span:first-child');
+          if (dot) dot.classList.add('animate-ping');
+        }
+      } else {
+        pill.classList.remove('active');
+        const dot = pill.querySelector('span:first-child');
+        if (dot) dot.classList.remove('animate-ping');
+      }
+    });
+
+    // Update Milestone Nodes
+    stepNodes.forEach((node, idx) => {
+      const nStep = parseInt(node.getAttribute('data-step-node') || (idx + 1));
+      if (nStep === stepNum) {
+        node.classList.add('is-active');
+      } else {
+        node.classList.remove('is-active');
+      }
+    });
+
+    // Update Cards
+    stepCards.forEach((card, idx) => {
+      const cStep = parseInt(card.getAttribute('data-step') || (idx + 1));
+      if (cStep === stepNum) {
+        card.classList.add('is-active-step');
+      } else {
+        card.classList.remove('is-active-step');
+      }
+    });
+
+    if (shouldScroll) {
+      const targetCard = document.getElementById(`experience-card-${stepNum}`) || stepCards[stepNum - 1];
+      if (targetCard) {
+        const topPos = targetCard.getBoundingClientRect().top + window.scrollY - 120;
+        window.scrollTo({ top: topPos, behavior: 'smooth' });
+      }
+    }
+  };
+
+  stepPills.forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      e.preventDefault();
+      const step = parseInt(pill.getAttribute('data-step') || 1);
+      setActiveStep(step, true);
+    });
+  });
+
+  stepNodes.forEach(node => {
+    node.addEventListener('click', (e) => {
+      e.preventDefault();
+      const step = parseInt(node.getAttribute('data-step-node') || 1);
+      setActiveStep(step, true);
+    });
+  });
+
+  // 2. Scroll Intersection Observer for Automatic In-View Step Sync
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const stepAttr = entry.target.getAttribute('data-step');
+          if (stepAttr) {
+            const step = parseInt(stepAttr);
+            setActiveStep(step, false);
+          }
+        }
+      });
+    }, { threshold: 0.5 });
+
+    stepCards.forEach(card => observer.observe(card));
+  }
+
+  // 3. Smooth Photon Comet Head RAF Animation Loop
+  let progress = 0;
+  const loopDurationMs = 4000; // 4 second full cycle through steps 1 -> 2 -> 3
+  let lastTimestamp = performance.now();
+
+  function animateLaserComet(timestamp) {
+    const delta = timestamp - lastTimestamp;
+    lastTimestamp = timestamp;
+
+    progress = (progress + (delta / loopDurationMs)) % 1;
+
+    if (cometGroup && pathPulse) {
+      const totalLen = pathPulse.getTotalLength ? pathPulse.getTotalLength() : 0;
+      if (totalLen > 0) {
+        const pt = pathPulse.getPointAtLength(progress * totalLen);
+        cometGroup.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
+
+        // Automatically trigger subtle step highlight when photon passes milestones
+        if (progress < 0.33 && currentActiveStep !== 1) {
+          setActiveStep(1, false);
+        } else if (progress >= 0.33 && progress < 0.68 && currentActiveStep !== 2) {
+          setActiveStep(2, false);
+        } else if (progress >= 0.68 && currentActiveStep !== 3) {
+          setActiveStep(3, false);
+        }
+      }
+    }
+
+    experienceCometAnimationId = requestAnimationFrame(animateLaserComet);
+  }
+
+  if (experienceCometAnimationId) {
+    cancelAnimationFrame(experienceCometAnimationId);
+  }
+  experienceCometAnimationId = requestAnimationFrame(animateLaserComet);
+}
+
+/* ==========================================================================
+   1.5. THREE.JS 3D INTERACTIVE GLOBAL NETWORK MESH & ERP CONSTELLATION
+   ========================================================================== */
+function initHero3DNetwork() {
+  const container = document.getElementById('global-3d-canvas-container') || document.getElementById('hero-3d-canvas-container');
+  if (!container || typeof THREE === 'undefined') return;
+
+  // Clear previous canvas if re-initialized
+  container.innerHTML = '';
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1500);
+  camera.position.z = 240;
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Group for overall 3D rotation & scroll parallax
+  const networkGroup = new THREE.Group();
+  scene.add(networkGroup);
+
+  // Generate 3D Enterprise Node Mesh (ERP, MicroTik, Cloud Nodes)
+  const nodeCount = 85;
+  const positions = new Float32Array(nodeCount * 3);
+  const colors = new Float32Array(nodeCount * 3);
+  const nodeVelocities = [];
+  const spreadX = 360;
+  const spreadY = 220;
+  const spreadZ = 200;
+
+  // Color Palette Definitions
+  const colorCyan = new THREE.Color(0x00f5d4);
+  const colorIndigo = new THREE.Color(0x818cf8);
+  const colorEmerald = new THREE.Color(0x10b981);
+  const colorGold = new THREE.Color(0xf59e0b);
+
+  const colorLightBlue = new THREE.Color(0x0284c7);
+  const colorLightIndigo = new THREE.Color(0x4f46e5);
+  const colorLightEmerald = new THREE.Color(0x059669);
+  const colorLightAmber = new THREE.Color(0xd97706);
+
+  const isDark = document.documentElement.classList.contains('dark');
+  const palette = isDark 
+    ? [colorCyan, colorIndigo, colorEmerald, colorGold] 
+    : [colorLightBlue, colorLightIndigo, colorLightEmerald, colorLightAmber];
+
+  for (let i = 0; i < nodeCount; i++) {
+    const x = (Math.random() - 0.5) * spreadX;
+    const y = (Math.random() - 0.5) * spreadY;
+    const z = (Math.random() - 0.5) * spreadZ;
+    positions[i * 3] = x;
+    positions[i * 3 + 1] = y;
+    positions[i * 3 + 2] = z;
+
+    const chosenColor = palette[i % palette.length];
+    colors[i * 3] = chosenColor.r;
+    colors[i * 3 + 1] = chosenColor.g;
+    colors[i * 3 + 2] = chosenColor.b;
+
+    nodeVelocities.push({
+      x: (Math.random() - 0.5) * 0.18,
+      y: (Math.random() - 0.5) * 0.18,
+      z: (Math.random() - 0.5) * 0.18
+    });
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  const particleMaterial = new THREE.PointsMaterial({
+    size: 4.8,
+    vertexColors: true,
+    transparent: true,
+    opacity: isDark ? 0.90 : 0.75,
+    blending: isDark ? THREE.AdditiveBlending : THREE.NormalBlending
+  });
+
+  const particleSystem = new THREE.Points(geometry, particleMaterial);
+  networkGroup.add(particleSystem);
+
+  // Dynamic Line Segments
+  const maxConnections = nodeCount * nodeCount;
+  const linePositions = new Float32Array(maxConnections * 6);
+  const lineColors = new Float32Array(maxConnections * 6);
+  const lineGeometry = new THREE.BufferGeometry();
+  lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+  lineGeometry.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
+
+  const lineMaterial = new THREE.LineBasicMaterial({
+    vertexColors: true,
+    transparent: true,
+    opacity: isDark ? 0.30 : 0.20,
+    blending: isDark ? THREE.AdditiveBlending : THREE.NormalBlending
+  });
+
+  const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+  networkGroup.add(lines);
+
+  // Mouse & Scroll interaction lerp
+  let mouseX = 0;
+  let mouseY = 0;
+  let targetX = 0;
+  let targetY = 0;
+  let scrollY = window.scrollY;
+  let targetScrollY = scrollY;
+  const windowHalfX = window.innerWidth / 2;
+  const windowHalfY = window.innerHeight / 2;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX - windowHalfX) * 0.05;
+    mouseY = (e.clientY - windowHalfY) * 0.05;
+  }, { passive: true });
+
+  window.addEventListener('scroll', () => {
+    scrollY = window.scrollY;
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // Theme synchronization hook
+  window.update3DTheme = (dark) => {
+    const curPalette = dark 
+      ? [colorCyan, colorIndigo, colorEmerald, colorGold] 
+      : [colorLightBlue, colorLightIndigo, colorLightEmerald, colorLightAmber];
+
+    const cArray = geometry.attributes.color.array;
+    for (let i = 0; i < nodeCount; i++) {
+      const c = curPalette[i % curPalette.length];
+      cArray[i * 3] = c.r;
+      cArray[i * 3 + 1] = c.g;
+      cArray[i * 3 + 2] = c.b;
+    }
+    geometry.attributes.color.needsUpdate = true;
+
+    if (particleMaterial) {
+      particleMaterial.opacity = dark ? 0.90 : 0.75;
+      particleMaterial.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
+    }
+    if (lineMaterial) {
+      lineMaterial.opacity = dark ? 0.30 : 0.20;
+      lineMaterial.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
+    }
+  };
+
+  // 60FPS Render Loop
+  let animId;
+  function animate() {
+    animId = requestAnimationFrame(animate);
+
+    targetX += (mouseX - targetX) * 0.04;
+    targetY += (mouseY - targetY) * 0.04;
+    targetScrollY += (scrollY - targetScrollY) * 0.05;
+
+    networkGroup.rotation.y += 0.0010;
+    networkGroup.rotation.x = targetY * 0.005 + targetScrollY * 0.0003;
+    networkGroup.rotation.z = targetX * 0.003;
+    networkGroup.position.y = -targetScrollY * 0.05;
+
+    const pos = geometry.attributes.position.array;
+    for (let i = 0; i < nodeCount; i++) {
+      pos[i * 3] += nodeVelocities[i].x;
+      pos[i * 3 + 1] += nodeVelocities[i].y;
+      pos[i * 3 + 2] += nodeVelocities[i].z;
+
+      if (pos[i * 3] < -spreadX * 0.6 || pos[i * 3] > spreadX * 0.6) nodeVelocities[i].x = -nodeVelocities[i].x;
+      if (pos[i * 3 + 1] < -spreadY * 0.6 || pos[i * 3 + 1] > spreadY * 0.6) nodeVelocities[i].y = -nodeVelocities[i].y;
+      if (pos[i * 3 + 2] < -spreadZ * 0.6 || pos[i * 3 + 2] > spreadZ * 0.6) nodeVelocities[i].z = -nodeVelocities[i].z;
+    }
+    geometry.attributes.position.needsUpdate = true;
+
+    // Connect close nodes with lines & gradient colors
+    let lineIdx = 0;
+    const lPos = lineGeometry.attributes.position.array;
+    const lCol = lineGeometry.attributes.color.array;
+    const cArr = geometry.attributes.color.array;
+    const connectDist = 65;
+
+    for (let i = 0; i < nodeCount; i++) {
+      for (let j = i + 1; j < nodeCount; j++) {
+        const dx = pos[i * 3] - pos[j * 3];
+        const dy = pos[i * 3 + 1] - pos[j * 3 + 1];
+        const dz = pos[i * 3 + 2] - pos[j * 3 + 2];
+        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+        if (dist < connectDist) {
+          lPos[lineIdx * 3] = pos[i * 3];
+          lPos[lineIdx * 3 + 1] = pos[i * 3 + 1];
+          lPos[lineIdx * 3 + 2] = pos[i * 3 + 2];
+          lCol[lineIdx * 3] = cArr[i * 3];
+          lCol[lineIdx * 3 + 1] = cArr[i * 3 + 1];
+          lCol[lineIdx * 3 + 2] = cArr[i * 3 + 2];
+          lineIdx++;
+
+          lPos[lineIdx * 3] = pos[j * 3];
+          lPos[lineIdx * 3 + 1] = pos[j * 3 + 1];
+          lPos[lineIdx * 3 + 2] = pos[j * 3 + 2];
+          lCol[lineIdx * 3] = cArr[j * 3];
+          lCol[lineIdx * 3 + 1] = cArr[j * 3 + 1];
+          lCol[lineIdx * 3 + 2] = cArr[j * 3 + 2];
+          lineIdx++;
+        }
+      }
+    }
+    lineGeometry.setDrawRange(0, lineIdx);
+    lineGeometry.attributes.position.needsUpdate = true;
+    lineGeometry.attributes.color.needsUpdate = true;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+/* ==========================================================================
+   3. LIGHT / DARK MODE SWITCHER
+   ========================================================================== */
+function initThemeToggle() {
+  const toggleBtns = document.querySelectorAll('.theme-toggle-btn');
+  
+  const storedTheme = localStorage.getItem('saidul-theme');
+  const isDark = storedTheme ? storedTheme === 'dark' : true;
+
+  const applyTheme = (dark) => {
+    if (dark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('saidul-theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('saidul-theme', 'light');
+    }
+
+    if (typeof window.update3DTheme === 'function') {
+      window.update3DTheme(dark);
+    }
+
+    toggleBtns.forEach(btn => {
+      const icon = btn.querySelector('.theme-icon');
+      if (icon) {
+        icon.textContent = dark ? 'light_mode' : 'dark_mode';
+      }
+      btn.setAttribute('title', dark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+      btn.setAttribute('aria-label', dark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+    });
+  };
+
+  applyTheme(isDark);
+
+  toggleBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const currentIsDark = document.documentElement.classList.contains('dark');
+      applyTheme(!currentIsDark);
+    });
+  });
+}
+
+/* ==========================================================================
+   4. 3D TILT WITH PERSPECTIVE & SPECULAR HIGHLIGHT
+   ========================================================================== */
+function init3DTilt() {
+  const cards = document.querySelectorAll('.bento-card, .competency-card, .erp-card, .network-card, .stat-card, .experience-card');
+
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -7;
+      const rotateY = ((x - centerX) / centerX) * 7;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+}
+
+/* ==========================================================================
+   5. SCROLL REVEAL (FRAMER-STYLE)
+   ========================================================================== */
+function initScrollReveal() {
+  const elements = document.querySelectorAll('.reveal-on-scroll');
+  if (elements.length === 0) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, idx) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('is-revealed');
+        }, idx * 70);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  elements.forEach(el => observer.observe(el));
+}
+
+/* ==========================================================================
+   6. MOBILE NAVIGATION
+   ========================================================================== */
+function initMobileNav() {
+  const openBtn = document.getElementById('mobile-menu-btn');
+  const closeBtn = document.getElementById('mobile-close-btn');
+  const navDrawer = document.getElementById('mobile-nav-menu');
+  const navLinks = document.querySelectorAll('.mobile-nav-link');
+
+  if (!openBtn || !navDrawer) return;
+
+  const openDrawer = () => {
+    navDrawer.classList.remove('translate-x-full', 'pointer-events-none');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeDrawer = () => {
+    navDrawer.classList.add('translate-x-full', 'pointer-events-none');
+    document.body.style.overflow = '';
+  };
+
+  openBtn.addEventListener('click', openDrawer);
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', closeDrawer);
+  });
+}
+
+/* ==========================================================================
+   7. ANIMATED METRICS COUNTERS (SMOOTH EASING UPON SCROLL)
+   ========================================================================== */
+function initCounters() {
+  const counters = document.querySelectorAll('.counter');
+  if (counters.length === 0) return;
+
+  const animate = (counter) => {
+    const target = parseFloat(counter.getAttribute('data-target'));
+    if (isNaN(target)) return;
+    const isDecimal = target % 1 !== 0;
+    const duration = 1400; // ms
+    const startTime = performance.now();
+
+    const update = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      const count = easeProgress * target;
+
+      counter.innerText = isDecimal ? count.toFixed(1) : Math.ceil(count);
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        counter.innerText = isDecimal ? target.toFixed(1) : target;
+      }
+    };
+    requestAnimationFrame(update);
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animate(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25 });
+
+  counters.forEach(c => observer.observe(c));
+}
 
 /* ==========================================================================
    1. INTERACTIVE MOUSE CURSOR, TRAILING RING & AMBIENT SPOTLIGHT
@@ -102,9 +735,12 @@ function initInteractiveCursor() {
    2. INTERACTIVE FLUID MOUSE PARTICLE CONSTELLATION CANVAS
    ========================================================================== */
 function initParticleCanvas() {
-  const canvas = document.createElement('canvas');
-  canvas.id = 'cursor-canvas';
-  document.body.appendChild(canvas);
+  let canvas = document.getElementById('cursor-canvas');
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.id = 'cursor-canvas';
+    document.body.appendChild(canvas);
+  }
 
   const ctx = canvas.getContext('2d');
   let width = (canvas.width = window.innerWidth);
@@ -116,7 +752,7 @@ function initParticleCanvas() {
   });
 
   let particles = [];
-  const maxParticles = 45;
+  const maxParticles = 60;
   let mouse = { x: null, y: null };
 
   window.addEventListener('mousemove', (e) => {
@@ -127,7 +763,7 @@ function initParticleCanvas() {
     if (particles.length < maxParticles) {
       particles.push(new Particle(mouse.x, mouse.y));
     }
-  });
+  }, { passive: true });
 
   window.addEventListener('mouseout', () => {
     mouse.x = null;
@@ -138,13 +774,13 @@ function initParticleCanvas() {
     constructor(x, y) {
       this.x = x;
       this.y = y;
-      this.size = Math.random() * 2.5 + 1;
-      this.speedX = (Math.random() - 0.5) * 1.5;
-      this.speedY = (Math.random() - 0.5) * 1.5;
+      this.size = Math.random() * 2.8 + 1.2;
+      this.speedX = (Math.random() - 0.5) * 1.8;
+      this.speedY = (Math.random() - 0.5) * 1.8;
       this.life = 1;
-      this.decay = Math.random() * 0.02 + 0.015;
-      // Gold & Cyan dual tone
-      this.isGold = Math.random() > 0.4;
+      this.decay = Math.random() * 0.02 + 0.012;
+      // Palette selection: 0: Cyan/Blue, 1: Rose/Red, 2: Amber/Gold, 3: Emerald
+      this.colorIdx = Math.floor(Math.random() * 4);
     }
 
     update() {
@@ -154,18 +790,23 @@ function initParticleCanvas() {
       if (this.size > 0.2) this.size -= 0.02;
     }
 
+    getColor(isDark) {
+      const darkPalette = ['#00f5d4', '#fb7185', '#f59e0b', '#10b981'];
+      const lightPalette = ['#0284c7', '#e11d48', '#d97706', '#059669'];
+      return (isDark ? darkPalette : lightPalette)[this.colorIdx];
+    }
+
     draw() {
       const isDark = document.documentElement.classList.contains('dark');
-      const goldColor = isDark ? '#f59e0b' : '#d97706';
-      const cyanColor = isDark ? '#00f0ff' : '#0284c7';
+      const col = this.getColor(isDark);
 
       ctx.save();
       ctx.globalAlpha = Math.max(0, this.life);
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = this.isGold ? goldColor : cyanColor;
-      ctx.shadowColor = this.isGold ? goldColor : cyanColor;
-      ctx.shadowBlur = 8;
+      ctx.fillStyle = col;
+      ctx.shadowColor = col;
+      ctx.shadowBlur = 10;
       ctx.fill();
       ctx.restore();
     }
@@ -185,21 +826,16 @@ function initParticleCanvas() {
         const dy = particles[i].y - particles[j].y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist < 80) {
+        if (dist < 90) {
           ctx.save();
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
           
-          const goldRgba = isDark 
-            ? `rgba(245, 158, 11, ${particles[i].life * 0.25})`
-            : `rgba(217, 119, 6, ${particles[i].life * 0.25})`;
-          const cyanRgba = isDark
-            ? `rgba(0, 240, 255, ${particles[i].life * 0.25})`
-            : `rgba(2, 132, 199, ${particles[i].life * 0.25})`;
-
-          ctx.strokeStyle = particles[i].isGold ? goldRgba : cyanRgba;
-          ctx.lineWidth = 0.8;
+          const col = particles[i].getColor(isDark);
+          ctx.strokeStyle = col;
+          ctx.globalAlpha = particles[i].life * 0.35 * (1 - dist / 90);
+          ctx.lineWidth = 0.9;
           ctx.stroke();
           ctx.restore();
         }
@@ -214,160 +850,6 @@ function initParticleCanvas() {
     requestAnimationFrame(animate);
   }
   animate();
-}
-
-/* ==========================================================================
-   3. LIGHT / DARK MODE SWITCHER
-   ========================================================================== */
-function initThemeToggle() {
-  const toggleBtns = document.querySelectorAll('.theme-toggle-btn');
-  
-  const storedTheme = localStorage.getItem('saidul-theme');
-  const isDark = storedTheme ? storedTheme === 'dark' : true;
-
-  const applyTheme = (dark) => {
-    if (dark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('saidul-theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('saidul-theme', 'light');
-    }
-
-    toggleBtns.forEach(btn => {
-      const icon = btn.querySelector('.theme-icon');
-      if (icon) {
-        icon.textContent = dark ? 'light_mode' : 'dark_mode';
-      }
-      btn.setAttribute('title', dark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
-      btn.setAttribute('aria-label', dark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
-    });
-  };
-
-  applyTheme(isDark);
-
-  toggleBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const currentIsDark = document.documentElement.classList.contains('dark');
-      applyTheme(!currentIsDark);
-    });
-  });
-}
-
-/* ==========================================================================
-   4. 3D TILT WITH GLARE REFRACTION
-   ========================================================================== */
-function init3DTilt() {
-  const cards = document.querySelectorAll('.bento-card');
-
-  cards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -6;
-      const rotateY = ((x - centerX) / centerX) * 6;
-
-      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-5px)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
-  });
-}
-
-/* ==========================================================================
-   5. SCROLL REVEAL (FRAMER-STYLE)
-   ========================================================================== */
-function initScrollReveal() {
-  const elements = document.querySelectorAll('.reveal-on-scroll');
-  if (elements.length === 0) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, idx) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.classList.add('is-revealed');
-        }, idx * 70);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  elements.forEach(el => observer.observe(el));
-}
-
-/* ==========================================================================
-   6. MOBILE NAVIGATION
-   ========================================================================== */
-function initMobileNav() {
-  const openBtn = document.getElementById('mobile-menu-btn');
-  const closeBtn = document.getElementById('mobile-close-btn');
-  const navDrawer = document.getElementById('mobile-nav-menu');
-  const navLinks = document.querySelectorAll('.mobile-nav-link');
-
-  if (!openBtn || !navDrawer) return;
-
-  const openDrawer = () => {
-    navDrawer.classList.remove('translate-x-full', 'pointer-events-none');
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeDrawer = () => {
-    navDrawer.classList.add('translate-x-full', 'pointer-events-none');
-    document.body.style.overflow = '';
-  };
-
-  openBtn.addEventListener('click', openDrawer);
-  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-
-  navLinks.forEach(link => {
-    link.addEventListener('click', closeDrawer);
-  });
-}
-
-/* ==========================================================================
-   7. ANIMATED METRICS COUNTERS
-   ========================================================================== */
-function initCounters() {
-  const counters = document.querySelectorAll('.counter');
-  if (counters.length === 0) return;
-
-  const speed = 100;
-
-  const animate = (counter) => {
-    const target = parseFloat(counter.getAttribute('data-target'));
-    const isDecimal = target % 1 !== 0;
-    let count = 0;
-    const step = target / speed;
-
-    const update = () => {
-      count += step;
-      if (count < target) {
-        counter.innerText = isDecimal ? count.toFixed(1) : Math.ceil(count);
-        requestAnimationFrame(update);
-      } else {
-        counter.innerText = isDecimal ? target.toFixed(1) : target;
-      }
-    };
-    update();
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animate(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.4 });
-
-  counters.forEach(c => observer.observe(c));
 }
 
 /* ==========================================================================
@@ -1204,16 +1686,21 @@ function hydratePortfolioContent() {
           ? `<svg class="size-6 text-brand-cyan" viewBox="0 0 24 24" fill="currentColor"><path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.37zM6.02 15.688L2.316 19.39 6.923 24h7.371l-4.57-4.609 3.704-3.703H6.02z"/></svg>`
           : `<span class="material-symbols-outlined text-2xl">${exp.icon || 'apartment'}</span>`;
 
+        const themeClass = idx === 1 ? 'theme-purple' : (idx === 2 ? 'theme-cyan' : '');
+        const stepNum = idx + 1;
         const cardContent = `
-          <div class="bento-card p-6 md:p-8 rounded-3xl border border-white/10 hover:border-primary/50 shadow-2xl relative overflow-hidden group">
+          <div class="bento-card experience-step-card ${themeClass} ${idx === 0 ? 'is-active-step' : ''} p-6 md:p-8 rounded-3xl border border-white/10 hover:border-primary/50 shadow-2xl relative overflow-hidden group" id="experience-card-${stepNum}" data-step="${stepNum}">
             <div class="flex items-start justify-between mb-4">
               <div class="flex items-center gap-3">
                 <div class="size-12 rounded-xl bg-gradient-to-br from-primary/20 via-brand-cyan/20 to-transparent border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_20px_rgba(245,158,11,0.2)] shrink-0">
                   ${iconHtml}
                 </div>
                 <div>
-                  <h3 class="text-xl font-bold text-white font-heading group-hover:text-primary transition-colors">${exp.role}</h3>
-                  <div class="text-primary text-xs font-bold font-mono uppercase">${exp.company}</div>
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded bg-primary/15 border border-primary/30 text-[9.5px] font-mono font-bold text-primary">STEP 0${stepNum}</span>
+                    <h3 class="text-xl font-bold text-white font-heading group-hover:text-primary transition-colors">${exp.role}</h3>
+                  </div>
+                  <div class="text-primary text-xs font-bold font-mono uppercase mt-0.5">${exp.company}</div>
                 </div>
               </div>
               <span class="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-mono font-bold text-primary whitespace-nowrap">
@@ -1232,20 +1719,20 @@ function hydratePortfolioContent() {
 
         if (isLeft) {
           return `
-            <div class="relative flex flex-col md:flex-row items-center justify-between w-full group">
-              <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-10 md:pl-0">
+            <div class="relative flex flex-col md:flex-row items-center justify-between w-full group" id="exp-row-${stepNum}">
+              <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-12 md:pl-0">
                 ${cardContent}
               </div>
-              <div class="timeline-node"></div>
+              <div class="step-milestone-node ${idx === 0 ? 'is-active' : ''}" data-step-node="${stepNum}" title="Phase 0${stepNum} Milestone">0${stepNum}</div>
               <div class="w-full md:w-[45%] hidden md:block"></div>
             </div>
           `;
         } else {
           return `
-            <div class="relative flex flex-col md:flex-row items-center justify-between w-full group">
+            <div class="relative flex flex-col md:flex-row items-center justify-between w-full group" id="exp-row-${stepNum}">
               <div class="w-full md:w-[45%] hidden md:block"></div>
-              <div class="timeline-node"></div>
-              <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-10 md:pl-0">
+              <div class="step-milestone-node ${idx === 0 ? 'is-active' : ''}" data-step-node="${stepNum}" title="Phase 0${stepNum} Milestone">0${stepNum}</div>
+              <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-12 md:pl-0">
                 ${cardContent}
               </div>
             </div>
@@ -1254,9 +1741,56 @@ function hydratePortfolioContent() {
       }).join('');
 
       timeline.innerHTML = `
-        <div class="timeline-laser-track"></div>
+        <svg class="experience-snake-svg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="snake-laser-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f5d4" stop-opacity="0.95" />
+              <stop offset="35%" stop-color="#818cf8" stop-opacity="0.95" />
+              <stop offset="70%" stop-color="#fb7185" stop-opacity="0.95" />
+              <stop offset="100%" stop-color="#10b981" stop-opacity="0.95" />
+            </linearGradient>
+            <linearGradient id="snake-laser-gradient-light" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0284c7" stop-opacity="0.95" />
+              <stop offset="35%" stop-color="#4f46e5" stop-opacity="0.95" />
+              <stop offset="70%" stop-color="#e11d48" stop-opacity="0.95" />
+              <stop offset="100%" stop-color="#059669" stop-opacity="0.95" />
+            </linearGradient>
+            <filter id="laser-glow-filter" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+            <filter id="beam-pulse-glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur2"/>
+              <feMerge>
+                <feMergeNode in="blur2"/>
+                <feMergeNode in="blur2"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <path id="snake-laser-base-path" d="" fill="none" stroke="rgba(0, 245, 212, 0.15)" stroke-width="7" stroke-linecap="round"/>
+          <path id="snake-laser-dots-path" class="animated-laser-dots" d="" fill="none" stroke="rgba(0, 245, 212, 0.55)" stroke-width="2.5" stroke-linecap="round"/>
+          <path id="snake-laser-glow-path" d="" fill="none" stroke="url(#snake-laser-gradient)" stroke-width="3.5" stroke-linecap="round" filter="url(#laser-glow-filter)"/>
+          <path id="snake-laser-core-path" d="" fill="none" stroke="url(#snake-laser-gradient)" stroke-width="2" stroke-linecap="round"/>
+          <path id="snake-laser-pulse-path" class="animated-laser-beam" d="" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" filter="url(#beam-pulse-glow)"/>
+          <g id="snake-laser-comet-group" class="laser-energy-comet" transform="translate(-100, -100)">
+            <circle r="14" fill="rgba(0, 245, 212, 0.25)" filter="url(#beam-pulse-glow)"/>
+            <circle r="7" fill="url(#snake-laser-gradient)"/>
+            <circle r="3.5" fill="#ffffff"/>
+          </g>
+        </svg>
         ${itemsHtml}
       `;
+      setTimeout(() => {
+        updateExperienceLaserPath();
+        if (typeof initStepProgressionGuide === 'function') {
+          initStepProgressionGuide();
+        }
+      }, 60);
     }
   }
 
@@ -1297,5 +1831,6 @@ function hydratePortfolioContent() {
     setText('cv-personal-address', b.address);
   }
 }
+
 
 

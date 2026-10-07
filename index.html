@@ -28,6 +28,9 @@
       }
     </script>
 
+    <!-- Three.js CDN for Interactive 3D Enterprise Network Mesh -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <!-- Tailwind CSS with custom styling tokens -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
@@ -36,13 +39,14 @@
         theme: {
           extend: {
             colors: {
-              "brand-cyan": "#00f0ff",
-              "brand-indigo": "#6366f1",
+              "brand-cyan": "#00f5d4",
+              "brand-indigo": "#818cf8",
               "brand-amber": "#f59e0b",
               "brand-emerald": "#10b981",
-              "bg-deep": "#05070c",
-              "bg-surface": "#0a0d17",
-              "bg-card": "rgba(14, 18, 30, 0.75)",
+              "brand-sakura": "#fb7185",
+              "bg-deep": "#020408",
+              "bg-surface": "#060a14",
+              "bg-card": "rgba(8, 14, 30, 0.74)",
               "text-muted": "#94a3b8",
             },
             fontFamily: {
@@ -106,27 +110,28 @@
 </head>
 <body class="bg-bg-deep font-sans text-slate-300 antialiased overflow-x-hidden min-h-screen relative selection:bg-brand-cyan/25 selection:text-white">
     
-    <!-- Deep Space Aurora Glows & Dynamic Mouse Animated Spotlight -->
+    <!-- Deep Space Aurora Glows, Global 3D Network Canvas & Dynamic Mouse Animated Spotlight -->
     <div class="fixed inset-0 z-0 pointer-events-none aurora-bg"></div>
     <div id="mouse-glow-mesh"></div>
+    <div id="global-3d-canvas-container"></div>
     <div class="fixed top-0 left-0 w-full h-full z-0 opacity-20 pointer-events-none grid-matrix"></div>
     
     <div class="relative z-10 flex min-h-screen w-full flex-col">
 
     <!-- =========================================================================
-         1. FLOATING CYBER-GLASS NAVBAR (RESPONSIVE & OVERFLOW PROTECTED)
+         1. FLOATING CYBER-GLASS NAVBAR (RESPONSIVE & COMPACT)
          ========================================================================= -->
-    <div class="sticky top-4 z-50 px-3 sm:px-6 md:px-8 w-full flex justify-center">
-        <header class="portfolio-navbar-capsule max-w-[1280px] w-full flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3.5 transition-all duration-300">
+    <div class="sticky top-2.5 sm:top-3.5 z-50 px-2 sm:px-4 md:px-6 w-full flex justify-center">
+        <header class="portfolio-navbar-capsule max-w-[1240px] w-full flex items-center justify-between px-3 sm:px-4.5 py-1.5 sm:py-2 transition-all duration-300 gap-2 sm:gap-4">
             
             <!-- Brand Monogram -->
-            <a href="#home" class="flex items-center gap-3 group shrink-0" aria-label="Saidul Islam Home">
-                <div class="nav-brand-badge size-9 sm:size-10 flex items-center justify-center rounded-xl sm:rounded-2xl border text-primary shrink-0">
-                    <span class="material-symbols-outlined text-xl sm:text-2xl transition-transform duration-300 group-hover:rotate-12">hub</span>
+            <a href="#home" class="flex items-center gap-2.5 group shrink-0" aria-label="Saidul Islam Home">
+                <div class="nav-brand-badge size-8 sm:size-8.5 flex items-center justify-center rounded-xl border text-primary shrink-0">
+                    <span class="material-symbols-outlined text-lg sm:text-xl transition-transform duration-300 group-hover:rotate-12">hub</span>
                 </div>
-                <div class="flex flex-col shrink-0">
-                    <div class="flex items-center gap-2 whitespace-nowrap">
-                        <h2 class="text-white text-sm sm:text-base font-black tracking-tight font-heading group-hover:text-primary transition-colors">
+                <div class="flex flex-col shrink-0 justify-center">
+                    <div class="flex items-center gap-1.5 whitespace-nowrap leading-tight">
+                        <h2 class="nav-brand-title text-white text-xs sm:text-[13px] font-black tracking-tight font-heading group-hover:text-primary transition-colors">
                             SAIDUL ISLAM
                         </h2>
                         <span class="relative flex h-2 w-2 shrink-0">
@@ -134,14 +139,14 @@
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </span>
                     </div>
-                    <span class="text-[9px] sm:text-[10px] font-mono font-semibold text-slate-400 tracking-wider uppercase whitespace-nowrap group-hover:text-slate-300 transition-colors">
+                    <span class="nav-brand-subtitle text-[8.5px] sm:text-[9px] font-mono font-semibold text-slate-400 tracking-wider uppercase whitespace-nowrap group-hover:text-slate-300 transition-colors leading-tight mt-0.5">
                         ERP SPECIALIST <span class="text-primary font-bold">&bull;</span> IT OFFICER
                     </span>
                 </div>
             </a>
 
-            <!-- Desktop Navigation Links (Clean Compact Single-Line Structure) -->
-            <nav class="hidden lg:flex items-center gap-1 xl:gap-1.5 shrink-0">
+            <!-- Desktop Navigation Links (Responsive, Single-Line, Clean Spacing) -->
+            <nav class="hidden xl:flex items-center gap-0.5 p-1 rounded-full bg-white/[0.03] border border-white/5 shrink-0">
                 <a class="nav-link-pill" href="#home">Home</a>
                 <a class="nav-link-pill" href="#erp-core">ERP Modules</a>
                 <a class="nav-link-pill" href="#networking">Networking</a>
@@ -152,34 +157,34 @@
             </nav>
 
             <!-- Actions (Theme Toggle, View CV, Contact) -->
-            <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 
                 <!-- Theme Toggle Button -->
-                <button class="theme-toggle-btn nav-action-btn size-9 sm:size-9.5 rounded-xl flex items-center justify-center cursor-pointer text-slate-300 hover:text-primary transition-all shrink-0" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
-                    <span class="material-symbols-outlined text-lg sm:text-xl theme-icon transition-transform duration-300">light_mode</span>
+                <button class="theme-toggle-btn nav-action-btn size-8 sm:size-8.5 rounded-xl flex items-center justify-center cursor-pointer text-slate-300 hover:text-white transition-all shrink-0" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
+                    <span class="material-symbols-outlined text-base sm:text-lg theme-icon transition-transform duration-300">light_mode</span>
                 </button>
 
                 <!-- View CV Button -->
-                <button class="hidden sm:flex open-resume-btn nav-cv-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold items-center gap-1.5 cursor-pointer transition-all whitespace-nowrap shrink-0">
-                    <span class="material-symbols-outlined text-sm text-primary">description</span>
+                <button class="hidden sm:flex open-resume-btn nav-cv-btn px-3.5 py-1.5 rounded-xl text-xs font-bold items-center gap-1.5 cursor-pointer transition-all whitespace-nowrap shrink-0">
+                    <span class="material-symbols-outlined text-xs text-primary">description</span>
                     <span>View CV</span>
                 </button>
                 
                 <!-- Contact Me Button -->
-                <a class="hidden md:inline-flex nav-contact-btn px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-[13px] font-black shadow-lg transition-all whitespace-nowrap shrink-0" href="#contact">
+                <a class="hidden lg:inline-flex nav-contact-btn px-4 py-1.5 rounded-xl text-xs font-black shadow-lg transition-all whitespace-nowrap shrink-0" href="#contact">
                     <span>Contact Me</span>
                 </a>
 
                 <!-- Mobile Menu Toggle -->
-                <button id="mobile-menu-btn" class="lg:hidden flex items-center justify-center p-1.5 text-slate-300 hover:text-primary transition-colors cursor-pointer shrink-0" aria-label="Toggle Menu">
-                    <span class="material-symbols-outlined text-2xl sm:text-3xl">menu</span>
+                <button id="mobile-menu-btn" class="xl:hidden flex items-center justify-center p-1 text-slate-300 hover:text-white transition-colors cursor-pointer shrink-0" aria-label="Toggle Menu">
+                    <span class="material-symbols-outlined text-2xl">menu</span>
                 </button>
             </div>
         </header>
     </div>
 
     <!-- Mobile Slide Drawer -->
-    <div id="mobile-nav-menu" class="fixed inset-0 z-[60] bg-[#05070c]/95 backdrop-blur-2xl transform translate-x-full transition-transform duration-300 pointer-events-none lg:hidden flex flex-col">
+    <div id="mobile-nav-menu" class="fixed inset-0 z-[60] bg-[#030712]/95 backdrop-blur-2xl transform translate-x-full transition-transform duration-300 pointer-events-none lg:hidden flex flex-col">
         <div class="flex items-center justify-between px-6 py-5 border-b border-white/10 pointer-events-auto">
             <div class="flex items-center gap-3">
                 <div class="size-9 rounded-xl bg-brand-cyan/20 border border-brand-cyan/40 flex items-center justify-center text-brand-cyan">
@@ -224,9 +229,9 @@
         <!-- =====================================================================
              2. SIGNATURE BENTO HERO SECTION
              ===================================================================== -->
-        <section id="home" class="w-full flex flex-col items-center pt-12 md:pt-16 pb-24 px-4 md:px-8 lg:px-16 relative overflow-hidden">
+        <section id="home" class="w-full flex flex-col items-center pt-6 sm:pt-8 md:pt-10 pb-20 px-4 md:px-8 lg:px-16 relative overflow-hidden">
             
-            <div class="max-w-[1240px] w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div class="max-w-[1240px] w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
                 
                 <!-- Left Details (Cols 1 to 7) -->
                 <div class="lg:col-span-7 flex flex-col gap-6 order-2 lg:order-1">
@@ -1094,38 +1099,112 @@
         <section id="experience" class="w-full flex justify-center py-24 px-4 md:px-8 lg:px-16 border-t border-white/5 relative overflow-hidden reveal-on-scroll">
             <div class="max-w-[1100px] w-full flex flex-col gap-16 relative z-10">
                 
-                <div class="flex flex-col items-center text-center gap-3">
+                <div class="flex flex-col items-center text-center gap-4">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 w-fit">
                         <span class="material-symbols-outlined text-xs text-primary">history</span>
-                        <span class="text-[10px] font-mono font-bold text-primary tracking-widest uppercase">Career Progression</span>
+                        <span class="text-[10px] font-mono font-bold text-primary tracking-widest uppercase">Career Progression Journey</span>
                     </div>
                     <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white font-heading">
-                        Professional <span class="gradient-text-primary">Experience</span>
+                        Professional <span class="text-gradient-cyan">Experience</span>
                     </h2>
                     <p class="text-slate-400 text-base font-light max-w-2xl">
                         <span class="dynamic-exp-short">4.8+</span> years of verified technical excellence across enterprise manufacturing, telecommunications, and software engineering.
                     </p>
+
+                    <!-- Interactive Step-by-Step Milestone Navigation Bar -->
+                    <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2" id="experience-step-nav">
+                        <button class="step-phase-pill active flex items-center gap-2 transition-all cursor-pointer" data-step="1" title="Jump to Phase 01">
+                            <span class="size-2 rounded-full bg-primary animate-ping"></span>
+                            <span>Phase 01: ERP Specialist</span>
+                        </button>
+                        <span class="text-slate-600 font-mono hidden sm:inline">&bull;</span>
+                        <button class="step-phase-pill flex items-center gap-2 transition-all cursor-pointer" data-step="2" title="Jump to Phase 02">
+                            <span class="size-1.5 rounded-full bg-purple-400"></span>
+                            <span>Phase 02: System Admin (ISP)</span>
+                        </button>
+                        <span class="text-slate-600 font-mono hidden sm:inline">&bull;</span>
+                        <button class="step-phase-pill flex items-center gap-2 transition-all cursor-pointer" data-step="3" title="Jump to Phase 03">
+                            <span class="size-1.5 rounded-full bg-brand-cyan"></span>
+                            <span>Phase 03: Mobile & Cloud Apps</span>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Clean Animated Laser Timeline Container -->
+                <!-- Clean Animated S-Curve Laser Timeline Container -->
                 <div class="experience-vertical-timeline flex flex-col gap-12 sm:gap-16 relative py-4">
                     
-                    <!-- Animated Flowing Laser Track -->
-                    <div class="timeline-laser-track"></div>
-                    
-                    <!-- Role 1: MEP Group -->
-                    <div class="relative flex flex-col md:flex-row items-center justify-between w-full group">
+                    <!-- Continuous S-Curved Laser Track SVG with Animated Light Pulse & Travelling Photon Comet -->
+                    <svg class="experience-snake-svg" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="snake-laser-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#00f5d4" stop-opacity="0.95" />
+                                <stop offset="35%" stop-color="#818cf8" stop-opacity="0.95" />
+                                <stop offset="70%" stop-color="#fb7185" stop-opacity="0.95" />
+                                <stop offset="100%" stop-color="#10b981" stop-opacity="0.95" />
+                            </linearGradient>
+                            <linearGradient id="snake-laser-gradient-light" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#0284c7" stop-opacity="0.95" />
+                                <stop offset="35%" stop-color="#4f46e5" stop-opacity="0.95" />
+                                <stop offset="70%" stop-color="#e11d48" stop-opacity="0.95" />
+                                <stop offset="100%" stop-color="#059669" stop-opacity="0.95" />
+                            </linearGradient>
+                            <filter id="laser-glow-filter" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+                                <feMerge>
+                                    <feMergeNode in="blur"/>
+                                    <feMergeNode in="blur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                            <filter id="beam-pulse-glow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur2"/>
+                                <feMerge>
+                                    <feMergeNode in="blur2"/>
+                                    <feMergeNode in="blur2"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
                         
-                        <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-10 md:pl-0">
-                            <div class="bento-card p-6 md:p-8 rounded-3xl border border-white/10 hover:border-primary/50 shadow-2xl relative overflow-hidden group">
+                        <!-- 1. Ambient Background Track -->
+                        <path id="snake-laser-base-path" d="" fill="none" stroke="rgba(0, 245, 212, 0.15)" stroke-width="7" stroke-linecap="round"/>
+                        
+                        <!-- 2. Filament Directional Dots Guidance Line -->
+                        <path id="snake-laser-dots-path" class="animated-laser-dots" d="" fill="none" stroke="rgba(0, 245, 212, 0.55)" stroke-width="2.5" stroke-linecap="round"/>
+                        
+                        <!-- 3. Glowing Neon S-Curve Track -->
+                        <path id="snake-laser-glow-path" d="" fill="none" stroke="url(#snake-laser-gradient)" stroke-width="3.5" stroke-linecap="round" filter="url(#laser-glow-filter)"/>
+                        
+                        <!-- 4. Core Luminous Wire -->
+                        <path id="snake-laser-core-path" d="" fill="none" stroke="url(#snake-laser-gradient)" stroke-width="2" stroke-linecap="round"/>
+                        
+                        <!-- 5. High-Speed Flowing Animated Laser Beam Pulse -->
+                        <path id="snake-laser-pulse-path" class="animated-laser-beam" d="" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" filter="url(#beam-pulse-glow)"/>
+
+                        <!-- 6. Real-Time Moving Photon Energy Comet (Step Guide Head) -->
+                        <g id="snake-laser-comet-group" class="laser-energy-comet" transform="translate(-100, -100)">
+                            <circle r="14" fill="rgba(0, 245, 212, 0.25)" filter="url(#beam-pulse-glow)"/>
+                            <circle r="7" fill="url(#snake-laser-gradient)"/>
+                            <circle r="3.5" fill="#ffffff"/>
+                        </g>
+                    </svg>
+                    
+                    <!-- Role 1: MEP Group (Step 01) -->
+                    <div class="relative flex flex-col md:flex-row items-center justify-between w-full group" id="exp-row-1">
+                        
+                        <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-12 md:pl-0">
+                            <div class="bento-card experience-step-card is-active-step p-6 md:p-8 rounded-3xl border border-white/10 hover:border-primary/50 shadow-2xl relative overflow-hidden group" id="experience-card-1" data-step="1">
                                 <div class="flex items-start justify-between mb-4">
                                     <div class="flex items-center gap-3">
                                         <div class="size-12 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary">
                                             <span class="material-symbols-outlined text-2xl">apartment</span>
                                         </div>
                                         <div>
-                                            <h3 class="text-xl font-bold text-white font-heading group-hover:text-primary transition-colors">IT Officer</h3>
-                                            <div class="text-primary text-xs font-bold font-mono uppercase">MEP Group Limited</div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="px-2 py-0.5 rounded bg-primary/15 border border-primary/30 text-[9.5px] font-mono font-bold text-primary">STEP 01</span>
+                                                <h3 class="text-xl font-bold text-white font-heading group-hover:text-primary transition-colors">IT Officer</h3>
+                                            </div>
+                                            <div class="text-primary text-xs font-bold font-mono uppercase mt-0.5">MEP Group Limited</div>
                                         </div>
                                     </div>
                                     <span class="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-mono font-bold text-primary whitespace-nowrap">
@@ -1164,30 +1243,33 @@
                             </div>
                         </div>
 
-                        <!-- Center Glowing Node -->
-                        <div class="timeline-node"></div>
+                        <!-- Numbered Milestone Node (Step 01) -->
+                        <div class="step-milestone-node is-active" data-step-node="1" title="Phase 01 Milestone">01</div>
 
                         <div class="w-full md:w-[45%] hidden md:block"></div>
                     </div>
 
-                    <!-- Role 2: AL-Mugni ISP -->
-                    <div class="relative flex flex-col md:flex-row items-center justify-between w-full group">
+                    <!-- Role 2: AL-Mugni ISP (Step 02) -->
+                    <div class="relative flex flex-col md:flex-row items-center justify-between w-full group" id="exp-row-2">
                         
                         <div class="w-full md:w-[45%] hidden md:block"></div>
 
-                        <!-- Center Glowing Node -->
-                        <div class="timeline-node"></div>
+                        <!-- Numbered Milestone Node (Step 02) -->
+                        <div class="step-milestone-node" data-step-node="2" title="Phase 02 Milestone">02</div>
 
-                        <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-10 md:pl-0">
-                            <div class="bento-card p-6 md:p-8 rounded-3xl border border-white/10 hover:border-purple-500/50 shadow-2xl relative overflow-hidden group">
+                        <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-12 md:pl-0">
+                            <div class="bento-card experience-step-card theme-purple p-6 md:p-8 rounded-3xl border border-white/10 hover:border-purple-500/50 shadow-2xl relative overflow-hidden group" id="experience-card-2" data-step="2">
                                 <div class="flex items-start justify-between mb-4">
                                     <div class="flex items-center gap-3">
                                         <div class="size-12 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
                                             <span class="material-symbols-outlined text-2xl">cell_tower</span>
                                         </div>
                                         <div>
-                                            <h3 class="text-xl font-bold text-white font-heading group-hover:text-purple-300 transition-colors">System Administrator</h3>
-                                            <div class="text-purple-400 text-xs font-bold font-mono uppercase">AL-Mugni Information & Tech (ISP)</div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="px-2 py-0.5 rounded bg-purple-500/15 border border-purple-500/30 text-[9.5px] font-mono font-bold text-purple-300">STEP 02</span>
+                                                <h3 class="text-xl font-bold text-white font-heading group-hover:text-purple-300 transition-colors">System Administrator</h3>
+                                            </div>
+                                            <div class="text-purple-400 text-xs font-bold font-mono uppercase mt-0.5">AL-Mugni Information & Tech (ISP)</div>
                                         </div>
                                     </div>
                                     <span class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-xs font-mono font-bold text-purple-300 whitespace-nowrap">
@@ -1221,11 +1303,11 @@
 
                     </div>
 
-                    <!-- Role 3: Mobile Apps -->
-                    <div class="relative flex flex-col md:flex-row items-center justify-between w-full group">
+                    <!-- Role 3: Mobile Apps (Step 03) -->
+                    <div class="relative flex flex-col md:flex-row items-center justify-between w-full group" id="exp-row-3">
                         
-                        <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-10 md:pl-0">
-                            <div class="bento-card p-6 md:p-8 rounded-3xl border border-white/10 hover:border-primary/50 shadow-2xl relative overflow-hidden group">
+                        <div class="w-full md:w-[45%] flex flex-col relative z-20 pl-12 md:pl-0">
+                            <div class="bento-card experience-step-card theme-cyan p-6 md:p-8 rounded-3xl border border-white/10 hover:border-primary/50 shadow-2xl relative overflow-hidden group" id="experience-card-3" data-step="3">
                                 <div class="flex items-start justify-between mb-4">
                                     <div class="flex items-center gap-3">
                                         <div class="size-12 rounded-xl bg-gradient-to-br from-brand-cyan/20 to-purple-500/20 border border-brand-cyan/40 flex items-center justify-center text-brand-cyan shadow-[0_0_20px_rgba(0,240,255,0.25)] shrink-0">
@@ -1234,8 +1316,11 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <h3 class="text-xl font-bold text-white font-heading group-hover:text-primary transition-colors">Mobile App Developer</h3>
-                                            <div class="text-primary text-xs font-bold font-mono uppercase">Flutter & Firebase Solutions</div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="px-2 py-0.5 rounded bg-brand-cyan/15 border border-brand-cyan/30 text-[9.5px] font-mono font-bold text-brand-cyan">STEP 03</span>
+                                                <h3 class="text-xl font-bold text-white font-heading group-hover:text-primary transition-colors">Mobile App Developer</h3>
+                                            </div>
+                                            <div class="text-primary text-xs font-bold font-mono uppercase mt-0.5">Flutter & Firebase Solutions</div>
                                         </div>
                                     </div>
                                     <span class="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-mono font-bold text-primary whitespace-nowrap">
@@ -1262,8 +1347,8 @@
                             </div>
                         </div>
 
-                        <!-- Center Glowing Node -->
-                        <div class="timeline-node"></div>
+                        <!-- Numbered Milestone Node (Step 03) -->
+                        <div class="step-milestone-node" data-step-node="3" title="Phase 03 Milestone">03</div>
 
                         <div class="w-full md:w-[45%] hidden md:block"></div>
                     </div>
@@ -1440,10 +1525,595 @@
             </div>
         </section>
 
+        <!-- =====================================================================
+             10. ARCADE TRILOGY & PORTFOLIO CHALLENGE HUB
+             ===================================================================== -->
+        <div class="w-full flex justify-center pt-14 pb-2 px-4 md:px-8 lg:px-16 border-t border-white/5 relative z-10">
+            <div class="max-w-[1000px] w-full flex flex-col items-center text-center gap-4">
+                
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary shadow-lg backdrop-blur-md">
+                    <span class="text-base">🏆</span>
+                    <span class="text-xs font-mono font-bold uppercase tracking-widest">PORTFOLIO CHALLENGE &bull; ARCADE TRILOGY</span>
+                </div>
+
+                <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight font-heading leading-tight">
+                    Take a Little Break <span class="text-gradient-cyan">🎮</span>
+                </h2>
+
+                <p class="text-slate-400 text-xs sm:text-sm font-light max-w-lg italic">
+                    "You've reached the end of my portfolio. Why not play a little? Progress through three interconnected challenges."
+                </p>
+
+                <!-- 3-Tier Interactive Progression Road -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-3xl pt-2">
+                    <!-- Tier 1 -->
+                    <a href="#cat-runner-section" class="p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-orange-500/50 transition-all flex items-center gap-3 text-left group">
+                        <div class="size-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                            🐱
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
+                                <span>✓</span> UNLOCKED
+                            </span>
+                            <h4 class="text-xs font-bold text-white font-heading">1. Cat Runner</h4>
+                            <span class="text-[9.5px] font-mono text-slate-400">Target: 6,000 pts</span>
+                        </div>
+                    </a>
+
+                    <!-- Tier 2 -->
+                    <a href="#robot-escape-section" class="p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-cyan/50 transition-all flex items-center gap-3 text-left group">
+                        <div class="size-10 rounded-xl bg-brand-cyan/20 text-brand-cyan flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                            🤖
+                        </div>
+                        <div class="flex flex-col">
+                            <span id="hub-robot-status" class="text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1">
+                                <span>🔒</span> 6,000 pts
+                            </span>
+                            <h4 class="text-xs font-bold text-white font-heading">2. Robot Escape</h4>
+                            <span class="text-[9.5px] font-mono text-slate-400">Target: 10,000 pts</span>
+                        </div>
+                    </a>
+
+                    <!-- Tier 3 -->
+                    <a href="#space-escape-section" class="p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 transition-all flex items-center gap-3 text-left group">
+                        <div class="size-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                            🚀
+                        </div>
+                        <div class="flex flex-col">
+                            <span id="hub-space-status" class="text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1">
+                                <span>🔒</span> 10,000 Robot pts
+                            </span>
+                            <h4 class="text-xs font-bold text-white font-heading">3. Space Escape</h4>
+                            <span class="text-[9.5px] font-mono text-slate-400">Final Challenge</span>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- =====================================================================
+             10. INTERACTIVE 2D CAT RUNNER MINI-GAME (EASTER EGG BREAK)
+             ===================================================================== -->
+        <section id="cat-runner-section" class="w-full flex justify-center py-12 px-4 md:px-8 lg:px-16 relative reveal-on-scroll">
+            <div class="max-w-[1000px] w-full flex flex-col items-center gap-7 relative z-10">
+                
+                <!-- Section Header -->
+                <div class="flex flex-col items-center text-center gap-2.5">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400">
+                        <span class="text-sm">🐱</span>
+                        <span class="text-xs font-mono font-bold uppercase tracking-wider">Chapter 1 &bull; Nature Run</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight font-heading flex items-center gap-2">
+                        <span>🐱</span> <span class="text-gradient-cyan">Cat Runner</span> <span>🐾</span>
+                    </h2>
+                    <p class="text-slate-400 text-xs sm:text-sm font-light max-w-md italic">
+                        "Run, collect fish and see how far you can go."
+                    </p>
+                </div>
+
+                <!-- Game Cabinet & Canvas Container -->
+                <div id="cat-runner-game-container" class="w-full rounded-3xl overflow-hidden relative border border-white/15 shadow-2xl bg-[#090d18] flex flex-col cat-game-cabinet">
+                    
+                    <!-- HUD Top Bar -->
+                    <div class="flex items-center justify-between px-4 sm:px-6 py-2.5 bg-black/40 border-b border-white/10 text-xs font-mono select-none z-20 backdrop-blur-md">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-orange-400 flex items-center gap-1">
+                                <span>🐾</span> <span class="hidden sm:inline">CAT RUNNER</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3 sm:gap-6 text-slate-200 text-[11px] sm:text-xs">
+                            <span class="flex items-center gap-1.5">
+                                <span class="text-slate-400">Score:</span>
+                                <strong id="cat-score-text" class="text-white font-bold font-mono">0000</strong>
+                            </span>
+                            <span class="flex items-center gap-1.5">
+                                <span class="text-slate-400">Distance:</span>
+                                <strong id="cat-distance-text" class="text-brand-cyan font-bold font-mono">0m</strong>
+                            </span>
+                            <span class="flex items-center gap-1.5">
+                                <span>🪙</span>
+                                <strong id="cat-coins-text" class="text-amber-400 font-bold font-mono">00</strong>
+                            </span>
+                            <span class="hidden md:flex items-center gap-1.5">
+                                <span>🏆</span>
+                                <strong id="cat-best-text" class="text-emerald-400 font-bold font-mono">0000</strong>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button id="cat-mute-btn" class="size-7.5 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer" title="Toggle Sound" aria-label="Toggle Sound">
+                                <span class="material-symbols-outlined text-base">volume_up</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Canvas Area -->
+                    <div class="relative w-full aspect-[21/10] sm:aspect-[2.1/1] overflow-hidden bg-slate-900 select-none">
+                        <canvas id="cat-runner-canvas" class="w-full h-full block cursor-pointer"></canvas>
+
+                        <!-- Start Screen Overlay -->
+                        <div id="cat-start-screen" class="absolute inset-0 z-30 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4 transition-opacity duration-300">
+                            <div class="size-16 sm:size-20 rounded-2xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-3xl sm:text-4xl shadow-xl animate-bounce">
+                                🐱
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-xl sm:text-3xl font-black text-white tracking-tight font-heading">
+                                    Cat Runner
+                                </h3>
+                                <p class="text-slate-300 text-xs sm:text-sm font-light italic max-w-sm">
+                                    "Take a little break and see how far you can run!"
+                                </p>
+                            </div>
+                            
+                            <button id="cat-start-btn" class="btn-signature-cyan px-8 py-3 rounded-2xl text-xs sm:text-sm font-black flex items-center gap-2 cursor-pointer shadow-xl hover:scale-105 transition-transform">
+                                <span>START GAME</span>
+                                <span class="material-symbols-outlined text-base">play_arrow</span>
+                            </button>
+
+                            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[10px] sm:text-[11px] font-mono text-slate-400 pt-1">
+                                <span class="px-2.5 py-1 rounded-md bg-white/10 border border-white/10 text-slate-200 font-semibold">SPACE / &uarr; to Jump</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/10 border border-white/10 text-slate-200 font-semibold">TAP to Jump</span>
+                            </div>
+                        </div>
+
+                        <!-- Game Over Screen Overlay -->
+                        <div id="cat-gameover-screen" class="absolute inset-0 z-30 bg-black/85 backdrop-blur-md hidden flex-col items-center justify-center p-6 text-center gap-4 transition-opacity duration-300">
+                            
+                            <!-- New Best Banner if achieved -->
+                            <div id="cat-go-newbest" class="hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 text-xs font-bold uppercase tracking-wider animate-pulse">
+                                <span>🏆</span> NEW BEST!
+                            </div>
+
+                            <div class="space-y-1">
+                                <h3 class="text-2xl sm:text-4xl font-black text-rose-500 tracking-tight font-heading">
+                                    GAME OVER
+                                </h3>
+                                <p class="text-slate-400 text-xs">Nice attempt! Ready to beat your high score?</p>
+                            </div>
+
+                            <!-- Stat Pill Grid -->
+                            <div class="grid grid-cols-3 gap-2 sm:gap-4 w-full max-w-xs py-1">
+                                <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center">
+                                    <span class="text-[9px] font-mono text-slate-400 uppercase">Distance</span>
+                                    <span id="cat-go-distance" class="text-sm sm:text-base font-bold text-brand-cyan font-mono">0m</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center">
+                                    <span class="text-[9px] font-mono text-slate-400 uppercase">Score</span>
+                                    <span id="cat-go-score" class="text-sm sm:text-base font-bold text-white font-mono">0</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center">
+                                    <span class="text-[9px] font-mono text-slate-400 uppercase">Coins/Fish</span>
+                                    <span id="cat-go-coins" class="text-sm sm:text-base font-bold text-amber-400 font-mono">0</span>
+                                </div>
+                            </div>
+
+                            <button id="cat-restart-btn" class="btn-signature-cyan px-8 py-3 rounded-2xl text-xs sm:text-sm font-black flex items-center gap-2 cursor-pointer shadow-xl hover:scale-105 transition-transform">
+                                <span class="material-symbols-outlined text-base">replay</span>
+                                <span>PLAY AGAIN</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- Bottom Controls Bar / Mobile Hint -->
+                    <div class="flex items-center justify-between px-4 py-2 bg-black/50 border-t border-white/10 text-[10.5px] font-mono text-slate-400">
+                        <span class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-xs text-primary">touch_app</span>
+                            <span>Click or Tap canvas anywhere to Jump (Double Jump supported!)</span>
+                        </span>
+                        <span class="hidden sm:inline text-slate-500">🐟 +100 pts &bull; 🪙 +25 pts</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             11. UNLOCKABLE BONUS MINI-GAME: 2D ROBOT ESCAPE
+             ===================================================================== -->
+        <section id="robot-escape-section" class="w-full flex justify-center py-12 px-4 md:px-8 lg:px-16 border-t border-white/5 relative reveal-on-scroll">
+            <div class="max-w-[1000px] w-full flex flex-col items-center gap-7 relative z-10">
+                
+                <!-- Section Header -->
+                <div class="flex flex-col items-center text-center gap-2.5">
+                    <div id="robot-lock-badge" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400">
+                        <span class="material-symbols-outlined text-xs">lock</span>
+                        <span class="text-xs font-mono font-bold uppercase tracking-wider">Bonus Game Locked</span>
+                    </div>
+                    <h2 id="robot-lock-title" class="text-2xl sm:text-4xl font-black text-white tracking-tight font-heading flex items-center gap-2">
+                        <span>🤖</span> <span class="text-gradient-cyan">Robot Escape</span> <span>⚡</span>
+                    </h2>
+                    <p id="robot-lock-subtitle" class="text-slate-400 text-xs sm:text-sm font-light max-w-md italic">
+                        "Reach 6,000 points in Cat Runner to unlock this challenge."
+                    </p>
+                </div>
+
+                <!-- Game Cabinet & Canvas Container -->
+                <div id="robot-escape-game-container" class="w-full rounded-3xl overflow-hidden relative border border-white/15 shadow-2xl bg-[#030712] flex flex-col robot-game-cabinet">
+                    
+                    <!-- HUD Top Bar -->
+                    <div class="flex items-center justify-between px-4 sm:px-6 py-2.5 bg-black/50 border-b border-white/10 text-xs font-mono select-none z-20 backdrop-blur-md">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-primary flex items-center gap-1">
+                                <span>🤖</span> <span class="hidden sm:inline">ROBOT ESCAPE</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3 sm:gap-6 text-slate-200 text-[11px] sm:text-xs">
+                            <span class="flex items-center gap-1.5">
+                                <span class="text-slate-400">Score:</span>
+                                <strong id="robot-score-text" class="text-white font-bold font-mono">0000</strong>
+                            </span>
+                            <span class="flex items-center gap-1.5">
+                                <span class="text-slate-400">Distance:</span>
+                                <strong id="robot-distance-text" class="text-brand-cyan font-bold font-mono">0m</strong>
+                            </span>
+                            <span class="flex items-center gap-1.5">
+                                <span>🔋</span>
+                                <strong id="robot-energy-text" class="text-emerald-400 font-bold font-mono">00</strong>
+                            </span>
+                            <span class="hidden md:flex items-center gap-1.5">
+                                <span>🏆</span>
+                                <strong id="robot-best-text" class="text-amber-400 font-bold font-mono">0000</strong>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button id="robot-mute-btn" class="size-7.5 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer" title="Toggle Sound" aria-label="Toggle Sound">
+                                <span class="material-symbols-outlined text-base">volume_up</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Canvas Area with Layers & Overlays -->
+                    <div class="relative w-full aspect-[21/10] sm:aspect-[2.1/1] overflow-hidden bg-[#030712] select-none">
+                        <canvas id="robot-escape-canvas" class="w-full h-full block cursor-pointer"></canvas>
+
+                        <!-- LOCKED OVERLAY (Shown when score < 6000) -->
+                        <div id="robot-lock-overlay" class="absolute inset-0 z-40 bg-[#030712]/92 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center gap-4 transition-all duration-500">
+                            <div class="size-16 sm:size-20 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-3xl sm:text-4xl shadow-xl animate-pulse text-rose-400">
+                                <span class="material-symbols-outlined text-3xl sm:text-4xl">lock</span>
+                            </div>
+                            
+                            <div class="space-y-1.5 max-w-sm">
+                                <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight font-heading">
+                                    BONUS GAME LOCKED
+                                </h3>
+                                <p class="text-slate-300 text-xs sm:text-sm font-light italic">
+                                    "Reach 6,000 points in Cat Runner to unlock this challenge."
+                                </p>
+                            </div>
+
+                            <!-- Progress Bar Card -->
+                            <div class="w-full max-w-xs p-3 rounded-2xl bg-white/5 border border-white/10 flex flex-col gap-2">
+                                <div class="flex items-center justify-between text-[11px] font-mono">
+                                    <span class="text-slate-400">Cat Runner Best:</span>
+                                    <span id="robot-lock-score-text" class="text-primary font-bold">0 / 6,000</span>
+                                </div>
+                                <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden relative">
+                                    <div id="robot-lock-progress-bar" class="h-full bg-gradient-to-r from-orange-500 via-brand-cyan to-emerald-400 transition-all duration-500 rounded-full" style="width: 0%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Access Button for instant testing -->
+                            <div class="pt-1">
+                                <button id="robot-quick-unlock-btn" class="px-4 py-1.5 rounded-xl text-[11px] font-mono font-semibold bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 transition-all flex items-center gap-1.5 cursor-pointer">
+                                    <span class="material-symbols-outlined text-xs text-amber-400">bolt</span>
+                                    <span>Quick Unlock (Instant Access)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- START SCREEN OVERLAY (When unlocked) -->
+                        <div id="robot-start-screen" class="absolute inset-0 z-30 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4 transition-opacity duration-300">
+                            <div class="size-16 sm:size-20 rounded-2xl bg-primary/20 border border-primary/40 flex items-center justify-center text-3xl sm:text-4xl shadow-xl animate-bounce">
+                                🤖
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-xl sm:text-3xl font-black text-white tracking-tight font-heading">
+                                    Robot Escape
+                                </h3>
+                                <p class="text-slate-300 text-xs sm:text-sm font-light italic max-w-sm">
+                                    "You proved your skills. Now survive the future."
+                                </p>
+                            </div>
+                            
+                            <button id="robot-start-btn" class="btn-signature-cyan px-8 py-3 rounded-2xl text-xs sm:text-sm font-black flex items-center gap-2 cursor-pointer shadow-xl hover:scale-105 transition-transform">
+                                <span>PLAY ROBOT ESCAPE</span>
+                                <span class="material-symbols-outlined text-base">play_arrow</span>
+                            </button>
+
+                            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] font-mono text-slate-400 pt-1">
+                                <span class="px-2.5 py-1 rounded-md bg-white/10 border border-white/10 text-slate-200 font-semibold">SPACE / &uarr; = JUMP</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/10 border border-white/10 text-slate-200 font-semibold">&darr; = SLIDE</span>
+                            </div>
+                        </div>
+
+                        <!-- GAME OVER SCREEN OVERLAY -->
+                        <div id="robot-gameover-screen" class="absolute inset-0 z-30 bg-black/85 backdrop-blur-md hidden flex-col items-center justify-center p-6 text-center gap-4 transition-opacity duration-300">
+                            
+                            <!-- New Best Banner -->
+                            <div id="robot-go-newbest" class="hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 text-xs font-bold uppercase tracking-wider animate-pulse">
+                                <span>🏆</span> NEW RECORD!
+                            </div>
+
+                            <div class="space-y-1">
+                                <h3 class="text-2xl sm:text-4xl font-black text-rose-500 tracking-tight font-heading flex items-center justify-center gap-2">
+                                    <span>SYSTEM FAILURE</span> <span class="text-amber-400">⚠️</span>
+                                </h3>
+                                <p class="text-slate-400 text-xs">Core systems offline. Re-initializing mainframe...</p>
+                            </div>
+
+                            <!-- Stat Grid -->
+                            <div class="grid grid-cols-3 gap-2 sm:gap-4 w-full max-w-xs py-1">
+                                <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center">
+                                    <span class="text-[9px] font-mono text-slate-400 uppercase">Distance</span>
+                                    <span id="robot-go-distance" class="text-sm sm:text-base font-bold text-brand-cyan font-mono">0m</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center">
+                                    <span class="text-[9px] font-mono text-slate-400 uppercase">Score</span>
+                                    <span id="robot-go-score" class="text-sm sm:text-base font-bold text-white font-mono">0</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center">
+                                    <span class="text-[9px] font-mono text-slate-400 uppercase">Energy Cores</span>
+                                    <span id="robot-go-cores" class="text-sm sm:text-base font-bold text-emerald-400 font-mono">0</span>
+                                </div>
+                            </div>
+
+                            <button id="robot-restart-btn" class="btn-signature-cyan px-8 py-3 rounded-2xl text-xs sm:text-sm font-black flex items-center gap-2 cursor-pointer shadow-xl hover:scale-105 transition-transform">
+                                <span class="material-symbols-outlined text-base">replay</span>
+                                <span>RESTART</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- Bottom Controls & Mobile Touch Bar -->
+                    <div class="flex items-center justify-between px-4 py-2.5 bg-black/60 border-t border-white/10 text-[10.5px] font-mono text-slate-400">
+                        
+                        <!-- Desktop Controls Tip -->
+                        <span class="hidden sm:flex items-center gap-2">
+                            <span class="text-primary font-bold">CONTROLS:</span>
+                            <span>[SPACE / &uarr;] Jump</span>
+                            <span class="text-slate-600">&bull;</span>
+                            <span>[&darr; / S] Slide under High Lasers</span>
+                        </span>
+
+                        <!-- Mobile On-Screen Touch Action Buttons -->
+                        <div class="sm:hidden flex items-center gap-3 w-full justify-between">
+                            <button id="robot-jump-touch-btn" class="flex-1 py-2 rounded-xl bg-brand-cyan/20 border border-brand-cyan/40 text-brand-cyan font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-transform">
+                                <span class="material-symbols-outlined text-sm">arrow_upward</span>
+                                <span>JUMP</span>
+                            </button>
+                            <button id="robot-slide-touch-btn" class="flex-1 py-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-transform">
+                                <span class="material-symbols-outlined text-sm">arrow_downward</span>
+                                <span>SLIDE</span>
+                            </button>
+                        </div>
+
+                        <span class="hidden sm:inline text-slate-500">🔋 +50 pts &bull; 💎 +100 pts</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             12. FINAL CHALLENGE MINI-GAME: 2D SPACE ESCAPE
+             ===================================================================== -->
+        <section id="space-escape-section" class="w-full flex justify-center py-12 px-4 md:px-8 lg:px-16 border-t border-white/5 relative reveal-on-scroll">
+            <div class="max-w-[1000px] w-full flex flex-col items-center gap-7 relative z-10">
+                
+                <!-- Section Header -->
+                <div class="flex flex-col items-center text-center gap-2.5">
+                    <div id="space-lock-badge" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400">
+                        <span class="material-symbols-outlined text-xs">lock</span>
+                        <span class="text-xs font-mono font-bold uppercase tracking-wider">Final Challenge Locked</span>
+                    </div>
+                    <h2 id="space-lock-title" class="text-2xl sm:text-4xl font-black text-white tracking-tight font-heading flex items-center gap-2">
+                        <span>🚀</span> <span class="text-gradient-cyan">Space Escape</span> <span>🌌</span>
+                    </h2>
+                    <p id="space-lock-subtitle" class="text-slate-400 text-xs sm:text-sm font-light max-w-md italic">
+                        "Reach 10,000 points in Robot Escape to unlock the final challenge."
+                    </p>
+                </div>
+
+                <!-- Game Cabinet & Canvas Container -->
+                <div id="space-escape-game-container" class="w-full rounded-3xl overflow-hidden relative border border-white/15 shadow-2xl bg-[#030712] flex flex-col space-game-cabinet">
+                    
+                    <!-- HUD Top Bar -->
+                    <div class="flex items-center justify-between px-4 sm:px-6 py-2.5 bg-black/60 border-b border-white/10 text-xs font-mono select-none z-20 backdrop-blur-md">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-brand-cyan flex items-center gap-1">
+                                <span>🚀</span> <span class="hidden sm:inline">SPACE ESCAPE</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3 sm:gap-6 text-slate-200 text-[11px] sm:text-xs">
+                            <span class="flex items-center gap-1.5">
+                                <span class="text-slate-400">Score:</span>
+                                <strong id="space-score-text" class="text-white font-bold font-mono">0000</strong>
+                            </span>
+                            <span class="flex items-center gap-1.5">
+                                <span class="text-slate-400">Distance:</span>
+                                <strong id="space-distance-text" class="text-brand-cyan font-bold font-mono">0m</strong>
+                            </span>
+                            <span class="flex items-center gap-1.5">
+                                <span>🔋</span>
+                                <strong id="space-energy-text" class="text-emerald-400 font-bold font-mono">00</strong>
+                            </span>
+                            <span class="hidden md:flex items-center gap-1.5">
+                                <span>🏆</span>
+                                <strong id="space-best-text" class="text-amber-400 font-bold font-mono">0000</strong>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button id="space-mute-btn" class="size-7.5 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer" title="Toggle Sound" aria-label="Toggle Sound">
+                                <span class="material-symbols-outlined text-base">volume_up</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Canvas Area -->
+                    <div class="relative w-full aspect-[21/10] sm:aspect-[2.1/1] overflow-hidden bg-[#030712] select-none">
+                        <canvas id="space-escape-canvas" class="w-full h-full block cursor-pointer"></canvas>
+
+                        <!-- LOCKED OVERLAY (When Robot Escape Score < 10,000) -->
+                        <div id="space-lock-overlay" class="absolute inset-0 z-40 bg-[#030712]/92 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center gap-4 transition-all duration-500">
+                            <div class="size-16 sm:size-20 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-3xl sm:text-4xl shadow-xl animate-pulse text-rose-400">
+                                <span class="material-symbols-outlined text-3xl sm:text-4xl">lock</span>
+                            </div>
+                            
+                            <div class="space-y-1.5 max-w-sm">
+                                <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight font-heading">
+                                    FINAL CHALLENGE LOCKED
+                                </h3>
+                                <p class="text-slate-300 text-xs sm:text-sm font-light italic">
+                                    "Reach 10,000 points in Robot Escape to unlock the final challenge."
+                                </p>
+                            </div>
+
+                            <!-- Progress Bar Card -->
+                            <div class="w-full max-w-xs p-3 rounded-2xl bg-white/5 border border-white/10 flex flex-col gap-2">
+                                <div class="flex items-center justify-between text-[11px] font-mono">
+                                    <span class="text-slate-400">Robot Escape Best:</span>
+                                    <span id="space-lock-score-text" class="text-brand-cyan font-bold">0 / 10,000</span>
+                                </div>
+                                <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden relative">
+                                    <div id="space-lock-progress-bar" class="h-full bg-gradient-to-r from-brand-cyan via-blue-500 to-purple-500 transition-all duration-500 rounded-full" style="width: 0%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Access Button for instant testing -->
+                            <div class="pt-1">
+                                <button id="space-quick-unlock-btn" class="px-4 py-1.5 rounded-xl text-[11px] font-mono font-semibold bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 transition-all flex items-center gap-1.5 cursor-pointer">
+                                    <span class="material-symbols-outlined text-xs text-purple-400">rocket_launch</span>
+                                    <span>Quick Unlock (Instant Access)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- START SCREEN OVERLAY -->
+                        <div id="space-start-screen" class="absolute inset-0 z-30 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4 transition-opacity duration-300">
+                            <div class="size-16 sm:size-20 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-3xl sm:text-4xl shadow-xl animate-bounce">
+                                🚀
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-xl sm:text-3xl font-black text-white tracking-tight font-heading">
+                                    Space Escape
+                                </h3>
+                                <p class="text-slate-300 text-xs sm:text-sm font-light italic max-w-sm">
+                                    "You've mastered the ground. You've survived the future. Now escape into space."
+                                </p>
+                            </div>
+                            
+                            <button id="space-start-btn" class="btn-signature-cyan px-8 py-3 rounded-2xl text-xs sm:text-sm font-black flex items-center gap-2 cursor-pointer shadow-xl hover:scale-105 transition-transform">
+                                <span>PLAY SPACE ESCAPE</span>
+                                <span class="material-symbols-outlined text-base">play_arrow</span>
+                            </button>
+
+                            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] font-mono text-slate-400 pt-1">
+                                <span class="px-2.5 py-1 rounded-md bg-white/10 border border-white/10 text-slate-200 font-semibold">&uarr; / W = Move Up</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/10 border border-white/10 text-slate-200 font-semibold">&darr; / S = Move Down</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/10 border border-white/10 text-slate-200 font-semibold">Touch / Drag to Fly</span>
+                            </div>
+                        </div>
+
+                        <!-- GAME OVER SCREEN OVERLAY -->
+                        <div id="space-gameover-screen" class="absolute inset-0 z-30 bg-black/85 backdrop-blur-md hidden flex-col items-center justify-center p-6 text-center gap-4 transition-opacity duration-300">
+                            
+                            <!-- New Best Banner -->
+                            <div id="space-go-newbest" class="hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 text-xs font-bold uppercase tracking-wider animate-pulse">
+                                <span>🏆</span> NEW RECORD!
+                            </div>
+
+                            <div class="space-y-1">
+                                <h3 class="text-2xl sm:text-4xl font-black text-rose-500 tracking-tight font-heading flex items-center justify-center gap-2">
+                                    <span>HULL COMPROMISED</span> <span class="text-purple-400">☄️</span>
+                                </h3>
+                                <p class="text-slate-400 text-xs">Asteroid collision detected. Re-calibrating navigation pod...</p>
+                            </div>
+
+                            <!-- Stat Grid -->
+                            <div class="grid grid-cols-3 gap-2 sm:gap-4 w-full max-w-xs py-1">
+                                <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center">
+                                    <span class="text-[9px] font-mono text-slate-400 uppercase">Distance</span>
+                                    <span id="space-go-distance" class="text-sm sm:text-base font-bold text-brand-cyan font-mono">0m</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center">
+                                    <span class="text-[9px] font-mono text-slate-400 uppercase">Score</span>
+                                    <span id="space-go-score" class="text-sm sm:text-base font-bold text-white font-mono">0</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center">
+                                    <span class="text-[9px] font-mono text-slate-400 uppercase">Energy</span>
+                                    <span id="space-go-energy" class="text-sm sm:text-base font-bold text-emerald-400 font-mono">0</span>
+                                </div>
+                            </div>
+
+                            <button id="space-restart-btn" class="btn-signature-cyan px-8 py-3 rounded-2xl text-xs sm:text-sm font-black flex items-center gap-2 cursor-pointer shadow-xl hover:scale-105 transition-transform">
+                                <span class="material-symbols-outlined text-base">replay</span>
+                                <span>RESTART MISSION</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- Bottom Controls & Mobile D-Pad Touch Bar -->
+                    <div class="flex items-center justify-between px-4 py-2.5 bg-black/60 border-t border-white/10 text-[10.5px] font-mono text-slate-400">
+                        
+                        <!-- Desktop Tip -->
+                        <span class="hidden sm:flex items-center gap-2">
+                            <span class="text-purple-400 font-bold">CONTROLS:</span>
+                            <span>[W / &uarr;] Ascend</span>
+                            <span class="text-slate-600">&bull;</span>
+                            <span>[S / &darr;] Descend</span>
+                            <span class="text-slate-600">&bull;</span>
+                            <span>[A/D] Dodge</span>
+                        </span>
+
+                        <!-- Mobile On-Screen Directional Touch Buttons -->
+                        <div class="sm:hidden flex items-center gap-2 w-full justify-between">
+                            <button id="space-touch-up" class="flex-1 py-2 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-300 font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-transform">
+                                <span class="material-symbols-outlined text-sm">north</span>
+                                <span>UP</span>
+                            </button>
+                            <button id="space-touch-down" class="flex-1 py-2 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-300 font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-transform">
+                                <span class="material-symbols-outlined text-sm">south</span>
+                                <span>DOWN</span>
+                            </button>
+                        </div>
+
+                        <span class="hidden sm:inline text-slate-500">⭐ +25 &bull; 🔋 +60 &bull; 💎 +150</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
     </main>
 
     <!-- =========================================================================
-         10. FOOTER
+         11. FOOTER
          ========================================================================= -->
     <footer class="w-full flex justify-center py-8 px-4 bg-[#040508] border-t border-white/5">
         <div class="max-w-[1240px] w-full flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono">
@@ -1989,5 +2659,8 @@
     <script src="assets/js/cv-avatar.js?v=3.2.0"></script>
     <script src="assets/js/portfolio-data.js?v=3.2.0"></script>
     <script src="assets/js/main.js?v=3.2.0"></script>
+    <script src="assets/js/cat-runner.js?v=3.2.0"></script>
+    <script src="assets/js/robot-escape.js?v=3.2.0"></script>
+    <script src="assets/js/space-escape.js?v=3.2.0"></script>
 </body>
 </html>

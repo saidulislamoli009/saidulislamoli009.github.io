@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐱 Cat Runner - 2D Sprite Character Animation Showcase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+      color: #f8fafc;
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fb923c, #f59e0b, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    p.subtitle {
+      color: #94a3b8;
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 980px;
+      width: 100%;
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .stage-wrapper {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: linear-gradient(180deg, #38bdf8 0%, #7dd3fc 45%, #86efac 46%, #22c55e 52%, #15803d 58%, #78350f 60%, #451a03 100%);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .badge-info {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-family: 'Space Grotesk', monospace;
+      color: #38bdf8;
+      display: flex;
+      gap: 14px;
+    }
+
+    .badge-info span {
+      color: #fbbf24;
+      font-weight: 700;
+    }
+
+    /* Controls Panel */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .btn {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 9px 16px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: #475569;
+      transform: translateY(-2px);
+    }
+
+    .btn.active {
+      background: linear-gradient(135deg, #ea580c, #f97316);
+      border-color: #fdba74;
+      box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4);
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, #0284c7, #0ea5e9);
+      border-color: #38bdf8;
+    }
+    .btn-action:hover {
+      background: linear-gradient(135deg, #0369a1, #0284c7);
+    }
+
+    /* Sliders */
+    .sliders {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .slider-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: #cbd5e1;
+    }
+
+    .slider-item input[type="range"] {
+      accent-color: #f97316;
+      cursor: pointer;
+    }
+
+    /* Sprite Frame Sheet Strip */
+    .spritesheet-section {
+      margin-top: 28px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .spritesheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .spritesheet-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fb923c;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .frames-strip {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .frame-card {
+      flex: 0 0 auto;
+      background: rgba(30, 41, 59, 0.8);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 8px;
+      text-align: center;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .frame-card:hover {
+      border-color: #38bdf8;
+      transform: translateY(-3px);
+    }
+
+    .frame-card.active {
+      border-color: #f97316;
+      background: rgba(234, 88, 12, 0.15);
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.4);
+    }
+
+    .frame-card canvas {
+      width: 90px;
+      height: 68px;
+      display: block;
+      margin: 0 auto 6px;
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 8px;
+    }
+
+    .frame-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #94a3b8;
+      font-family: 'Space Grotesk', monospace;
+    }
+
+    .frame-desc {
+      font-size: 0.68rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .back-link {
+      margin-top: 25px;
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: #7dd3fc;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🐱 Cat Runner — 2D Character Animation Showcase</h1>
+    <p class="subtitle">Official 2D Illustrated Sprites, 4-Leg Running Cycle & Parabolic Jump Kinematics</p>
+  </header>
+
+  <div class="container">
+    <div class="stage-wrapper">
+      <canvas id="showcaseCanvas" width="900" height="380"></canvas>
+      <div class="badge-info">
+        <div>State: <span id="stateDisplay">RUNNING</span></div>
+        <div>Active Frame: <span id="frameDisplay">cat-run-01</span></div>
+        <div>Cadence: <span id="fpsDisplay">10 FPS</span></div>
+        <div>Zoom: <span id="zoomDisplay">2.2x</span></div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn active" id="btnRun">🏃 4-Leg Run Cycle</button>
+      <button class="btn" id="btnJump">🦘 Parabolic Jump</button>
+      <button class="btn" id="btnHappy">😻 Happy Fish Reaction</button>
+      <button class="btn" id="btnIdle">🐱 Idle Pose</button>
+      <button class="btn btn-action" id="btnMeow">🔊 Play Meow Sound</button>
+    </div>
+
+    <!-- Sliders -->
+    <div class="sliders">
+      <div class="slider-item">
+        <label for="speedSlider">Animation Speed:</label>
+        <input type="range" id="speedSlider" min="0.1" max="2.0" step="0.1" value="1.0">
+        <span id="speedVal">1.0x (10 FPS)</span>
+      </div>
+      <div class="slider-item">
+        <label for="zoomSlider">Zoom Scale:</label>
+        <input type="range" id="zoomSlider" min="1.0" max="3.5" step="0.1" value="2.2">
+        <span id="zoomVal">2.2x</span>
+      </div>
+    </div>
+
+    <!-- Pre-Baked Sprite Frame Strip Inspector -->
+    <div class="spritesheet-section">
+      <div class="spritesheet-header">
+        <div class="spritesheet-title">
+          <span>🎞️ Character Sprite Frames Inspector</span>
+        </div>
+        <span style="font-size:0.8rem; color:#94a3b8;">Click any frame to freeze & inspect details</span>
+      </div>
+      <div class="frames-strip" id="framesStrip">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </div>
+  </div>
+
+  <a href="index.html" class="back-link">← Return to Developer Portfolio & Games</a>
+
+  <script>
+    // --- SHOWCASE SCRIPT ---
+    const canvas = document.getElementById('showcaseCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const stateDisplay = document.getElementById('stateDisplay');
+    const frameDisplay = document.getElementById('frameDisplay');
+    const fpsDisplay = document.getElementById('fpsDisplay');
+    const zoomDisplay = document.getElementById('zoomDisplay');
+    const speedVal = document.getElementById('speedVal');
+    const zoomVal = document.getElementById('zoomVal');
+    const framesStrip = document.getElementById('framesStrip');
+
+    class ShowcaseSpriteBaker {
+      constructor(onReady) {
+        this.sprites = {};
+        this.onReady = onReady;
+        this.loadSprites();
+      }
+
+      loadSprites() {
+        const runCount = 12;
+        const jumpCount = 5;
+        const landCount = 5;
+        let total = runCount + jumpCount + landCount;
+        let loaded = 0;
+
+        const check = () => {
+          loaded++;
+          if (loaded >= total) {
+            this.buildStripUI();
+            if (this.onReady) this.onReady();
+          }
+        };
+
+        // 1. Run frames
+        for (let i = 0; i < runCount; i++) {
+          const key = `cat-run-${i.toString().padStart(2, '0')}`;
+          const img = new Image();
+          img.src = `assets/cat/frames/run_${i}.png`;
+          img.onload = () => {
+            this.sprites[key] = { img: img, title: `Run ${i + 1}`, desc: `Frame ${i + 1}/12` };
+            check();
+          };
+          img.onerror = () => check();
+        }
+
+        // 2. Jump frames
+        const jumpTitles = ['Crouch / Prep', 'Ascending', 'Jump Peak / Apex', 'Descending', 'Pre-Landing'];
+        for (let i = 0; i < jumpCount; i++) {
+          const key = `cat-jump-${i.toString().padStart(2, '0')}`;
+          const img = new Image();
+          img.src = `assets/cat/frames/jump_${i}.png`;
+          img.onload = () => {
+            this.sprites[key] = { img: img, title: `Jump ${i + 1}`, desc: jumpTitles[i] };
+            check();
+          };
+          img.onerror = () => check();
+        }
+
+        // 3. Land frames
+        const landTitles = ['Impact Touch', 'Shock Absorb', 'Recovery Stand', 'Push-off Stride', 'Resume Run'];
+        for (let i = 0; i < landCount; i++) {
+          const key = `cat-land-${i.toString().padStart(2, '0')}`;
+          const img = new Image();
+          img.src = `assets/cat/frames/land_${i}.png`;
+          img.onload = () => {
+            this.sprites[key] = { img: img, title: `Land ${i + 1}`, desc: landTitles[i] };
+            check();
+          };
+          img.onerror = () => check();
+        }
+
+        // Happy frame
+        const happyImg = new Image();
+        happyImg.src = 'assets/images/cat-happy-spritesheet.jpg';
+        happyImg.onload = () => {
+          const c = document.createElement('canvas');
+          c.width = 160;
+          c.height = 120;
+          const ctx = c.getContext('2d');
+          ctx.drawImage(happyImg, 350, 520, 330, 450, 0, 0, 160, 120);
+          const imgData = ctx.getImageData(0, 0, 160, 120);
+          const d = imgData.data;
+          for (let k = 0; k < d.length; k += 4) {
+            if (d[k] < 65 && d[k+1] < 85 && d[k+2] < 110) d[k+3] = 0;
+          }
+          ctx.putImageData(imgData, 0, 0);
+          this.sprites['cat-happy'] = { img: c, title: 'Happy', desc: 'Fish Caught ^ ‿ ^' };
+        };
+      }
+
+      buildStripUI() {
+        framesStrip.innerHTML = '';
+        Object.keys(this.sprites).forEach(key => {
+          const sp = this.sprites[key];
+          const card = document.createElement('div');
+          card.className = 'frame-card';
+          card.id = `card-${key}`;
+
+          const miniCanvas = document.createElement('canvas');
+          miniCanvas.width = 90;
+          miniCanvas.height = 68;
+          const mctx = miniCanvas.getContext('2d');
+          mctx.drawImage(sp.img, 0, 0, miniCanvas.width, miniCanvas.height);
+
+          const label = document.createElement('div');
+          label.className = 'frame-label';
+          label.textContent = sp.title;
+
+          const desc = document.createElement('div');
+          desc.className = 'frame-desc';
+          desc.textContent = sp.desc;
+
+          card.appendChild(miniCanvas);
+          card.appendChild(label);
+          card.appendChild(desc);
+
+          card.addEventListener('click', () => {
+            currentState = 'FREEZE';
+            frozenFrameKey = key;
+            updateUI();
+          });
+
+          framesStrip.appendChild(card);
+        });
+      }
+    }
+
+    const baker = new ShowcaseSpriteBaker();
+
+    // State Variables
+    let currentState = 'RUNNING'; // 'RUNNING', 'JUMPING', 'LANDING', 'HAPPY', 'IDLE', 'FREEZE'
+    let frozenFrameKey = 'cat-run-00';
+    let animSpeed = 1.0;
+    let zoomScale = 2.2;
+    let animTimer = 0;
+    let runFrameIndex = 0;
+    let landFrameIndex = 0;
+    let landProgress = 0;
+    let landTimer = 0;
+
+    const runFrames = Array.from({ length: 12 }, (_, i) => `cat-run-${i.toString().padStart(2, '0')}`);
+    const jumpFrames = Array.from({ length: 5 }, (_, i) => `cat-jump-${i.toString().padStart(2, '0')}`);
+    const landFrames = Array.from({ length: 5 }, (_, i) => `cat-land-${i.toString().padStart(2, '0')}`);
+
+    let activeFrameKey = 'cat-run-00';
+
+    // Physics
+    let catY = 0;
+    let velocityY = 0;
+    let isJumping = false;
+    const GRAVITY = 1600;
+    const JUMP_FORCE = 680;
+    let happyTimer = 0;
+    let lastTimestamp = performance.now();
+
+    // Sound Synthesizer
+    const playMeow = () => {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ac = new AudioCtx();
+        const now = ac.currentTime;
+
+        const osc1 = ac.createOscillator();
+        const osc2 = ac.createOscillator();
+        const lfo = ac.createOscillator();
+        const lfoGain = ac.createGain();
+
+        osc1.type = 'sawtooth';
+        osc2.type = 'triangle';
+
+        lfo.type = 'sine';
+        lfo.frequency.setValueAtTime(6.5, now);
+        lfoGain.gain.setValueAtTime(12, now);
+        lfo.connect(osc1.frequency);
+        lfo.connect(osc2.frequency);
+        lfo.start(now);
+        lfo.stop(now + 0.42);
+
+        [osc1, osc2].forEach(osc => {
+          osc.frequency.setValueAtTime(410, now);
+          osc.frequency.exponentialRampToValueAtTime(860, now + 0.11);
+          osc.frequency.exponentialRampToValueAtTime(330, now + 0.40);
+        });
+
+        const f1 = ac.createBiquadFilter();
+        f1.type = 'bandpass';
+        f1.Q.value = 3.2;
+        f1.frequency.setValueAtTime(650, now);
+        f1.frequency.exponentialRampToValueAtTime(1120, now + 0.11);
+        f1.frequency.exponentialRampToValueAtTime(460, now + 0.40);
+
+        const f2 = ac.createBiquadFilter();
+        f2.type = 'bandpass';
+        f2.Q.value = 3.8;
+        f2.frequency.setValueAtTime(1600, now);
+        f2.frequency.exponentialRampToValueAtTime(2350, now + 0.11);
+        f2.frequency.exponentialRampToValueAtTime(760, now + 0.40);
+
+        const warmthFilter = ac.createBiquadFilter();
+        warmthFilter.type = 'lowpass';
+        warmthFilter.frequency.setValueAtTime(3800, now);
+
+        const masterGain = ac.createGain();
+        masterGain.gain.setValueAtTime(0.001, now);
+        masterGain.gain.linearRampToValueAtTime(0.24, now + 0.06);
+        masterGain.gain.setValueAtTime(0.24, now + 0.18);
+        masterGain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+
+        osc1.connect(f1);
+        osc2.connect(f2);
+        f1.connect(warmthFilter);
+        f2.connect(warmthFilter);
+        warmthFilter.connect(masterGain);
+        masterGain.connect(ac.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 0.42);
+        osc2.stop(now + 0.42);
+      } catch (e) {}
+    };
+
+    const buttons = {
+      RUNNING: document.getElementById('btnRun'),
+      JUMPING: document.getElementById('btnJump'),
+      HAPPY: document.getElementById('btnHappy'),
+      IDLE: document.getElementById('btnIdle')
+    };
+
+    function updateUI() {
+      Object.keys(buttons).forEach(k => {
+        if (buttons[k]) buttons[k].classList.toggle('active', currentState === k);
+      });
+      stateDisplay.textContent = currentState;
+      frameDisplay.textContent = activeFrameKey;
+
+      document.querySelectorAll('.frame-card').forEach(c => c.classList.remove('active'));
+      const activeCard = document.getElementById(`card-${activeFrameKey}`);
+      if (activeCard) activeCard.classList.add('active');
+    }
+
+    document.getElementById('btnRun').addEventListener('click', () => {
+      currentState = 'RUNNING';
+      isJumping = false;
+      catY = 0;
+      updateUI();
+    });
+
+    const triggerJump = () => {
+      currentState = 'JUMPING';
+      isJumping = true;
+      velocityY = JUMP_FORCE;
+      playMeow();
+      updateUI();
+    };
+
+    document.getElementById('btnJump').addEventListener('click', triggerJump);
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' || e.code === 'ArrowUp') {
+        e.preventDefault();
+        triggerJump();
+      }
+    });
+
+    document.getElementById('btnHappy').addEventListener('click', () => {
+      currentState = 'HAPPY';
+      happyTimer = 0.5;
+      playMeow();
+      updateUI();
+    });
+
+    document.getElementById('btnIdle').addEventListener('click', () => {
+      currentState = 'IDLE';
+      isJumping = false;
+      catY = 0;
+      updateUI();
+    });
+
+    document.getElementById('btnMeow').addEventListener('click', () => playMeow());
+
+    document.getElementById('speedSlider').addEventListener('input', (e) => {
+      animSpeed = parseFloat(e.target.value);
+      speedVal.textContent = `${animSpeed.toFixed(1)}x (${(14 * animSpeed).toFixed(0)} FPS)`;
+      fpsDisplay.textContent = `${(14 * animSpeed).toFixed(0)} FPS`;
+    });
+
+    document.getElementById('zoomSlider').addEventListener('input', (e) => {
+      zoomScale = parseFloat(e.target.value);
+      zoomVal.textContent = `${zoomScale.toFixed(1)}x`;
+      zoomDisplay.textContent = `${zoomScale.toFixed(1)}x`;
+    });
+
+    // Animation Loop
+    function loop(timestamp = performance.now()) {
+      const dt = Math.min((timestamp - lastTimestamp) / 1000, 0.1);
+      lastTimestamp = timestamp;
+
+      // 1. RUNNING State (Seamless 12-Frame Continuous Loop)
+      if (currentState === 'RUNNING') {
+        animTimer += dt;
+        const frameDuration = 1 / (14 * animSpeed);
+        if (animTimer >= frameDuration) {
+          animTimer -= frameDuration;
+          runFrameIndex = (runFrameIndex + 1) % runFrames.length;
+        }
+        activeFrameKey = runFrames[runFrameIndex];
+      }
+      // 2. JUMPING State (Upward Physics & Gravity)
+      else if (currentState === 'JUMPING') {
+        if (isJumping) {
+          velocityY -= GRAVITY * dt;
+          catY += velocityY * dt;
+
+          if (velocityY > 360) {
+            activeFrameKey = 'cat-jump-00';
+          } else if (velocityY > 80) {
+            activeFrameKey = 'cat-jump-01';
+          } else if (velocityY > -240) {
+            activeFrameKey = 'cat-jump-02';
+          } else if (velocityY > -500) {
+            activeFrameKey = 'cat-jump-03';
+          } else {
+            activeFrameKey = 'cat-jump-04';
+          }
+
+          // Landing Detection
+          if (catY <= 0) {
+            catY = 0;
+            velocityY = 0;
+            isJumping = false;
+            currentState = 'LANDING';
+            landProgress = 0;
+            landTimer = 0.22;
+            activeFrameKey = 'cat-land-00';
+          }
+        }
+      }
+      // 3. LANDING State (Plays cat_land sequence once -> immediately returns to cat_run loop)
+      else if (currentState === 'LANDING') {
+        landTimer -= dt;
+        landProgress += dt / 0.22;
+        landFrameIndex = Math.min(4, Math.floor(landProgress * 5));
+        activeFrameKey = landFrames[landFrameIndex];
+
+        if (landTimer <= 0) {
+          currentState = 'RUNNING';
+          activeFrameKey = 'cat-run-00';
+        }
+      }
+      // 4. Other states
+      else if (currentState === 'HAPPY') {
+        activeFrameKey = 'cat-happy';
+        happyTimer -= dt;
+        if (happyTimer <= 0) {
+          currentState = 'RUNNING';
+          activeFrameKey = 'cat-run-00';
+        }
+      } else if (currentState === 'IDLE') {
+        activeFrameKey = 'cat-run-00';
+      } else if (currentState === 'FREEZE') {
+        activeFrameKey = frozenFrameKey;
+      }
+
+      updateUI();
+
+      // Render Stage
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const groundY = 280;
+
+      // Sky
+      const skyGrad = ctx.createLinearGradient(0, 0, 0, groundY);
+      skyGrad.addColorStop(0, '#38bdf8');
+      skyGrad.addColorStop(0.5, '#7dd3fc');
+      skyGrad.addColorStop(1, '#bae6fd');
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(0, 0, canvas.width, groundY);
+
+      // Mountains
+      ctx.fillStyle = '#93c5fd';
+      ctx.beginPath();
+      ctx.moveTo(100, groundY);
+      ctx.lineTo(250, groundY - 140);
+      ctx.lineTo(400, groundY);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(350, groundY);
+      ctx.lineTo(520, groundY - 180);
+      ctx.lineTo(700, groundY);
+      ctx.closePath();
+      ctx.fill();
+
+      // Ground & Path
+      const groundGrad = ctx.createLinearGradient(0, groundY, 0, canvas.height);
+      groundGrad.addColorStop(0, '#22c55e');
+      groundGrad.addColorStop(0.08, '#16a34a');
+      groundGrad.addColorStop(0.2, '#d97706');
+      groundGrad.addColorStop(0.4, '#b45309');
+      groundGrad.addColorStop(1, '#451a03');
+      ctx.fillStyle = groundGrad;
+      ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+
+      // Scalloped Grass
+      ctx.fillStyle = '#4ade80';
+      const scallopSize = 18;
+      ctx.beginPath();
+      ctx.moveTo(0, groundY);
+      for (let x = 0; x < canvas.width; x += scallopSize) {
+        ctx.quadraticCurveTo(x + scallopSize / 2, groundY + 8, x + scallopSize, groundY);
+      }
+      ctx.lineTo(canvas.width, groundY - 4);
+      ctx.lineTo(0, groundY - 4);
+      ctx.closePath();
+      ctx.fill();
+
+      // Dynamic Contact Ground Shadow
+      const shadowCenterX = canvas.width / 2;
+      const shadowY = groundY + 3;
+      const heightRatio = Math.min(1, Math.max(0, catY / 220));
+      const shadowScale = Math.max(0.35, 1.0 - heightRatio * 0.60) * (zoomScale / 2.2);
+      const shadowAlpha = Math.max(0.10, 0.40 - heightRatio * 0.30);
+
+      ctx.save();
+      ctx.fillStyle = `rgba(15, 23, 42, ${shadowAlpha})`;
+      ctx.beginPath();
+      ctx.ellipse(shadowCenterX, shadowY, 28 * shadowScale, 6.5 * shadowScale, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Draw Cat Sprite
+      ctx.save();
+      const catCenterX = canvas.width / 2;
+      const catBaseY = groundY - catY;
+
+      ctx.translate(catCenterX, catBaseY);
+      ctx.scale(zoomScale, zoomScale);
+
+      const sp = baker.sprites[activeFrameKey];
+      if (sp && sp.img) {
+        const scale = 0.315;
+        const nativeW = sp.img.naturalWidth || sp.img.width || 290;
+        const nativeH = sp.img.naturalHeight || sp.img.height || 220;
+        const spriteW = nativeW * scale;
+        const spriteH = nativeH * scale;
+        const renderX = -spriteW / 2;
+        const renderY = -spriteH + (4 * scale);
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(sp.img, renderX, renderY, spriteW, spriteH);
+      }
+      ctx.restore();
+
+      requestAnimationFrame(loop);
+    }
+
+    updateUI();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
