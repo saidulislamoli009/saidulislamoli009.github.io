@@ -84,6 +84,94 @@
       } catch (e) {}
     }
 
+    playMeow(isPlayful = false) {
+      if (this.muted || !this.ctx) return;
+      try {
+        const now = this.ctx.currentTime;
+        
+        // Authentic Acoustic Feline Meow Synthesizer
+        const pitchVariation = 0.96 + Math.random() * 0.08;
+        const duration = isPlayful ? 0.42 : 0.65;
+        const baseFreq = (isPlayful ? 460 : 390) * pitchVariation;
+        const peakFreq = (isPlayful ? 920 : 840) * pitchVariation;
+        const endFreq = (isPlayful ? 430 : 340) * pitchVariation;
+        const peakTime = isPlayful ? 0.12 : 0.18;
+
+        const oscSaw = this.ctx.createOscillator();
+        const oscTri = this.ctx.createOscillator();
+        const oscSub = this.ctx.createOscillator(); // warm vocal sub-harmonic
+        const lfo = this.ctx.createOscillator();
+        const lfoGain = this.ctx.createGain();
+
+        oscSaw.type = 'sawtooth';
+        oscTri.type = 'triangle';
+        oscSub.type = 'sine';
+
+        // Organic Feline Vocal Vibrato
+        lfo.type = 'sine';
+        lfo.frequency.setValueAtTime(isPlayful ? 7.2 : 6.0, now);
+        lfoGain.gain.setValueAtTime(14, now);
+        lfo.connect(oscSaw.frequency);
+        lfo.connect(oscTri.frequency);
+        lfo.start(now);
+        lfo.stop(now + duration);
+
+        [oscSaw, oscTri].forEach(osc => {
+          osc.frequency.setValueAtTime(baseFreq, now);
+          osc.frequency.exponentialRampToValueAtTime(peakFreq, now + peakTime);
+          osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration - 0.04);
+        });
+
+        oscSub.frequency.setValueAtTime(baseFreq * 0.5, now);
+        oscSub.frequency.exponentialRampToValueAtTime(peakFreq * 0.5, now + peakTime);
+        oscSub.frequency.exponentialRampToValueAtTime(endFreq * 0.5, now + duration - 0.04);
+
+        // Dual Formant Bandpass Filters (F1 & F2 vowel articulation: "m-eee-o-www")
+        const f1 = this.ctx.createBiquadFilter();
+        f1.type = 'bandpass';
+        f1.Q.value = 3.6;
+        f1.frequency.setValueAtTime(680, now);
+        f1.frequency.exponentialRampToValueAtTime(1180, now + peakTime);
+        f1.frequency.exponentialRampToValueAtTime(460, now + duration - 0.04);
+
+        const f2 = this.ctx.createBiquadFilter();
+        f2.type = 'bandpass';
+        f2.Q.value = 4.2;
+        f2.frequency.setValueAtTime(1650, now);
+        f2.frequency.exponentialRampToValueAtTime(2450, now + peakTime);
+        f2.frequency.exponentialRampToValueAtTime(780, now + duration - 0.04);
+
+        const warmthFilter = this.ctx.createBiquadFilter();
+        warmthFilter.type = 'lowpass';
+        warmthFilter.frequency.setValueAtTime(3600, now);
+
+        const subGain = this.ctx.createGain();
+        subGain.gain.setValueAtTime(0.06, now);
+
+        const masterGain = this.ctx.createGain();
+        masterGain.gain.setValueAtTime(0.001, now);
+        masterGain.gain.linearRampToValueAtTime(0.30, now + 0.07);
+        masterGain.gain.setValueAtTime(0.30, now + peakTime + 0.08);
+        masterGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        oscSaw.connect(f1);
+        oscTri.connect(f2);
+        oscSub.connect(subGain);
+        subGain.connect(warmthFilter);
+        f1.connect(warmthFilter);
+        f2.connect(warmthFilter);
+        warmthFilter.connect(masterGain);
+        masterGain.connect(this.ctx.destination);
+
+        oscSaw.start(now);
+        oscTri.start(now);
+        oscSub.start(now);
+        oscSaw.stop(now + duration);
+        oscTri.stop(now + duration);
+        oscSub.stop(now + duration);
+      } catch (e) {}
+    }
+
     playFish() {
       if (this.muted || !this.ctx) return;
       try {
@@ -668,6 +756,11 @@
       this.sceneryTrees = [];
       this.sceneryFlowers = [];
 
+      // Game Over 2-Legged Cat & Butterfly Animation State
+      this.gameOverTimer = 0;
+      this.butterfly = null;
+      this.gameOverCat = null;
+
       this.initScenery();
       this.setupCanvas();
       this.bindEvents();
@@ -761,7 +854,7 @@
       window.addEventListener('resize', () => this.setupCanvas());
 
       window.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' || e.code === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+        if (e.code === 'Space' || e.code === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.key === 'Enter') {
           if (this.isSectionVisible()) {
             e.preventDefault();
             this.handleAction();
@@ -772,18 +865,43 @@
       this.canvas.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         this.sound.init();
-        this.handleAction();
+        if (this.state === 'GAMEOVER') {
+          // Play a cheerful, cute meow and spawn heart sparkles!
+          this.sound.playMeow(true);
+          const rect = this.canvas.getBoundingClientRect();
+          const scaleX = VIRTUAL_WIDTH / rect.width;
+          const scaleY = VIRTUAL_HEIGHT / rect.height;
+          const clickX = (e.clientX - rect.left) * scaleX;
+          const clickY = (e.clientY - rect.top) * scaleY;
+          this.spawnFloatingText('Meow! 💖', clickX, clickY - 15, '#f43f5e');
+          for (let i = 0; i < 10; i++) {
+            this.particles.push({
+              x: clickX + (Math.random() - 0.5) * 20,
+              y: clickY + (Math.random() - 0.5) * 20,
+              vx: (Math.random() - 0.5) * 3,
+              vy: -2 - Math.random() * 3,
+              radius: 2 + Math.random() * 3,
+              color: Math.random() < 0.5 ? '#fda4af' : '#fde047',
+              alpha: 1,
+              decay: 0.03
+            });
+          }
+        } else {
+          this.handleAction();
+        }
       });
 
       if (this.startBtn) {
-        this.startBtn.addEventListener('click', () => {
+        this.startBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
           this.sound.init();
           this.startGame();
         });
       }
 
       if (this.restartBtn) {
-        this.restartBtn.addEventListener('click', () => {
+        this.restartBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
           this.sound.init();
           this.startGame();
         });
@@ -803,7 +921,7 @@
           (entries) => {
             entries.forEach((entry) => {
               this.isVisible = entry.isIntersecting;
-              if (this.isVisible && this.state === 'PLAYING' && !this.animId) {
+              if (this.isVisible && (this.state === 'PLAYING' || this.state === 'GAMEOVER') && !this.animId) {
                 this.lastTime = performance.now();
                 this.loop();
               }
@@ -853,6 +971,9 @@
       this.floatingTexts = [];
       this.spawnTimer = 70;
       this.itemSpawnTimer = 40;
+      this.gameOverTimer = 0;
+      this.butterfly = null;
+      this.gameOverCat = null;
       this.cat = this.createCat();
 
       if (this.startScreen) this.startScreen.classList.add('hidden');
@@ -889,7 +1010,31 @@
 
     gameOver() {
       this.state = 'GAMEOVER';
+      this.gameOverTimer = 0;
+
+      const startCatX = Math.min(320, Math.max(160, this.cat.x));
+      this.gameOverCat = {
+        x: startCatX,
+        targetX: 240,
+        blinkTimer: 0,
+        pawSparkleCooldown: 0
+      };
+
+      this.butterfly = {
+        x: startCatX + 85,
+        y: GROUND_Y - 95,
+        wingAngle: 0,
+        sparkleTimer: 0
+      };
+
       this.sound.playHit();
+      // Realistic, authentic Cat Meow sound upon game over
+      setTimeout(() => {
+        if (this.state === 'GAMEOVER') {
+          this.sound.playMeow();
+        }
+      }, 280);
+
       this.spawnDust(this.cat.x + 25, GROUND_Y - this.cat.catY - 20, 25, '#f43f5e');
 
       const isNewBest = this.score > this.bestScore;
@@ -922,6 +1067,11 @@
           detail: { score: this.score, bestScore: this.bestScore, isNewBest: isNewBest }
         }));
       } catch (e) {}
+
+      // Keep animation loop alive to render 2-legged standing cat & butterfly playing animation
+      if (!this.animId) {
+        this.loop();
+      }
     }
 
     updateHUD() {
@@ -983,7 +1133,7 @@
     }
 
     loop(timestamp = performance.now()) {
-      if (!this.isVisible && this.state !== 'PLAYING') {
+      if (!this.isVisible && this.state !== 'PLAYING' && this.state !== 'GAMEOVER') {
         this.animId = null;
         return;
       }
@@ -998,6 +1148,11 @@
     }
 
     update(dt) {
+      if (this.state === 'GAMEOVER') {
+        this.updateGameOverAnimation(dt);
+        return;
+      }
+
       if (this.state !== 'PLAYING') return;
 
       this.distance += this.speed * 0.05;
@@ -1166,6 +1321,96 @@
       }
     }
 
+    updateGameOverAnimation(dt) {
+      this.gameOverTimer += dt;
+      const t = this.gameOverTimer;
+
+      if (!this.gameOverCat) {
+        this.gameOverCat = { x: 240, targetX: 240, blinkTimer: 0, pawSparkleCooldown: 0 };
+      }
+      if (!this.butterfly) {
+        this.butterfly = { x: 330, y: GROUND_Y - 95, wingAngle: 0, sparkleTimer: 0 };
+      }
+
+      // Smoothly center the standing cat
+      this.gameOverCat.x += (this.gameOverCat.targetX - this.gameOverCat.x) * 0.08;
+      const cx = this.gameOverCat.x;
+
+      // Update butterfly floating & swooping physics (smooth Lissajous and organic curves)
+      this.butterfly.x = cx + 85 + Math.sin(t * 1.6) * 48 + Math.cos(t * 0.7) * 20;
+      this.butterfly.y = (GROUND_Y - 80) - Math.abs(Math.sin(t * 2.0)) * 58 - Math.cos(t * 1.2) * 16;
+      this.butterfly.wingAngle = Math.sin(t * 26) * 0.85;
+
+      // Butterfly magical sparkle trail
+      this.butterfly.sparkleTimer = (this.butterfly.sparkleTimer || 0) + dt;
+      if (this.butterfly.sparkleTimer > 0.07) {
+        this.butterfly.sparkleTimer = 0;
+        this.particles.push({
+          x: this.butterfly.x + (Math.random() - 0.5) * 10,
+          y: this.butterfly.y + 4 + (Math.random() - 0.5) * 6,
+          vx: (Math.random() - 0.5) * 1.4,
+          vy: -0.6 - Math.random() * 1.4,
+          radius: 1.5 + Math.random() * 2.4,
+          color: Math.random() < 0.4 ? '#38bdf8' : Math.random() < 0.7 ? '#fde047' : '#ec4899',
+          alpha: 0.95,
+          decay: 0.035
+        });
+      }
+
+      // Paw batting proximity detection with butterfly
+      const pawLTargetX = cx + 16 + Math.sin(t * 4.4) * 22;
+      const pawLTargetY = GROUND_Y - 138 + Math.sin(t * 3.6) * 3 + Math.cos(t * 4.4) * 20;
+      const pawRTargetX = cx + 46 + Math.sin(t * 4.4 + 1.8) * 24;
+      const pawRTargetY = GROUND_Y - 152 + Math.sin(t * 3.6) * 3 + Math.cos(t * 4.4 + 1.8) * 22;
+
+      const distL = Math.hypot(this.butterfly.x - pawLTargetX, this.butterfly.y - pawLTargetY);
+      const distR = Math.hypot(this.butterfly.x - pawRTargetX, this.butterfly.y - pawRTargetY);
+
+      this.gameOverCat.pawSparkleCooldown = Math.max(0, (this.gameOverCat.pawSparkleCooldown || 0) - dt);
+
+      if ((distL < 38 || distR < 38) && this.gameOverCat.pawSparkleCooldown <= 0) {
+        this.gameOverCat.pawSparkleCooldown = 0.5;
+        const hitX = distL < distR ? pawLTargetX : pawRTargetX;
+        const hitY = distL < distR ? pawLTargetY : pawRTargetY;
+        
+        this.spawnFloatingText(Math.random() < 0.5 ? '💖' : '✨', hitX, hitY - 12, '#f43f5e');
+        for (let i = 0; i < 7; i++) {
+          this.particles.push({
+            x: hitX + (Math.random() - 0.5) * 14,
+            y: hitY + (Math.random() - 0.5) * 14,
+            vx: (Math.random() - 0.5) * 2.8,
+            vy: -1.6 - Math.random() * 2.2,
+            radius: 1.8 + Math.random() * 2.6,
+            color: Math.random() < 0.5 ? '#fda4af' : '#fde047',
+            alpha: 1,
+            decay: 0.03
+          });
+        }
+      }
+
+      // Update Particles
+      for (let i = this.particles.length - 1; i >= 0; i--) {
+        const p = this.particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.gravity) p.vy += p.gravity;
+        p.alpha -= p.decay;
+        if (p.alpha <= 0) {
+          this.particles.splice(i, 1);
+        }
+      }
+
+      // Update Floating Texts
+      for (let i = this.floatingTexts.length - 1; i >= 0; i--) {
+        const ft = this.floatingTexts[i];
+        ft.y += ft.vy;
+        ft.alpha -= 0.025;
+        if (ft.alpha <= 0) {
+          this.floatingTexts.splice(i, 1);
+        }
+      }
+    }
+
     spawnObstacle() {
       const types = ['crate', 'rock', 'bush', 'puddle', 'bird'];
       const availableTypes = this.distance > 80 ? types : ['crate', 'rock', 'bush', 'puddle'];
@@ -1271,6 +1516,16 @@
       this.drawMountains(ctx);
       this.drawTrees(ctx);
       this.drawGround(ctx);
+
+      if (this.state === 'GAMEOVER') {
+        this.drawObstacles(ctx);
+        this.drawGameOverCatPlaying(ctx);
+        this.drawParticles(ctx);
+        this.drawFloatingTexts(ctx);
+        this.drawVignette(ctx);
+        return;
+      }
+
       this.drawObstacles(ctx);
       this.drawItems(ctx);
       this.drawCat(ctx);
@@ -1581,6 +1836,598 @@
 
         ctx.restore();
       }
+    }
+
+    // ==============================================================================
+    // 🦋 GAME OVER 2-LEGGED STANDING CAT & BUTTERFLY PLAYING ANIMATION
+    // ==============================================================================
+    drawGameOverCatPlaying(ctx) {
+      const catX = (this.gameOverCat && this.gameOverCat.x) ? this.gameOverCat.x : 240;
+      const groundY = GROUND_Y;
+      const t = this.gameOverTimer || 0;
+      const bodyBob = Math.sin(t * 3.6) * 3;
+      const breath = Math.sin(t * 2.2) * 1.5;
+      const bfly = this.butterfly || { x: catX + 90, y: groundY - 110, wingAngle: 0 };
+
+      // 1. Soft Contact Shadows beneath 2 standing feet
+      ctx.save();
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.38)';
+      ctx.beginPath();
+      ctx.ellipse(catX - 16, groundY + 3, 16, 5, 0, 0, Math.PI * 2);
+      ctx.ellipse(catX + 16, groundY + 3, 16, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Shadow beneath tail tip
+      const tailTipX = catX - 60 + Math.sin(t * 2.6) * 16;
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.18)';
+      ctx.beginPath();
+      ctx.ellipse(tailTipX, groundY + 3, 10, 3.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 2. Animated Swaying Tabby Tail
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      
+      const tailBaseX = catX - 18;
+      const tailBaseY = groundY - 40 + bodyBob;
+      const tailCp1X = catX - 45 + Math.sin(t * 2.2) * 8;
+      const tailCp1Y = groundY - 18;
+      const tailCp2X = catX - 70 + Math.sin(t * 2.6) * 14;
+      const tailCp2Y = groundY - 48;
+      const tailEndX = catX - 58 + Math.sin(t * 3.0) * 18;
+      const tailEndY = groundY - 72 + Math.cos(t * 3.0) * 10;
+
+      // Tail base stroke
+      ctx.strokeStyle = '#ea580c';
+      ctx.lineWidth = 13;
+      ctx.beginPath();
+      ctx.moveTo(tailBaseX, tailBaseY);
+      ctx.bezierCurveTo(tailCp1X, tailCp1Y, tailCp2X, tailCp2Y, tailEndX, tailEndY);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#f97316';
+      ctx.lineWidth = 10;
+      ctx.beginPath();
+      ctx.moveTo(tailBaseX, tailBaseY);
+      ctx.bezierCurveTo(tailCp1X, tailCp1Y, tailCp2X, tailCp2Y, tailEndX, tailEndY);
+      ctx.stroke();
+
+      // Tail stripes & cream tip
+      ctx.strokeStyle = '#c2410c';
+      ctx.lineWidth = 3.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#fffbeb';
+      ctx.beginPath();
+      ctx.arc(tailEndX, tailEndY, 6.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 3. Two Standing Hind Legs & Feet (Standing firmly on 2 feet)
+      ctx.save();
+      // Left Hind Leg
+      ctx.fillStyle = '#ea580c';
+      ctx.beginPath();
+      ctx.moveTo(catX - 26, groundY - 48 + bodyBob);
+      ctx.quadraticCurveTo(catX - 32, groundY - 24, catX - 28, groundY - 8);
+      ctx.lineTo(catX - 8, groundY - 8);
+      ctx.quadraticCurveTo(catX - 14, groundY - 32, catX - 12, groundY - 48 + bodyBob);
+      ctx.closePath();
+      ctx.fill();
+
+      // Left Foot (Planted on ground)
+      ctx.fillStyle = '#f97316';
+      ctx.beginPath();
+      ctx.ellipse(catX - 20, groundY - 4, 15, 7, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Left Pink Toe Beans
+      ctx.fillStyle = '#fda4af';
+      ctx.beginPath();
+      ctx.arc(catX - 28, groundY - 3, 2.6, 0, Math.PI * 2);
+      ctx.arc(catX - 22, groundY - 6, 2.6, 0, Math.PI * 2);
+      ctx.arc(catX - 16, groundY - 6, 2.6, 0, Math.PI * 2);
+      ctx.arc(catX - 10, groundY - 3, 2.6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Right Hind Leg
+      ctx.fillStyle = '#f97316';
+      ctx.beginPath();
+      ctx.moveTo(catX + 12, groundY - 48 + bodyBob);
+      ctx.quadraticCurveTo(catX + 14, groundY - 32, catX + 8, groundY - 8);
+      ctx.lineTo(catX + 28, groundY - 8);
+      ctx.quadraticCurveTo(catX + 32, groundY - 24, catX + 26, groundY - 48 + bodyBob);
+      ctx.closePath();
+      ctx.fill();
+
+      // Right Foot (Planted on ground)
+      ctx.fillStyle = '#ea580c';
+      ctx.beginPath();
+      ctx.ellipse(catX + 20, groundY - 4, 15, 7, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Right Pink Toe Beans
+      ctx.fillStyle = '#fda4af';
+      ctx.beginPath();
+      ctx.arc(catX + 10, groundY - 3, 2.6, 0, Math.PI * 2);
+      ctx.arc(catX + 16, groundY - 6, 2.6, 0, Math.PI * 2);
+      ctx.arc(catX + 22, groundY - 6, 2.6, 0, Math.PI * 2);
+      ctx.arc(catX + 28, groundY - 3, 2.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 4. Standing Fluffy Body / Torso
+      ctx.save();
+      const torsoY = groundY - 50 + bodyBob;
+      const torsoTopY = groundY - 110 + bodyBob;
+
+      // Main Torso Gradient
+      const bodyGrad = ctx.createLinearGradient(catX - 30, torsoTopY, catX + 30, torsoY);
+      bodyGrad.addColorStop(0, '#fb923c');
+      bodyGrad.addColorStop(0.5, '#f97316');
+      bodyGrad.addColorStop(1, '#ea580c');
+      ctx.fillStyle = bodyGrad;
+
+      ctx.beginPath();
+      ctx.moveTo(catX - 22, torsoTopY + 12);
+      ctx.quadraticCurveTo(catX - 30 - breath, torsoTopY + 38, catX - 26, torsoY + 4);
+      ctx.quadraticCurveTo(catX, torsoY + 10, catX + 26, torsoY + 4);
+      ctx.quadraticCurveTo(catX + 30 + breath, torsoTopY + 38, catX + 22, torsoTopY + 12);
+      ctx.closePath();
+      ctx.fill();
+
+      // Tabby Body Stripes
+      ctx.strokeStyle = '#c2410c';
+      ctx.lineWidth = 3.2;
+      ctx.beginPath();
+      ctx.moveTo(catX - 26, torsoTopY + 28);
+      ctx.lineTo(catX - 15, torsoTopY + 32);
+      ctx.moveTo(catX - 27, torsoTopY + 44);
+      ctx.lineTo(catX - 16, torsoTopY + 48);
+      ctx.moveTo(catX + 26, torsoTopY + 28);
+      ctx.lineTo(catX + 15, torsoTopY + 32);
+      ctx.moveTo(catX + 27, torsoTopY + 44);
+      ctx.lineTo(catX + 16, torsoTopY + 48);
+      ctx.stroke();
+
+      // Soft Fluffy Cream Belly / Bib
+      ctx.fillStyle = '#fffbeb';
+      ctx.beginPath();
+      ctx.ellipse(catX, torsoTopY + 42, 17 + breath, 24, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Fluffy Chest Tuft
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(catX, torsoTopY + 22, 12, 0, Math.PI * 2);
+      ctx.arc(catX - 7, torsoTopY + 26, 9, 0, Math.PI * 2);
+      ctx.arc(catX + 7, torsoTopY + 26, 9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 5. Head & Facial Expressions
+      ctx.save();
+      const headCenterY = groundY - 118 + bodyBob;
+      const headCenterX = catX + 2;
+
+      // Head Tilting towards Butterfly
+      const angleToBfly = Math.atan2(bfly.y - headCenterY, bfly.x - headCenterX);
+      const headAngle = Math.max(-0.4, Math.min(0.4, (angleToBfly + 0.3) * 0.55));
+
+      ctx.translate(headCenterX, headCenterY);
+      ctx.rotate(headAngle);
+
+      // Cute Triangular Ears
+      // Left Ear
+      ctx.fillStyle = '#ea580c';
+      ctx.beginPath();
+      ctx.moveTo(-22, -14);
+      ctx.lineTo(-32, -42);
+      ctx.lineTo(-6, -26);
+      ctx.closePath();
+      ctx.fill();
+      // Left Inner Ear (Pink)
+      ctx.fillStyle = '#fda4af';
+      ctx.beginPath();
+      ctx.moveTo(-20, -17);
+      ctx.lineTo(-28, -38);
+      ctx.lineTo(-8, -26);
+      ctx.closePath();
+      ctx.fill();
+      // Ear fluff
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(-13, -22, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Right Ear
+      ctx.fillStyle = '#f97316';
+      ctx.beginPath();
+      ctx.moveTo(6, -26);
+      ctx.lineTo(32, -42);
+      ctx.lineTo(22, -14);
+      ctx.closePath();
+      ctx.fill();
+      // Right Inner Ear (Pink)
+      ctx.fillStyle = '#fda4af';
+      ctx.beginPath();
+      ctx.moveTo(8, -26);
+      ctx.lineTo(28, -38);
+      ctx.lineTo(20, -17);
+      ctx.closePath();
+      ctx.fill();
+      // Ear fluff
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(13, -22, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Head Base Shape
+      const headGrad = ctx.createRadialGradient(0, -2, 6, 0, 0, 30);
+      headGrad.addColorStop(0, '#fb923c');
+      headGrad.addColorStop(0.8, '#f97316');
+      headGrad.addColorStop(1, '#ea580c');
+      ctx.fillStyle = headGrad;
+
+      ctx.beginPath();
+      ctx.ellipse(0, -2, 27, 23, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Chubby Cheeks
+      ctx.fillStyle = '#fed7aa';
+      ctx.beginPath();
+      ctx.ellipse(-18, 5, 11, 9, -0.2, 0, Math.PI * 2);
+      ctx.ellipse(18, 5, 11, 9, 0.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Tabby Forehead "M" marking
+      ctx.strokeStyle = '#c2410c';
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(-8, -19);
+      ctx.lineTo(-4, -10);
+      ctx.lineTo(0, -17);
+      ctx.lineTo(4, -10);
+      ctx.lineTo(8, -19);
+      ctx.stroke();
+
+      // Eyes Tracking Butterfly
+      const isBlink = (t % 3.5) < 0.18;
+      const eyeL = { x: -11, y: -4 };
+      const eyeR = { x: 11, y: -4 };
+
+      // Eye offset towards butterfly
+      const eyeLookX = Math.max(-2.5, Math.min(3.5, (bfly.x - headCenterX) * 0.035));
+      const eyeLookY = Math.max(-3.5, Math.min(2.5, (bfly.y - headCenterY) * 0.035));
+
+      if (isBlink) {
+        // Cute happy closed eye curves ^ ^
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 2.8;
+        ctx.beginPath();
+        ctx.arc(eyeL.x, eyeL.y, 6, Math.PI * 1.15, Math.PI * 1.85);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(eyeR.x, eyeR.y, 6, Math.PI * 1.15, Math.PI * 1.85);
+        ctx.stroke();
+      } else {
+        // Large Expressive Eyes (Emerald Green with golden ring)
+        [eyeL, eyeR].forEach(eye => {
+          // Sclera / Eye Base
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.ellipse(eye.x, eye.y, 7.5, 8.5, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Iris (Emerald Green)
+          const irisGrad = ctx.createRadialGradient(eye.x + eyeLookX, eye.y + eyeLookY, 1, eye.x, eye.y, 6);
+          irisGrad.addColorStop(0, '#34d399');
+          irisGrad.addColorStop(0.6, '#10b981');
+          irisGrad.addColorStop(1, '#047857');
+          ctx.fillStyle = irisGrad;
+          ctx.beginPath();
+          ctx.arc(eye.x + eyeLookX * 0.8, eye.y + eyeLookY * 0.8, 5.8, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Pupil (Dilated & Focused on Butterfly)
+          ctx.fillStyle = '#0f172a';
+          ctx.beginPath();
+          ctx.ellipse(eye.x + eyeLookX, eye.y + eyeLookY, 3.2, 4.4, 0.05, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Specular Highlights (Sparkling eyes ✨)
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(eye.x + eyeLookX - 1.5, eye.y + eyeLookY - 2.0, 2.0, 0, Math.PI * 2);
+          ctx.arc(eye.x + eyeLookX + 1.8, eye.y + eyeLookY + 1.5, 1.1, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Upper Eyelash line
+          ctx.strokeStyle = '#1e293b';
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.arc(eye.x, eye.y - 1, 8, Math.PI * 1.2, Math.PI * 1.8);
+          ctx.stroke();
+        });
+      }
+
+      // Cute Pink Button Nose
+      ctx.fillStyle = '#f43f5e';
+      ctx.beginPath();
+      ctx.moveTo(0, 4);
+      ctx.lineTo(-3.5, 1.5);
+      ctx.lineTo(3.5, 1.5);
+      ctx.closePath();
+      ctx.fill();
+
+      // Open Playful / Meowing Smile (showing tiny pink tongue)
+      ctx.fillStyle = '#991b1b';
+      ctx.beginPath();
+      ctx.arc(0, 7.5, 4.8, 0, Math.PI);
+      ctx.fill();
+      // Tiny tongue
+      ctx.fillStyle = '#fda4af';
+      ctx.beginPath();
+      ctx.arc(0, 9.2, 3.0, 0, Math.PI);
+      ctx.fill();
+
+      // Mouth outline "3" shape
+      ctx.strokeStyle = '#78350f';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.arc(-2.6, 5.8, 3.2, 0.2, Math.PI * 0.95);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(2.6, 5.8, 3.2, 0.05, Math.PI * 0.8);
+      ctx.stroke();
+
+      // Whiskers (6 Long white whiskers twitching)
+      const whiskerWiggle = Math.sin(t * 8) * 1.2;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.lineWidth = 1.2;
+      // Left Whiskers
+      ctx.beginPath();
+      ctx.moveTo(-9, 4); ctx.lineTo(-32, 2 + whiskerWiggle);
+      ctx.moveTo(-9, 6); ctx.lineTo(-34, 7);
+      ctx.moveTo(-9, 8); ctx.lineTo(-30, 12 - whiskerWiggle);
+      // Right Whiskers
+      ctx.moveTo(9, 4); ctx.lineTo(32, 2 - whiskerWiggle);
+      ctx.moveTo(9, 6); ctx.lineTo(34, 7);
+      ctx.moveTo(9, 8); ctx.lineTo(30, 12 + whiskerWiggle);
+      ctx.stroke();
+
+      ctx.restore();
+
+      // 6. Two Front Paws Reaching & Batting at Butterfly ("hat diye dhorar chesta")
+      ctx.save();
+      // Left Front Paw (Swiping upward & forward)
+      const pawLShoulderX = catX - 18;
+      const pawLShoulderY = torsoTopY + 16;
+      const pawLTargetX = catX + 16 + Math.sin(t * 4.4) * 22;
+      const pawLTargetY = groundY - 138 + bodyBob + Math.cos(t * 4.4) * 20;
+
+      // Forearm Arm
+      ctx.strokeStyle = '#ea580c';
+      ctx.lineWidth = 11;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(pawLShoulderX, pawLShoulderY);
+      ctx.quadraticCurveTo(catX - 6, pawLTargetY + 20, pawLTargetX, pawLTargetY);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#f97316';
+      ctx.lineWidth = 8.5;
+      ctx.beginPath();
+      ctx.moveTo(pawLShoulderX, pawLShoulderY);
+      ctx.quadraticCurveTo(catX - 6, pawLTargetY + 20, pawLTargetX, pawLTargetY);
+      ctx.stroke();
+
+      // Left Paw Ball & Pink Toe Beans 🐾
+      ctx.fillStyle = '#fffbeb';
+      ctx.beginPath();
+      ctx.arc(pawLTargetX, pawLTargetY, 7.5, 0, Math.PI * 2);
+      ctx.fill();
+      // Pink Paw Pad
+      ctx.fillStyle = '#f43f5e';
+      ctx.beginPath();
+      ctx.arc(pawLTargetX + 0.5, pawLTargetY + 0.5, 3.4, 0, Math.PI * 2);
+      ctx.fill();
+      // 3 Pink Toe beans
+      ctx.beginPath();
+      ctx.arc(pawLTargetX - 4.5, pawLTargetY - 4.5, 1.8, 0, Math.PI * 2);
+      ctx.arc(pawLTargetX, pawLTargetY - 6.5, 1.8, 0, Math.PI * 2);
+      ctx.arc(pawLTargetX + 4.5, pawLTargetY - 4.5, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Right Front Paw (Alternate reach towards butterfly)
+      const pawRShoulderX = catX + 18;
+      const pawRShoulderY = torsoTopY + 16;
+      const pawRTargetX = catX + 46 + Math.sin(t * 4.4 + 1.8) * 24;
+      const pawRTargetY = groundY - 152 + bodyBob + Math.cos(t * 4.4 + 1.8) * 22;
+
+      // Forearm Arm
+      ctx.strokeStyle = '#ea580c';
+      ctx.lineWidth = 11;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(pawRShoulderX, pawRShoulderY);
+      ctx.quadraticCurveTo(catX + 24, pawRTargetY + 20, pawRTargetX, pawRTargetY);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#f97316';
+      ctx.lineWidth = 8.5;
+      ctx.beginPath();
+      ctx.moveTo(pawRShoulderX, pawRShoulderY);
+      ctx.quadraticCurveTo(catX + 24, pawRTargetY + 20, pawRTargetX, pawRTargetY);
+      ctx.stroke();
+
+      // Right Paw Ball & Pink Toe Beans 🐾
+      ctx.fillStyle = '#fffbeb';
+      ctx.beginPath();
+      ctx.arc(pawRTargetX, pawRTargetY, 8, 0, Math.PI * 2);
+      ctx.fill();
+      // Pink Paw Pad
+      ctx.fillStyle = '#f43f5e';
+      ctx.beginPath();
+      ctx.arc(pawRTargetX + 0.5, pawRTargetY + 0.5, 3.6, 0, Math.PI * 2);
+      ctx.fill();
+      // 3 Pink Toe beans
+      ctx.beginPath();
+      ctx.arc(pawRTargetX - 4.8, pawRTargetY - 4.8, 2.0, 0, Math.PI * 2);
+      ctx.arc(pawRTargetX, pawRTargetY - 7.0, 2.0, 0, Math.PI * 2);
+      ctx.arc(pawRTargetX + 4.8, pawRTargetY - 4.8, 2.0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 7. Beautiful Fluttering Butterfly 🦋
+      ctx.save();
+      const bx = bfly.x;
+      const by = bfly.y;
+      const wingFlap = Math.cos(t * 24);
+      const wingScale = Math.abs(wingFlap);
+      const butterflyTilt = Math.sin(t * 2.5) * 0.25;
+
+      ctx.translate(bx, by);
+      ctx.rotate(butterflyTilt);
+
+      // Soft magical glow behind butterfly
+      const glowGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, 24);
+      glowGrad.addColorStop(0, 'rgba(56, 189, 248, 0.5)');
+      glowGrad.addColorStop(0.5, 'rgba(236, 72, 153, 0.25)');
+      glowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = glowGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, 24, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 4 Butterfly Wings with 3D Fluttering Perspective
+      // Left Upper Wing
+      ctx.save();
+      ctx.scale(wingFlap < 0 ? -wingScale : -wingScale, 1);
+      const wingGradL = ctx.createLinearGradient(0, 0, -18, -18);
+      wingGradL.addColorStop(0, '#fde047');
+      wingGradL.addColorStop(0.5, '#ec4899');
+      wingGradL.addColorStop(1, '#38bdf8');
+      ctx.fillStyle = wingGradL;
+      ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 1.2;
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(-12, -22, -26, -14, -18, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Lower Left Wing
+      ctx.beginPath();
+      ctx.moveTo(0, 2);
+      ctx.bezierCurveTo(-8, 14, -20, 12, -12, 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Sparkle dots on wing edge
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(-18, -12, 1.2, 0, Math.PI * 2);
+      ctx.arc(-14, -18, 1.2, 0, Math.PI * 2);
+      ctx.arc(-12, 8, 1.0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Right Upper Wing
+      ctx.save();
+      ctx.scale(wingScale, 1);
+      const wingGradR = ctx.createLinearGradient(0, 0, 18, -18);
+      wingGradR.addColorStop(0, '#fde047');
+      wingGradR.addColorStop(0.5, '#38bdf8');
+      wingGradR.addColorStop(1, '#c084fc');
+      ctx.fillStyle = wingGradR;
+      ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 1.2;
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(12, -22, 26, -14, 18, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Lower Right Wing
+      ctx.beginPath();
+      ctx.moveTo(0, 2);
+      ctx.bezierCurveTo(8, 14, 20, 12, 12, 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Sparkle dots on wing edge
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(18, -12, 1.2, 0, Math.PI * 2);
+      ctx.arc(14, -18, 1.2, 0, Math.PI * 2);
+      ctx.arc(12, 8, 1.0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Butterfly Body & Antennae
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 2.2, 9.0, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Antennae
+      ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(-1, -7); ctx.quadraticCurveTo(-5, -14, -8, -12);
+      ctx.moveTo(1, -7); ctx.quadraticCurveTo(5, -14, 8, -12);
+      ctx.stroke();
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.arc(-8, -12, 1.2, 0, Math.PI * 2);
+      ctx.arc(8, -12, 1.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+
+      // 8. Cute Floating Speech Bubble / Meow Icon above cat
+      const bubbleY = headCenterY - 46 + Math.sin(t * 3.2) * 4;
+      const bubbleX = headCenterX + 35;
+      
+      ctx.save();
+      // Speech Bubble Background
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+      ctx.strokeStyle = 'rgba(251, 146, 60, 0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(bubbleX - 36, bubbleY - 14, 72, 24, 12);
+      } else {
+        ctx.arc(bubbleX - 24, bubbleY - 2, 12, Math.PI * 0.5, Math.PI * 1.5);
+        ctx.arc(bubbleX + 24, bubbleY - 2, 12, Math.PI * 1.5, Math.PI * 0.5);
+        ctx.closePath();
+      }
+      ctx.fill();
+      ctx.stroke();
+
+      // Pointer triangle
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+      ctx.beginPath();
+      ctx.moveTo(bubbleX - 10, bubbleY + 10);
+      ctx.lineTo(bubbleX - 18, bubbleY + 18);
+      ctx.lineTo(bubbleX - 2, bubbleY + 10);
+      ctx.closePath();
+      ctx.fill();
+
+      // Text inside bubble
+      ctx.fillStyle = '#fef08a';
+      ctx.font = 'bold 11px "Outfit", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Meow~ 🐾', bubbleX, bubbleY - 2);
+      ctx.restore();
     }
 
     drawObstacles(ctx) {
