@@ -1,3 +1,24 @@
+/* Network Diagnostics Multi-Tool Suite (Ping, Tracert, Real Speed Test) */
+.net-diag-tab {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+.net-diag-tab:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f1f5f9;
+}
+
+.net-diag-tab.active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
 /* Strict size constraints for packet envelopes across all rendering environments */
 .topology-packet-layer svg,
 .packet-envelope,

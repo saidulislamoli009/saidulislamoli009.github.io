@@ -827,20 +827,82 @@
 
                 <!-- Enterprise Network Topology & Architecture Showcase (Cisco Packet Tracer) -->
                 <div class="bento-card topology-showcase-card no-tilt p-6 sm:p-8 md:p-10 rounded-3xl border border-white/10 hover:border-brand-cyan/40 transition-all flex flex-col gap-8 group" data-no-tilt="true" style="transform: none !important;">
-                    
+
+                    <!-- Top: Architecture Details & Key Highlights (Header & Feature Pillars) -->
+                    <div class="w-full flex flex-col gap-6 pb-2 border-b border-white/10">
+                        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                            <div class="flex flex-col gap-2.5 max-w-3xl">
+                                <div class="flex items-center gap-2">
+                                    <span class="size-2 rounded-full bg-brand-cyan animate-ping"></span>
+                                    <span class="text-[10px] font-mono font-bold text-brand-cyan px-2.5 py-0.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 uppercase tracking-wider">
+                                        Architecture Blueprint
+                                    </span>
+                                </div>
+                                <h3 class="text-2xl sm:text-3xl font-bold text-white font-heading group-hover:text-brand-cyan transition-colors">
+                                    Enterprise Multi-Site Architecture & IPsec VPN (Head Office & Branch Office Network Topology)
+                                </h3>
+                                <p class="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">
+                                    High-availability multi-site enterprise network architecture engineered in Cisco Packet Tracer. Features HQ Network with 6 department VLANs, Dual-ISP WAN failover (Main ISP & Backup ISP), Site-to-Site IPsec VPN Tunnel with ACL Rule-110 Extended, Branch Office Network with 6 department VLANs, and an isolated Server-Side Network farm (DHCP, DNS, Email, Web Server clusters) connected via Single-Area OSPF Area 10.
+                                </p>
+                            </div>
+
+                            <!-- Highlights Tags -->
+                            <div class="flex flex-wrap gap-2 lg:justify-end items-center self-start lg:self-center">
+                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/30 font-semibold flex items-center gap-1.5">
+                                    <span class="size-1.5 rounded-full bg-brand-cyan"></span> Cisco Packet Tracer
+                                </span>
+                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-white/5 text-slate-300 border border-white/10">Dual-WAN Failover</span>
+                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-white/5 text-slate-300 border border-white/10">EtherChannel Core</span>
+                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-white/5 text-slate-300 border border-white/10">DMZ Server Farm</span>
+                            </div>
+                        </div>
+
+                        <!-- Key Architecture Pillars (4 Columns Across Full Width) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-brand-cyan/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
+                                <div class="flex items-center gap-2 text-brand-cyan font-bold text-sm font-mono">
+                                    <span class="material-symbols-outlined text-lg">alt_route</span>
+                                    <span>Dual-WAN OSPF</span>
+                                </div>
+                                <span class="text-xs text-slate-400 leading-relaxed">Dual ISP WAN Redundancy, dynamic routing failover & multi-path traffic balancing.</span>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-amber-400/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
+                                <div class="flex items-center gap-2 text-amber-400 font-bold text-sm font-mono">
+                                    <span class="material-symbols-outlined text-lg">dns</span>
+                                    <span>DMZ Server Farm</span>
+                                </div>
+                                <span class="text-xs text-slate-400 leading-relaxed">ERP, Web, DNS & DHCP isolated high-availability server cluster with perimeter ACLs.</span>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-purple-400/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
+                                <div class="flex items-center gap-2 text-purple-400 font-bold text-sm font-mono">
+                                    <span class="material-symbols-outlined text-lg">hub</span>
+                                    <span>3-Tier Multi-VLAN</span>
+                                </div>
+                                <span class="text-xs text-slate-400 leading-relaxed">Core, Distribution & Access layer switching with L3 inter-VLAN routing & 802.1Q trunking.</span>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-emerald-400/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
+                                <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm font-mono">
+                                    <span class="material-symbols-outlined text-lg">security</span>
+                                    <span>VoIP & Security</span>
+                                </div>
+                                <span class="text-xs text-slate-400 leading-relaxed">Voice VLAN priority with QoS queuing, ACL security filtering & port-security hardening.</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Diagram Interactive Viewer + Live Ping Terminal (Full Width Hero Showcase) -->
                     <div class="w-full flex flex-col gap-4">
                         
                         <!-- Diagram Interactive Viewer with Live Packet Message Simulation -->
                         <div class="topology-stage w-full relative rounded-2xl overflow-hidden border border-white/15 bg-[#05070c] shadow-2xl app-preview-trigger cursor-pointer group/img select-none hover:border-brand-cyan/40 transition-all duration-300"
                              data-img="assets/images/enterprise-networking-project7.jpg"
-                             data-title="Enterprise Networking Project #7 • Multi-Site Architecture & IPsec VPN (Cisco Packet Tracer)"
+                             data-title="Enterprise Multi-Site Architecture & IPsec VPN • Head Office & Branch Office Network Topology (Cisco Packet Tracer)"
                              data-desc="Dual ISP WAN Redundancy • Site-to-Site IPsec VPN Tunnel • DMZ Server Farm • Multi-Area OSPF • 12 Department VLANs"
                              style="aspect-ratio: 1024 / 546;">
                             
                             <!-- Base Topology Diagram Image (Enterprise Project #7) -->
                             <img src="assets/images/enterprise-networking-project7.jpg" 
-                                 alt="Design Document - Enterprise Networking Project #7 - Cisco Packet Tracer" 
+                                 alt="Design Document - Head Office & Branch Office Enterprise Network Topology - Cisco Packet Tracer" 
                                  class="w-full h-full object-cover object-center transition-transform duration-500 block"
                                  loading="lazy">
 
@@ -965,121 +1027,105 @@
                             </div>
                         </div>
 
-                        <!-- Live WAN Ping & Latency Terminal (ping 8.8.8.8 -t) -->
-                        <div class="ping-terminal-container w-full rounded-2xl border border-white/10 bg-[#030712] overflow-hidden shadow-2xl font-mono text-xs select-none">
-                            <!-- Terminal Titlebar -->
-                            <div class="px-3.5 py-2 bg-white/[0.04] border-b border-white/10 flex items-center justify-between gap-3">
-                                <div class="flex items-center gap-2 text-slate-300">
-                                    <span class="material-symbols-outlined text-sm text-brand-cyan">terminal</span>
-                                    <span class="text-[11px] font-semibold text-slate-200 tracking-wide flex items-center gap-1.5">
-                                        C:\Windows\System32\cmd.exe <span class="text-slate-500">—</span> <span class="text-brand-cyan font-bold">ping 8.8.8.8 -t</span>
-                                    </span>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold">
+                        <!-- Live Network Diagnostics Suite: Dual Real Engines (Live Continuous Ping & Dual Download/Upload Speed Test) -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 w-full select-none font-mono">
+                            
+                            <!-- Box 1: Real Live Ping Console (ping 8.8.8.8 -t) -->
+                            <div class="rounded-2xl border border-white/10 bg-[#030712] overflow-hidden shadow-2xl flex flex-col justify-between hover:border-brand-cyan/40 transition-colors">
+                                <!-- Console Titlebar -->
+                                <div class="px-3.5 py-2.5 bg-white/[0.04] border-b border-white/10 flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-2 text-slate-200">
+                                        <span class="material-symbols-outlined text-sm text-brand-cyan">terminal</span>
+                                        <span class="text-[11px] font-bold">ping 8.8.8.8 -t</span>
+                                    </div>
+                                    <div id="ping-status-badge" class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold transition-all">
                                         <span class="relative flex h-1.5 w-1.5">
-                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                            <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                                            <span id="ping-dot-pulse" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                            <span id="ping-dot-core" class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                                         </span>
-                                        <span>0% LOSS • STABLE</span>
-                                    </div>
-                                    <div class="hidden sm:flex items-center gap-1.5">
-                                        <span class="size-2.5 rounded-full bg-white/20"></span>
-                                        <span class="size-2.5 rounded-full bg-amber-400/80"></span>
-                                        <span class="size-2.5 rounded-full bg-emerald-400/80"></span>
+                                        <span id="ping-status-text">ONLINE</span>
                                     </div>
                                 </div>
+                                <!-- Ping Stream -->
+                                <div id="ping-terminal-body" class="p-3 text-[11px] leading-relaxed h-[195px] overflow-y-auto space-y-0.5 text-slate-300 bg-gradient-to-b from-[#030712] to-[#050917] scrollbar-thin scrollbar-thumb-white/10">
+                                    <div class="text-[10px] text-slate-500">C:\Users\SaiDuL&gt; ping 8.8.8.8 -t (Real Browser RTT)</div>
+                                    <div id="ping-replies-stream" class="space-y-0.5 pt-0.5"></div>
+                                </div>
+                                <!-- Ping Footer -->
+                                <div class="px-3.5 py-2 bg-white/[0.02] border-t border-white/5 flex items-center justify-between text-[10px] text-slate-400">
+                                    <span>Sent: <strong id="ping-stat-sent" class="text-white">0</strong></span>
+                                    <span>Recv: <strong id="ping-stat-recv" class="text-emerald-400">0</strong></span>
+                                    <span>Avg: <strong id="ping-stat-avg" class="text-brand-cyan">--</strong></span>
+                                    <span>Loss: <strong id="ping-stat-loss" class="text-emerald-400">0%</strong></span>
+                                </div>
                             </div>
 
-                            <!-- Terminal Output Area -->
-                            <div id="ping-terminal-body" class="p-3.5 sm:p-4 text-[11px] sm:text-xs leading-relaxed max-h-[175px] min-h-[165px] overflow-y-auto space-y-0.5 text-slate-300 bg-gradient-to-b from-[#030712] to-[#050917] font-mono scrollbar-thin scrollbar-thumb-white/10">
-                                <div class="text-slate-400">Microsoft Windows [Version 10.0.19045.4291]</div>
-                                <div class="text-slate-500">(c) Microsoft Corporation. All rights reserved.</div>
-                                <div class="pt-1 text-slate-200">
-                                    <span class="text-brand-cyan">C:\Users\SaiDuL&gt;</span> ping 8.8.8.8 -t
+                            <!-- Box 3: Internet Speed Test Console (Both Download & Upload) -->
+                            <div class="rounded-2xl border border-white/10 bg-[#030712] overflow-hidden shadow-2xl flex flex-col justify-between hover:border-purple-500/40 transition-colors">
+                                <!-- Console Titlebar -->
+                                <div class="px-3.5 py-2.5 bg-white/[0.04] border-b border-white/10 flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-2 text-slate-200">
+                                        <span class="material-symbols-outlined text-sm text-purple-400">speed</span>
+                                        <span class="text-[11px] font-bold">Speed Test (DL &amp; UL)</span>
+                                    </div>
+                                    <button id="speedtest-run-btn" type="button" class="px-2.5 py-1 rounded-md bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-300 text-[10px] font-bold flex items-center gap-1 transition-all active:scale-95 cursor-pointer">
+                                        <span class="material-symbols-outlined text-xs">bolt</span>
+                                        <span id="speedtest-btn-label">Check Speed</span>
+                                    </button>
                                 </div>
-                                <div class="text-slate-400 pb-1">Pinging 8.8.8.8 with 32 bytes of data:</div>
-                                <div id="ping-replies-stream" class="space-y-0.5"></div>
+                                <!-- Speed Metrics Body: Download AND Upload -->
+                                <div class="p-3 text-[11px] h-[195px] flex flex-col justify-between bg-gradient-to-b from-[#030712] to-[#050917]">
+                                    <!-- Download & Upload 2-Box Cards -->
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <!-- Download -->
+                                        <div class="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 flex flex-col">
+                                            <span class="text-[9px] text-purple-300 uppercase tracking-wider font-semibold flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-xs">download</span> Download
+                                            </span>
+                                            <div class="flex items-baseline gap-1 mt-0.5">
+                                                <span id="speed-down-val" class="text-xl font-extrabold text-purple-400">--</span>
+                                                <span class="text-[10px] text-purple-300 font-bold">Mbps</span>
+                                            </div>
+                                        </div>
+                                        <!-- Upload -->
+                                        <div class="p-2.5 rounded-xl bg-brand-cyan/10 border border-brand-cyan/30 flex flex-col">
+                                            <span class="text-[9px] text-brand-cyan uppercase tracking-wider font-semibold flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-xs">upload</span> Upload
+                                            </span>
+                                            <div class="flex items-baseline gap-1 mt-0.5">
+                                                <span id="speed-up-val" class="text-xl font-extrabold text-brand-cyan">--</span>
+                                                <span class="text-[10px] text-brand-cyan font-bold">Mbps</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Ping & Jitter Telemetry -->
+                                    <div class="flex items-center justify-between text-[10px] text-slate-300 px-1">
+                                        <span>Ping: <strong id="speed-ping-val" class="text-emerald-400">--</strong> ms</span>
+                                        <span>Jitter: <strong id="speed-jitter-val" class="text-brand-cyan">--</strong> ms</span>
+                                        <span id="speed-grade-badge" class="text-emerald-400/90 font-semibold">• Real CDN</span>
+                                    </div>
+
+                                    <!-- Progress bar & Status text -->
+                                    <div class="space-y-1">
+                                        <div class="flex items-center justify-between text-[9px] text-slate-400">
+                                            <span id="speed-status-text" class="truncate pr-1">Ready to test download &amp; upload</span>
+                                            <span id="speed-progress-pct" class="text-purple-400 font-bold">0%</span>
+                                        </div>
+                                        <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                            <div id="speed-progress-bar" class="h-full bg-gradient-to-r from-purple-500 via-brand-cyan to-emerald-400 w-0 transition-all duration-200"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Speed Footer -->
+                                <div class="px-3.5 py-2 bg-white/[0.02] border-t border-white/5 flex items-center justify-between text-[10px] text-slate-400">
+                                    <span>Cloudflare CDN Edge</span>
+                                    <span class="text-emerald-400 font-semibold">• 100% Real Live Bandwidth</span>
+                                </div>
                             </div>
 
-                            <!-- Terminal Status Footer -->
-                            <div class="px-3.5 sm:px-4 py-2 bg-white/[0.02] border-t border-white/5 flex flex-wrap items-center justify-between text-[10px] sm:text-[11px] text-slate-400 gap-2 font-mono">
-                                <div class="flex items-center gap-3 sm:gap-4">
-                                    <span>Sent: <strong id="ping-stat-sent" class="text-white">7</strong></span>
-                                    <span>Recv: <strong id="ping-stat-recv" class="text-emerald-400">7</strong></span>
-                                    <span>Loss: <strong class="text-emerald-400">0 (0%)</strong></span>
-                                </div>
-                                <div class="flex items-center gap-2 sm:gap-3">
-                                    <span>Min: <strong class="text-brand-cyan">1ms</strong></span>
-                                    <span>Max: <strong class="text-brand-cyan">9ms</strong></span>
-                                    <span>Avg: <strong id="ping-stat-avg" class="text-brand-cyan">4ms</strong></span>
-                                    <span class="text-emerald-400 font-bold hidden md:inline">• 100% OPERATIONAL FIBER LINK</span>
-                                </div>
-                            </div>
                         </div>
 
-                    </div>
-
-                    <!-- Bottom: Architecture Details & Key Highlights (Full Width Below Diagram) -->
-                    <div class="w-full flex flex-col gap-6 pt-4 border-t border-white/10">
-                        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-                            <div class="flex flex-col gap-2.5 max-w-3xl">
-                                <div class="flex items-center gap-2">
-                                    <span class="size-2 rounded-full bg-brand-cyan animate-ping"></span>
-                                    <span class="text-[10px] font-mono font-bold text-brand-cyan px-2.5 py-0.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 uppercase tracking-wider">
-                                        Architecture Blueprint
-                                    </span>
-                                </div>
-                                <h3 class="text-2xl sm:text-3xl font-bold text-white font-heading group-hover:text-brand-cyan transition-colors">
-                                    Enterprise Multi-Site Architecture & IPsec VPN (Project #7)
-                                </h3>
-                                <p class="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">
-                                    High-availability multi-site enterprise network architecture engineered in Cisco Packet Tracer. Features HQ Network with 6 department VLANs, Dual-ISP WAN failover (Main ISP & Backup ISP), Site-to-Site IPsec VPN Tunnel with ACL Rule-110 Extended, Branch Office Network with 6 department VLANs, and an isolated Server-Side Network farm (DHCP, DNS, Email, Web Server clusters) connected via Single-Area OSPF Area 10.
-                                </p>
-                            </div>
-
-                            <!-- Highlights Tags -->
-                            <div class="flex flex-wrap gap-2 lg:justify-end items-center self-start lg:self-center">
-                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/30 font-semibold flex items-center gap-1.5">
-                                    <span class="size-1.5 rounded-full bg-brand-cyan"></span> Cisco Packet Tracer
-                                </span>
-                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-white/5 text-slate-300 border border-white/10">Dual-WAN Failover</span>
-                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-white/5 text-slate-300 border border-white/10">EtherChannel Core</span>
-                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-white/5 text-slate-300 border border-white/10">DMZ Server Farm</span>
-                            </div>
-                        </div>
-
-                        <!-- Key Architecture Pillars (4 Columns Across Full Width) -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
-                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-brand-cyan/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
-                                <div class="flex items-center gap-2 text-brand-cyan font-bold text-sm font-mono">
-                                    <span class="material-symbols-outlined text-lg">alt_route</span>
-                                    <span>Dual-WAN OSPF</span>
-                                </div>
-                                <span class="text-xs text-slate-400 leading-relaxed">Dual ISP WAN Redundancy, dynamic routing failover & multi-path traffic balancing.</span>
-                            </div>
-                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-amber-400/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
-                                <div class="flex items-center gap-2 text-amber-400 font-bold text-sm font-mono">
-                                    <span class="material-symbols-outlined text-lg">dns</span>
-                                    <span>DMZ Server Farm</span>
-                                </div>
-                                <span class="text-xs text-slate-400 leading-relaxed">ERP, Web, DNS & DHCP isolated high-availability server cluster with perimeter ACLs.</span>
-                            </div>
-                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-purple-400/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
-                                <div class="flex items-center gap-2 text-purple-400 font-bold text-sm font-mono">
-                                    <span class="material-symbols-outlined text-lg">hub</span>
-                                    <span>3-Tier Multi-VLAN</span>
-                                </div>
-                                <span class="text-xs text-slate-400 leading-relaxed">Core, Distribution & Access layer switching with L3 inter-VLAN routing & 802.1Q trunking.</span>
-                            </div>
-                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-emerald-400/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
-                                <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm font-mono">
-                                    <span class="material-symbols-outlined text-lg">security</span>
-                                    <span>VoIP & Security</span>
-                                </div>
-                                <span class="text-xs text-slate-400 leading-relaxed">Voice VLAN priority with QoS queuing, ACL security filtering & port-security hardening.</span>
-                            </div>
-                        </div>
                     </div>
 
                 </div>
@@ -2852,7 +2898,7 @@
     <!-- Scripts -->
     <script src="assets/js/cv-avatar.js?v=4.0.0"></script>
     <script src="assets/js/portfolio-data.js?v=4.0.0"></script>
-    <script src="assets/js/main.js?v=4.0.0"></script>
+    <script src="assets/js/main.js?v=4.5.0"></script>
     <script src="assets/js/cat-runner.js?v=4.0.0"></script>
     <script src="assets/js/robot-escape.js?v=4.0.0"></script>
     <script src="assets/js/space-escape.js?v=4.0.0"></script>

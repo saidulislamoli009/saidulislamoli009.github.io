@@ -174,7 +174,7 @@ const DEFAULT_PORTFOLIO_DATA = {
     }
   ],
   topologyShowcase: {
-    title: "Enterprise Multi-Site Architecture & IPsec VPN (Project #7)",
+    title: "Enterprise Multi-Site Architecture & IPsec VPN (Head Office & Branch Office Network Topology)",
     badge: "Dual-WAN OSPF • IPsec VPN Tunnel • Server Farm",
     image: "assets/images/enterprise-networking-project7.jpg",
     description: "High-availability multi-site enterprise network architecture engineered in Cisco Packet Tracer. Features HQ Network with 6 department VLANs, Dual-ISP WAN failover (Main ISP & Backup ISP), Site-to-Site IPsec VPN Tunnel with ACL Rule-110 Extended, Branch Office Network with 6 department VLANs, and an isolated Server-Side Network farm (DHCP, DNS, Email, Web Server clusters) connected via Single-Area OSPF Area 10.",
