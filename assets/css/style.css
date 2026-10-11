@@ -1,3 +1,21 @@
+/* Strict size constraints for packet envelopes across all rendering environments */
+.topology-packet-layer svg,
+.packet-envelope,
+.packet-msg svg {
+  width: 16px !important;
+  height: 12px !important;
+  max-width: 16px !important;
+  max-height: 12px !important;
+  display: block !important;
+}
+
+.topology-showcase-card,
+.topology-showcase-card:hover,
+.topology-showcase-card:focus,
+.topology-showcase-card:active {
+  transform: none !important;
+}
+
 /* ==========================================================================
    SAIDUL ISLAM - SIGNATURE BESPOKE EXECUTIVE & CYBER-ZEN OBSIDIAN PORTFOLIO
    Award-Winning Bento Grid, Luminescent Glassmorphism & Neon Cyber Aesthetics

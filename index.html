@@ -60,7 +60,7 @@
     </script>
 
     <!-- Distinctive Custom CSS System -->
-    <link rel="stylesheet" href="assets/css/style.css"/>
+    <link rel="stylesheet" href="assets/css/style.css?v=4.0.0"/>
 
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="profile"/>
@@ -826,7 +826,7 @@
                 </div>
 
                 <!-- Enterprise Network Topology & Architecture Showcase (Cisco Packet Tracer) -->
-                <div class="bento-card topology-showcase-card no-tilt p-6 sm:p-8 md:p-10 rounded-3xl border border-white/10 hover:border-brand-cyan/40 transition-all flex flex-col gap-8 group">
+                <div class="bento-card topology-showcase-card no-tilt p-6 sm:p-8 md:p-10 rounded-3xl border border-white/10 hover:border-brand-cyan/40 transition-all flex flex-col gap-8 group" data-no-tilt="true" style="transform: none !important;">
                     
                     <!-- Diagram Interactive Viewer + Live Ping Terminal (Full Width Hero Showcase) -->
                     <div class="w-full flex flex-col gap-4">
@@ -892,40 +892,40 @@
                                 <div class="port-led port-led-green" style="left: 69.5%; top: 74.9%; animation-duration: 0.22s; animation-delay: 0.21s;" title="PN-SW Port Link"></div>
                                 <div class="port-led port-led-green" style="left: 70.2%; top: 89.3%; animation-duration: 0.25s; animation-delay: 0.00s;" title="BR-GWA-SW Port Link"></div>
 
-                                <!-- Flow 1: HQ User Device to Branch User Device via IPsec VPN Tunnel (Soft Sky-Blue WAN) -->
-                                <div class="packet packet-msg packet-wan" style="animation-name: flow-p7-wan-fwd; animation-duration: 5.4s; animation-delay: 0s;" title="HQ MLOS PC -> IPsec VPN Tunnel -> Branch NL PC">
-                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                                <!-- Flow 1: HQ User Device to Branch User Device via IPsec VPN Tunnel (Soft Sky-Blue WAN) -->
+                                <div class="packet packet-msg packet-wan" style="position: absolute; width: 16px; height: 12px; max-width: 16px; max-height: 12px; z-index: 15; transform: translate(-50%, -50%); animation-name: flow-p7-wan-fwd; animation-duration: 5.4s; animation-delay: 0s; animation-timing-function: linear; animation-iteration-count: infinite;" title="HQ MLOS PC -> IPsec VPN Tunnel -> Branch NL PC">
+                                    <svg viewBox="0 0 16 12" width="16" height="12" style="width: 16px; height: 12px; max-width: 16px; max-height: 12px; display: block;" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </div>
                                 <!-- Flow 1 Return: Branch User Device to HQ User Device Reply (Soft Sky-Blue Reply) -->
-                                <div class="packet packet-msg packet-wan" style="animation-name: flow-p7-wan-rev; animation-duration: 5.4s; animation-delay: 2.7s;" title="Branch NL PC -> IPsec VPN Reply -> HQ MLOS PC">
-                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <div class="packet packet-msg packet-wan" style="position: absolute; width: 16px; height: 12px; max-width: 16px; max-height: 12px; z-index: 15; transform: translate(-50%, -50%); animation-name: flow-p7-wan-rev; animation-duration: 5.4s; animation-delay: 2.7s; animation-timing-function: linear; animation-iteration-count: infinite;" title="Branch NL PC -> IPsec VPN Reply -> HQ MLOS PC">
+                                    <svg viewBox="0 0 16 12" width="16" height="12" style="width: 16px; height: 12px; max-width: 16px; max-height: 12px; display: block;" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </div>
 
                                 <!-- Flow 2: HQ User Device to Server-Side Farm (Soft Amber Server Packet) -->
-                                <div class="packet packet-msg packet-server" style="animation-name: flow-p7-srv-fwd; animation-duration: 3.8s; animation-delay: 0.4s;" title="HQ IT PC -> Web Server Query">
-                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <div class="packet packet-msg packet-server" style="position: absolute; width: 16px; height: 12px; max-width: 16px; max-height: 12px; z-index: 15; transform: translate(-50%, -50%); animation-name: flow-p7-srv-fwd; animation-duration: 3.8s; animation-delay: 0.4s; animation-timing-function: linear; animation-iteration-count: infinite;" title="HQ IT PC -> Web Server Query">
+                                    <svg viewBox="0 0 16 12" width="16" height="12" style="width: 16px; height: 12px; max-width: 16px; max-height: 12px; display: block;" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </div>
                                 <!-- Flow 2 Return: Server-Side Farm to HQ User Device Reply (Soft Amber Reply) -->
-                                <div class="packet packet-msg packet-server" style="animation-name: flow-p7-srv-rev; animation-duration: 3.8s; animation-delay: 2.3s;" title="Web Server -> HTTP 200 Response -> HQ IT PC">
-                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <div class="packet packet-msg packet-server" style="position: absolute; width: 16px; height: 12px; max-width: 16px; max-height: 12px; z-index: 15; transform: translate(-50%, -50%); animation-name: flow-p7-srv-rev; animation-duration: 3.8s; animation-delay: 2.3s; animation-timing-function: linear; animation-iteration-count: infinite;" title="Web Server -> HTTP 200 Response -> HQ IT PC">
+                                    <svg viewBox="0 0 16 12" width="16" height="12" style="width: 16px; height: 12px; max-width: 16px; max-height: 12px; display: block;" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </div>
 
                                 <!-- Flow 3: Branch User Device to Server-Side Farm (Soft Mint Emerald) -->
-                                <div class="packet packet-msg packet-vpn" style="animation-name: flow-p7-srvbr-fwd; animation-duration: 4.6s; animation-delay: 1.0s;" title="Branch MK Laptop -> VPN -> DHCP/DNS Request">
-                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <div class="packet packet-msg packet-vpn" style="position: absolute; width: 16px; height: 12px; max-width: 16px; max-height: 12px; z-index: 15; transform: translate(-50%, -50%); animation-name: flow-p7-srvbr-fwd; animation-duration: 4.6s; animation-delay: 1.0s; animation-timing-function: linear; animation-iteration-count: infinite;" title="Branch MK Laptop -> VPN -> DHCP/DNS Request">
+                                    <svg viewBox="0 0 16 12" width="16" height="12" style="width: 16px; height: 12px; max-width: 16px; max-height: 12px; display: block;" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </div>
                                 <!-- Flow 3 Return: Server-Side Farm to Branch User Device Reply -->
-                                <div class="packet packet-msg packet-vpn" style="animation-name: flow-p7-srvbr-rev; animation-duration: 4.6s; animation-delay: 3.3s;" title="DHCP Server -> DHCP ACK Reply -> Branch MK Laptop">
-                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <div class="packet packet-msg packet-vpn" style="position: absolute; width: 16px; height: 12px; max-width: 16px; max-height: 12px; z-index: 15; transform: translate(-50%, -50%); animation-name: flow-p7-srvbr-rev; animation-duration: 4.6s; animation-delay: 3.3s; animation-timing-function: linear; animation-iteration-count: infinite;" title="DHCP Server -> DHCP ACK Reply -> Branch MK Laptop">
+                                    <svg viewBox="0 0 16 12" width="16" height="12" style="width: 16px; height: 12px; max-width: 16px; max-height: 12px; display: block;" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </div>
 
                                 <!-- Flow 4: Dual-ISP Redundant Link via Main ISP (Soft Indigo/Lavender) -->
-                                <div class="packet packet-msg packet-isp" style="animation-name: flow-p7-isp-fwd; animation-duration: 5.6s; animation-delay: 1.5s;" title="HQ MER PC -> Main ISP Failover Link -> Branch NSO Laptop">
-                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <div class="packet packet-msg packet-isp" style="position: absolute; width: 16px; height: 12px; max-width: 16px; max-height: 12px; z-index: 15; transform: translate(-50%, -50%); animation-name: flow-p7-isp-fwd; animation-duration: 5.6s; animation-delay: 1.5s; animation-timing-function: linear; animation-iteration-count: infinite;" title="HQ MER PC -> Main ISP Failover Link -> Branch NSO Laptop">
+                                    <svg viewBox="0 0 16 12" width="16" height="12" style="width: 16px; height: 12px; max-width: 16px; max-height: 12px; display: block;" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </div>
                                 <!-- Flow 4 Return: Branch to HQ via Main ISP Reply -->
-                                <div class="packet packet-msg packet-isp" style="animation-name: flow-p7-isp-rev; animation-duration: 5.6s; animation-delay: 4.3s;" title="Branch NSO Laptop -> Main ISP -> HQ MER PC">
-                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <div class="packet packet-msg packet-isp" style="position: absolute; width: 16px; height: 12px; max-width: 16px; max-height: 12px; z-index: 15; transform: translate(-50%, -50%); animation-name: flow-p7-isp-rev; animation-duration: 5.6s; animation-delay: 4.3s; animation-timing-function: linear; animation-iteration-count: infinite;" title="Branch NSO Laptop -> Main ISP -> HQ MER PC">
+                                    <svg viewBox="0 0 16 12" width="16" height="12" style="width: 16px; height: 12px; max-width: 16px; max-height: 12px; display: block;" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </div>
 
                             </div>
@@ -2850,11 +2850,11 @@
     </div>
 
     <!-- Scripts -->
-    <script src="assets/js/cv-avatar.js?v=3.2.0"></script>
-    <script src="assets/js/portfolio-data.js?v=3.2.0"></script>
-    <script src="assets/js/main.js?v=3.2.0"></script>
-    <script src="assets/js/cat-runner.js?v=3.2.0"></script>
-    <script src="assets/js/robot-escape.js?v=3.2.0"></script>
-    <script src="assets/js/space-escape.js?v=3.2.0"></script>
+    <script src="assets/js/cv-avatar.js?v=4.0.0"></script>
+    <script src="assets/js/portfolio-data.js?v=4.0.0"></script>
+    <script src="assets/js/main.js?v=4.0.0"></script>
+    <script src="assets/js/cat-runner.js?v=4.0.0"></script>
+    <script src="assets/js/robot-escape.js?v=4.0.0"></script>
+    <script src="assets/js/space-escape.js?v=4.0.0"></script>
 </body>
 </html>
