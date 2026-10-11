@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initClipboardActions();
   initBackToTop();
+  initLivePingTerminal();
 });
 
 /* ==========================================================================
@@ -550,6 +551,11 @@ function init3DTilt() {
   const cards = document.querySelectorAll('.bento-card, .competency-card, .erp-card, .network-card, .stat-card, .experience-card');
 
   cards.forEach(card => {
+    // Keep large interactive topology showcase card stable without wobbly tilt
+    if (card.classList.contains('no-tilt') || card.querySelector('.topology-stage') || card.closest('.topology-stage')) {
+      return;
+    }
+
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -557,10 +563,11 @@ function init3DTilt() {
 
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -7;
-      const rotateY = ((x - centerX) / centerX) * 7;
+      // Gentle, subtle micro-tilt (reduced from aggressive 7deg to smooth 1.8deg)
+      const rotateX = ((y - centerY) / centerY) * -1.8;
+      const rotateY = ((x - centerX) / centerX) * 1.8;
 
-      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-2px)`;
     });
 
     card.addEventListener('mouseleave', () => {
@@ -1010,6 +1017,7 @@ const LightboxGalleryState = {
   screenshots: [],
   currentIndex: 0,
   titles: {
+    'enterprise-networking-project7.jpg': 'Enterprise Networking Project #7 • Multi-Site Architecture & IPsec VPN (Cisco Packet Tracer)',
     'enterprise-network-topology.jpg': 'Enterprise Multi-Area Network Architecture • Cisco Packet Tracer',
     'app-fixbd.jpg': 'Screen 1/4 • Home Categories & 24/7 Emergency Dispatch',
     'app-fixbd-tracking.jpg': 'Screen 2/4 • Real-time Live GPS Map & Technician Tracking',
@@ -1832,5 +1840,77 @@ function hydratePortfolioContent() {
   }
 }
 
+/* ==========================================================================
+   7.2. LIVE WAN ICMP PING TERMINAL ENGINE (ping 8.8.8.8 -t)
+   ========================================================================== */
+function initLivePingTerminal() {
+  const container = document.getElementById('ping-terminal-body');
+  const stream = document.getElementById('ping-replies-stream');
+  const statSent = document.getElementById('ping-stat-sent');
+  const statRecv = document.getElementById('ping-stat-recv');
+  const statAvg = document.getElementById('ping-stat-avg');
 
+  if (!container || !stream) return;
 
+  // Exact initial sequence requested by the user:
+  // Reply from 8.8.8.8: bytes=32 time=3ms TTL=116
+  // Reply from 8.8.8.8: bytes=32 time=5ms TTL=116
+  // Reply from 8.8.8.8: bytes=32 time=9ms TTL=116
+  // Reply from 8.8.8.8: bytes=32 time=6ms TTL=116
+  // Reply from 8.8.8.8: bytes=32 time=1ms TTL=116
+  // Reply from 8.8.8.8: bytes=32 time=1ms TTL=116
+  // Reply from 8.8.8.8: bytes=32 time=7ms TTL=116
+  const initialReplies = [3, 5, 9, 6, 1, 1, 7];
+  const realisticTimes = [1, 2, 3, 1, 5, 2, 4, 1, 6, 2, 3, 1, 7, 2, 1, 4, 3, 9, 2, 1, 5, 2];
+
+  let packetsSent = initialReplies.length;
+  let totalLatency = initialReplies.reduce((acc, curr) => acc + curr, 0);
+
+  // Helper to create and append a formatted ping line
+  function appendReplyLine(time, animate = true) {
+    const line = document.createElement('div');
+    line.className = `flex items-center gap-1.5 sm:gap-2 text-[11px] font-mono leading-relaxed ${animate ? 'ping-new-line' : ''}`;
+    line.innerHTML = `
+      <span class="text-slate-300">Reply from <span class="text-slate-100 font-semibold">8.8.8.8</span>:</span>
+      <span class="text-slate-400">bytes=32</span>
+      <span class="text-emerald-400 font-bold">time=${time}ms</span>
+      <span class="text-slate-400">TTL=116</span>
+    `;
+    stream.appendChild(line);
+
+    // Limit stream DOM to latest 40 lines to maintain ultra-fast performance
+    if (stream.children.length > 40) {
+      stream.removeChild(stream.firstElementChild);
+    }
+
+    // Auto-scroll to bottom so user always sees the newest ping response
+    container.scrollTop = container.scrollHeight;
+  }
+
+  // Populate initial requested batch
+  initialReplies.forEach((time) => {
+    appendReplyLine(time, false);
+  });
+
+  if (statSent) statSent.textContent = packetsSent;
+  if (statRecv) statRecv.textContent = packetsSent;
+  if (statAvg) statAvg.textContent = `${Math.round(totalLatency / packetsSent)}ms`;
+
+  // Continuously generate realistic low-latency replies every 950ms
+  const pingInterval = setInterval(() => {
+    if (!document.body.contains(stream)) {
+      clearInterval(pingInterval);
+      return;
+    }
+
+    const time = realisticTimes[Math.floor(Math.random() * realisticTimes.length)];
+    packetsSent++;
+    totalLatency += time;
+
+    appendReplyLine(time, true);
+
+    if (statSent) statSent.textContent = packetsSent;
+    if (statRecv) statRecv.textContent = packetsSent;
+    if (statAvg) statAvg.textContent = `${Math.round(totalLatency / packetsSent)}ms`;
+  }, 950);
+}

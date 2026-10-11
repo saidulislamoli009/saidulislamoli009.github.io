@@ -174,17 +174,17 @@ const DEFAULT_PORTFOLIO_DATA = {
     }
   ],
   topologyShowcase: {
-    title: "Enterprise Multi-Area Network Architecture (Cisco Packet Tracer)",
-    badge: "Dual-WAN • Server Farm • Multi-VLAN Routing",
-    image: "assets/images/enterprise-network-topology.jpg",
-    description: "High-availability enterprise network architecture engineered in Cisco Packet Tracer. Features dual-ISP automatic WAN failover, dynamic Multi-Area OSPF routing, a dedicated DMZ server farm (ERP/DNS/DHCP), 3-tier switching, and department VLANs with VoIP QoS.",
+    title: "Enterprise Multi-Site Architecture & IPsec VPN (Project #7)",
+    badge: "Dual-WAN OSPF • IPsec VPN Tunnel • Server Farm",
+    image: "assets/images/enterprise-networking-project7.jpg",
+    description: "High-availability multi-site enterprise network architecture engineered in Cisco Packet Tracer. Features HQ Network with 6 department VLANs, Dual-ISP WAN failover (Main ISP & Backup ISP), Site-to-Site IPsec VPN Tunnel with ACL Rule-110 Extended, Branch Office Network with 6 department VLANs, and an isolated Server-Side Network farm (DHCP, DNS, Email, Web Server clusters) connected via Single-Area OSPF Area 10.",
     highlights: [
       { icon: "alt_route", label: "Dual-WAN OSPF", desc: "Dual ISP WAN Redundancy & Load Balancing" },
       { icon: "dns", label: "DMZ Server Farm", desc: "ERP, Web, DNS & DHCP Server Clusters" },
       { icon: "hub", label: "3-Tier Multi-VLAN", desc: "Core, Distribution & Access Layer Switching" },
       { icon: "security", label: "VoIP & Security", desc: "IP Telephony, ACL Filtering & Redundancy" }
     ],
-    tags: ["Cisco Packet Tracer", "Dual-WAN Failover", "OSPF Multi-Area", "DMZ Server Farm", "VLAN Segmentation", "VoIP Telephony"]
+    tags: ["Cisco Packet Tracer", "Dual-WAN Failover", "IPsec VPN Tunnel", "OSPF Multi-Area", "Server Farm", "VLAN Segmentation", "VoIP Telephony"]
   },
   apps: [
     {

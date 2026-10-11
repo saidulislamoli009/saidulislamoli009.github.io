@@ -535,7 +535,7 @@ html:not(.dark) .erp-tab-btn.active {
 }
 
 /* ==========================================================================
-   7. FUTURISTIC NETWORK TOPOLOGY & MIKROTIK INFRASTRUCTURE
+   7. FUTURISTIC NETWORK TOPOLOGY & CISCO PACKET TRACER SIMULATION
    ========================================================================== */
 .network-node {
   background: var(--bg-card);
@@ -569,6 +569,359 @@ html:not(.dark) .erp-tab-btn.active {
   0% { transform: scale(0.95); opacity: 0.8; }
   50% { transform: scale(1.5); opacity: 0; }
   100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* Stable Hover for Large Interactive Topology Showcase (Preserves Orange Glow without Shaking) */
+.topology-showcase-card,
+.topology-showcase-card:hover {
+  transform: none !important;
+}
+
+.topology-stage img,
+.topology-stage:hover img {
+  transform: none !important;
+}
+
+/* Cisco Packet Tracer Animated Flow System */
+.topology-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1024 / 546;
+  overflow: hidden;
+  background: #05070c;
+  border-radius: 1rem;
+}
+
+.topology-stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Overlay Layer for Animated Packets & Beacons */
+.topology-packet-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+/* Base Packet Styling - Glowing Laser Data Packet & Message Envelopes */
+.packet {
+  position: absolute;
+  width: 13px;
+  height: 9.5px;
+  pointer-events: none;
+  z-index: 15;
+  transform: translate(-50%, -50%);
+  will-change: top, left, opacity;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+/* Cisco Packet Tracer Simulation Message Envelope Box (PDU Packet) */
+.packet-msg {
+  width: 14px;
+  height: 10px;
+  border-radius: 1.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .packet-msg {
+    width: 17px;
+    height: 12px;
+  }
+}
+
+.packet-envelope {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Soft, Non-Glare Packet Styling (Gentle light glow for realistic simulation) */
+.packet-wan {
+  background: transparent;
+  color: #38bdf8;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 3px rgba(56, 189, 248, 0.45));
+}
+
+.packet-server {
+  background: transparent;
+  color: #fbbf24;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 3px rgba(251, 191, 36, 0.45));
+}
+
+.packet-vpn {
+  background: transparent;
+  color: #34d399;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 3px rgba(52, 211, 153, 0.45));
+}
+
+.packet-isp {
+  background: transparent;
+  color: #818cf8;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 3px rgba(129, 140, 248, 0.45));
+}
+
+.packet-cyan {
+  background: transparent;
+  color: #38bdf8;
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.45));
+}
+
+.packet-magenta {
+  background: transparent;
+  color: #f472b6;
+  filter: drop-shadow(0 0 3px rgba(244, 114, 182, 0.45));
+}
+
+.packet-yellow {
+  background: transparent;
+  color: #fbbf24;
+  filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.45));
+}
+
+.packet-emerald {
+  background: transparent;
+  color: #34d399;
+  filter: drop-shadow(0 0 3px rgba(52, 211, 153, 0.45));
+}
+
+/* Cisco Packet Tracer Port Activity LED System (Fast Live Blinking Link Lights) */
+.port-led {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 14;
+  transform: translate(-50%, -50%);
+  animation: port-led-blink 0.28s infinite alternate ease-in-out;
+}
+
+@media (min-width: 768px) {
+  .port-led {
+    width: 6.5px;
+    height: 6.5px;
+  }
+}
+
+.port-led-green {
+  background: #39ff14;
+  box-shadow: 0 0 4px #39ff14, 0 0 8px rgba(57, 255, 20, 0.9);
+}
+
+.port-led-amber {
+  background: #ffaa00;
+  box-shadow: 0 0 4px #ffaa00, 0 0 8px rgba(255, 170, 0, 0.9);
+}
+
+@keyframes port-led-blink {
+  0% {
+    opacity: 0.18;
+    transform: translate(-50%, -50%) scale(0.7);
+    filter: brightness(0.6);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+    filter: brightness(1.5);
+  }
+  100% {
+    opacity: 0.35;
+    transform: translate(-50%, -50%) scale(0.85);
+  }
+}
+
+/* Live ICMP Ping Terminal Console Styling */
+.ping-terminal-container {
+  background: #030712;
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.85), 0 0 25px rgba(0, 245, 212, 0.05);
+}
+
+#ping-terminal-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+#ping-terminal-body::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+#ping-terminal-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+#ping-terminal-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 204, 0.4);
+}
+
+.ping-new-line {
+  animation: pingLineFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pingLineFade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Router & Core Switch Pulsing Beacons */
+.packet-node-beacon {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 12;
+}
+
+.packet-node-beacon::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.95;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.packet-node-beacon::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  animation: packet-beacon-pulse 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+@keyframes packet-beacon-pulse {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  60% { transform: scale(2.0); opacity: 0.2; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* Router Beacons Color Themes */
+.beacon-cyan { color: #00ffcc; }
+.beacon-emerald { color: #00ff88; }
+.beacon-yellow { color: #ffcc00; }
+.beacon-magenta { color: #ff0055; }
+
+/* ==========================================================================
+   ENTERPRISE NETWORKING PROJECT #7 - PRECISION PACKET MOTION KEYFRAMES
+   Calculated with distance-proportional velocity for butter-smooth travel
+   ========================================================================== */
+
+@keyframes flow-p7-wan-fwd {
+  0.0% { left: 10.5%; top: 7.5%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  6.8% { left: 15.2%; top: 12%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  21.5% { left: 26.2%; top: 18.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  35.2% { left: 34.8%; top: 30.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  45.8% { left: 42.8%; top: 34.2%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  56.2% { left: 50.8%; top: 31%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  69.9% { left: 57.5%; top: 15.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  87.3% { left: 69.5%; top: 27.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100.0% { left: 78.5%; top: 19.5%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+}
+
+@keyframes flow-p7-wan-rev {
+  0.0% { left: 78.5%; top: 19.5%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  12.7% { left: 69.5%; top: 27.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  30.1% { left: 57.5%; top: 15.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  43.8% { left: 50.8%; top: 31%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  54.2% { left: 42.8%; top: 34.2%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  64.8% { left: 34.8%; top: 30.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  78.5% { left: 26.2%; top: 18.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  93.2% { left: 15.2%; top: 12%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100.0% { left: 10.5%; top: 7.5%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+}
+
+@keyframes flow-p7-srv-fwd {
+  0.0% { left: 11%; top: 55.5%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  8.7% { left: 15.5%; top: 57%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  34.3% { left: 28.8%; top: 53.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  60.3% { left: 34.8%; top: 30.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  84.4% { left: 39.5%; top: 52.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100.0% { left: 45.2%; top: 63.5%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+}
+
+@keyframes flow-p7-srv-rev {
+  0.0% { left: 45.2%; top: 63.5%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  15.6% { left: 39.5%; top: 52.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  39.7% { left: 34.8%; top: 30.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  65.7% { left: 28.8%; top: 53.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  91.3% { left: 15.5%; top: 57%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100.0% { left: 11%; top: 55.5%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+}
+
+@keyframes flow-p7-srvbr-fwd {
+  0.0% { left: 89.5%; top: 53%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  24.1% { left: 69.8%; top: 59.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  44.5% { left: 53.2%; top: 52.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  58.6% { left: 50.8%; top: 31%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  68.5% { left: 42.8%; top: 34.2%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  78.4% { left: 34.8%; top: 30.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  93.6% { left: 39.5%; top: 52.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100.0% { left: 37.8%; top: 62%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+}
+
+@keyframes flow-p7-srvbr-rev {
+  0.0% { left: 37.8%; top: 62%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  6.4% { left: 39.5%; top: 52.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  21.6% { left: 34.8%; top: 30.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  31.5% { left: 42.8%; top: 34.2%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  41.4% { left: 50.8%; top: 31%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  55.5% { left: 53.2%; top: 52.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  75.9% { left: 69.8%; top: 59.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100.0% { left: 89.5%; top: 53%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+}
+
+@keyframes flow-p7-isp-fwd {
+  0.0% { left: 10.5%; top: 22%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  6.3% { left: 15.5%; top: 26.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  19.4% { left: 26.2%; top: 18.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  31.5% { left: 34.8%; top: 30.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  42.6% { left: 36.8%; top: 12.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  62.1% { left: 50.8%; top: 31%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  74.2% { left: 57.5%; top: 15.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  87.9% { left: 69.5%; top: 12.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100.0% { left: 79.5%; top: 5.5%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+}
+
+@keyframes flow-p7-isp-rev {
+  0.0% { left: 79.5%; top: 5.5%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  12.1% { left: 69.5%; top: 12.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  25.8% { left: 57.5%; top: 15.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  37.9% { left: 50.8%; top: 31%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  57.4% { left: 36.8%; top: 12.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  68.5% { left: 34.8%; top: 30.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  80.6% { left: 26.2%; top: 18.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  93.7% { left: 15.5%; top: 26.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100.0% { left: 10.5%; top: 22%; opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+}
+
+
+/* Accessibility: Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .packet {
+    animation: none !important;
+    opacity: 0.25 !important;
+  }
+  .packet-node-beacon::after {
+    animation: none !important;
+  }
 }
 
 /* ==========================================================================

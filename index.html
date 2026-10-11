@@ -826,72 +826,259 @@
                 </div>
 
                 <!-- Enterprise Network Topology & Architecture Showcase (Cisco Packet Tracer) -->
-                <div class="bento-card p-6 sm:p-8 rounded-3xl border border-white/10 hover:border-brand-cyan/40 transition-all flex flex-col lg:flex-row gap-8 items-center group">
+                <div class="bento-card topology-showcase-card no-tilt p-6 sm:p-8 md:p-10 rounded-3xl border border-white/10 hover:border-brand-cyan/40 transition-all flex flex-col gap-8 group">
                     
-                    <!-- Left: Diagram Interactive Viewer -->
-                    <div class="w-full lg:w-7/12 relative aspect-[16/9] sm:aspect-[21/9] lg:aspect-[16/9] rounded-2xl overflow-hidden border border-white/15 bg-[#05070c] shadow-2xl app-preview-trigger cursor-pointer group/img" data-img="assets/images/enterprise-network-topology.jpg" data-title="Enterprise Multi-Area Network Architecture (Cisco Packet Tracer)" data-desc="Dual-WAN Load Balancing • OSPF Multi-Area • DMZ Server Farm • 3-Tier Multi-VLAN Switching">
-                        <img src="assets/images/enterprise-network-topology.jpg" alt="Enterprise Multi-Area Network Topology Design - Cisco Packet Tracer" class="w-full h-full object-cover object-center group-hover/img:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-bg-deep/90 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity flex items-end justify-between p-4">
-                            <span class="text-xs font-mono font-bold text-brand-cyan bg-brand-cyan/10 px-3 py-1.5 rounded-lg border border-brand-cyan/30 backdrop-blur-md flex items-center gap-1.5">
-                                <span class="material-symbols-outlined text-sm">zoom_in</span> Click to Inspect Full Diagram
-                            </span>
-                            <span class="material-symbols-outlined text-brand-cyan bg-white/10 rounded-full p-1.5 text-sm">fullscreen</span>
+                    <!-- Diagram Interactive Viewer + Live Ping Terminal (Full Width Hero Showcase) -->
+                    <div class="w-full flex flex-col gap-4">
+                        
+                        <!-- Diagram Interactive Viewer with Live Packet Message Simulation -->
+                        <div class="topology-stage w-full relative rounded-2xl overflow-hidden border border-white/15 bg-[#05070c] shadow-2xl app-preview-trigger cursor-pointer group/img select-none hover:border-brand-cyan/40 transition-all duration-300"
+                             data-img="assets/images/enterprise-networking-project7.jpg"
+                             data-title="Enterprise Networking Project #7 • Multi-Site Architecture & IPsec VPN (Cisco Packet Tracer)"
+                             data-desc="Dual ISP WAN Redundancy • Site-to-Site IPsec VPN Tunnel • DMZ Server Farm • Multi-Area OSPF • 12 Department VLANs"
+                             style="aspect-ratio: 1024 / 546;">
+                            
+                            <!-- Base Topology Diagram Image (Enterprise Project #7) -->
+                            <img src="assets/images/enterprise-networking-project7.jpg" 
+                                 alt="Design Document - Enterprise Networking Project #7 - Cisco Packet Tracer" 
+                                 class="w-full h-full object-cover object-center transition-transform duration-500 block"
+                                 loading="lazy">
+
+                            <!-- Live Animated Packet Flow & Port Blink Overlay Layer -->
+                            <div class="topology-packet-layer absolute inset-0 pointer-events-none z-10" aria-hidden="true">
+                                
+                                <!-- Core Node Pulsing Beacons (Project #7 Core Infrastructure) -->
+                                <div class="packet-node-beacon beacon-cyan" style="left: 34.8%; top: 30.5%;" title="HQ Core Router (OSPF Area 10)"></div>
+                                <div class="packet-node-beacon beacon-cyan" style="left: 50.8%; top: 31.0%;" title="Branch Core Router (OSPF Area 10)"></div>
+                                <div class="packet-node-beacon beacon-emerald" style="left: 36.8%; top: 12.5%;" title="Main ISP Cloud Gateway"></div>
+                                <div class="packet-node-beacon beacon-emerald" style="left: 45.8%; top: 12.5%;" title="Backup ISP Cloud Gateway"></div>
+                                <div class="packet-node-beacon beacon-cyan" style="left: 26.2%; top: 18.5%;" title="HQ-Multilayer Switch 1"></div>
+                                <div class="packet-node-beacon beacon-cyan" style="left: 28.8%; top: 53.5%;" title="HQ-Multilayer Switch 2"></div>
+                                <div class="packet-node-beacon beacon-magenta" style="left: 57.5%; top: 15.5%;" title="BR-Multilayer Switch 1"></div>
+                                <div class="packet-node-beacon beacon-magenta" style="left: 53.2%; top: 52.5%;" title="BR-Multilayer Switch 2"></div>
+                                <div class="packet-node-beacon beacon-yellow" style="left: 39.5%; top: 52.5%;" title="Server-Side Network Switch"></div>
+
+                                <!-- Fast Blinking Port Activity Link LEDs across all interfaces -->
+                                <div class="port-led port-led-green" style="left: 35.5%; top: 31.0%; animation-duration: 0.22s; animation-delay: 0.03s;" title="HQ-Router Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 36.0%; top: 29.7%; animation-duration: 0.27s; animation-delay: 0.08s;" title="HQ-Router Port Link 2"></div>
+                                <div class="port-led port-led-green" style="left: 26.3%; top: 17.5%; animation-duration: 0.28s; animation-delay: 0.09s;" title="HQ-Multilayer1 Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 27.4%; top: 17.7%; animation-duration: 0.21s; animation-delay: 0.16s;" title="HQ-Multilayer1 Port Link 2"></div>
+                                <div class="port-led port-led-green" style="left: 28.0%; top: 53.8%; animation-duration: 0.19s; animation-delay: 0.15s;" title="HQ-Multilayer2 Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 30.0%; top: 52.7%; animation-duration: 0.27s; animation-delay: 0.00s;" title="HQ-Multilayer2 Port Link 2"></div>
+                                <div class="port-led port-led-amber" style="left: 37.3%; top: 13.3%; animation-duration: 0.25s; animation-delay: 0.21s;" title="Main-ISP Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 46.6%; top: 12.4%; animation-duration: 0.28s; animation-delay: 0.00s;" title="Backup-ISP Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 51.1%; top: 30.1%; animation-duration: 0.31s; animation-delay: 0.03s;" title="BR-Router Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 52.0%; top: 30.2%; animation-duration: 0.27s; animation-delay: 0.16s;" title="BR-Router Port Link 2"></div>
+                                <div class="port-led port-led-green" style="left: 56.7%; top: 15.5%; animation-duration: 0.22s; animation-delay: 0.09s;" title="BR-Multilayer1 Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 58.7%; top: 14.7%; animation-duration: 0.21s; animation-delay: 0.00s;" title="BR-Multilayer1 Port Link 2"></div>
+                                <div class="port-led port-led-green" style="left: 53.5%; top: 53.4%; animation-duration: 0.28s; animation-delay: 0.15s;" title="BR-Multilayer2 Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 54.4%; top: 51.7%; animation-duration: 0.27s; animation-delay: 0.08s;" title="BR-Multilayer2 Port Link 2"></div>
+                                <div class="port-led port-led-green" style="left: 40.0%; top: 51.7%; animation-duration: 0.19s; animation-delay: 0.21s;" title="Server-SW Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 40.7%; top: 51.7%; animation-duration: 0.21s; animation-delay: 0.16s;" title="Server-SW Port Link 2"></div>
+                                <div class="port-led port-led-green" style="left: 37.0%; top: 61.7%; animation-duration: 0.25s; animation-delay: 0.03s;" title="DHCP-Server Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 39.6%; top: 65.2%; animation-duration: 0.28s; animation-delay: 0.06s;" title="DNS-Server Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 42.6%; top: 66.5%; animation-duration: 0.31s; animation-delay: 0.09s;" title="Email-Server Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 45.9%; top: 63.9%; animation-duration: 0.19s; animation-delay: 0.12s;" title="Web-Server Port Link"></div>
+                                <div class="port-led port-led-amber" style="left: 15.9%; top: 11.5%; animation-duration: 0.22s; animation-delay: 0.15s;" title="MLOS-SW Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 15.5%; top: 25.5%; animation-duration: 0.25s; animation-delay: 0.18s;" title="MER-SW Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 14.8%; top: 41.0%; animation-duration: 0.28s; animation-delay: 0.21s;" title="WFIM-SW Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 14.8%; top: 57.4%; animation-duration: 0.31s; animation-delay: 0.00s;" title="IT-SW Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 15.4%; top: 73.0%; animation-duration: 0.19s; animation-delay: 0.03s;" title="CS-SW Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 16.1%; top: 87.6%; animation-duration: 0.22s; animation-delay: 0.06s;" title="GWA-SW Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 70.3%; top: 12.2%; animation-duration: 0.25s; animation-delay: 0.09s;" title="NSO-SW Port Link"></div>
+                                <div class="port-led port-led-amber" style="left: 69.7%; top: 26.5%; animation-duration: 0.28s; animation-delay: 0.12s;" title="NL-SW Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 69.0%; top: 41.8%; animation-duration: 0.31s; animation-delay: 0.15s;" title="NB-SW Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 69.0%; top: 59.7%; animation-duration: 0.19s; animation-delay: 0.18s;" title="MK-SW Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 69.5%; top: 74.9%; animation-duration: 0.22s; animation-delay: 0.21s;" title="PN-SW Port Link"></div>
+                                <div class="port-led port-led-green" style="left: 70.2%; top: 89.3%; animation-duration: 0.25s; animation-delay: 0.00s;" title="BR-GWA-SW Port Link"></div>
+
+                                <!-- Flow 1: HQ User Device to Branch User Device via IPsec VPN Tunnel (Soft Sky-Blue WAN) -->
+                                <div class="packet packet-msg packet-wan" style="animation-name: flow-p7-wan-fwd; animation-duration: 5.4s; animation-delay: 0s;" title="HQ MLOS PC -> IPsec VPN Tunnel -> Branch NL PC">
+                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </div>
+                                <!-- Flow 1 Return: Branch User Device to HQ User Device Reply (Soft Sky-Blue Reply) -->
+                                <div class="packet packet-msg packet-wan" style="animation-name: flow-p7-wan-rev; animation-duration: 5.4s; animation-delay: 2.7s;" title="Branch NL PC -> IPsec VPN Reply -> HQ MLOS PC">
+                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </div>
+
+                                <!-- Flow 2: HQ User Device to Server-Side Farm (Soft Amber Server Packet) -->
+                                <div class="packet packet-msg packet-server" style="animation-name: flow-p7-srv-fwd; animation-duration: 3.8s; animation-delay: 0.4s;" title="HQ IT PC -> Web Server Query">
+                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </div>
+                                <!-- Flow 2 Return: Server-Side Farm to HQ User Device Reply (Soft Amber Reply) -->
+                                <div class="packet packet-msg packet-server" style="animation-name: flow-p7-srv-rev; animation-duration: 3.8s; animation-delay: 2.3s;" title="Web Server -> HTTP 200 Response -> HQ IT PC">
+                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </div>
+
+                                <!-- Flow 3: Branch User Device to Server-Side Farm (Soft Mint Emerald) -->
+                                <div class="packet packet-msg packet-vpn" style="animation-name: flow-p7-srvbr-fwd; animation-duration: 4.6s; animation-delay: 1.0s;" title="Branch MK Laptop -> VPN -> DHCP/DNS Request">
+                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </div>
+                                <!-- Flow 3 Return: Server-Side Farm to Branch User Device Reply -->
+                                <div class="packet packet-msg packet-vpn" style="animation-name: flow-p7-srvbr-rev; animation-duration: 4.6s; animation-delay: 3.3s;" title="DHCP Server -> DHCP ACK Reply -> Branch MK Laptop">
+                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </div>
+
+                                <!-- Flow 4: Dual-ISP Redundant Link via Main ISP (Soft Indigo/Lavender) -->
+                                <div class="packet packet-msg packet-isp" style="animation-name: flow-p7-isp-fwd; animation-duration: 5.6s; animation-delay: 1.5s;" title="HQ MER PC -> Main ISP Failover Link -> Branch NSO Laptop">
+                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </div>
+                                <!-- Flow 4 Return: Branch to HQ via Main ISP Reply -->
+                                <div class="packet packet-msg packet-isp" style="animation-name: flow-p7-isp-rev; animation-duration: 5.6s; animation-delay: 4.3s;" title="Branch NSO Laptop -> Main ISP -> HQ MER PC">
+                                    <svg viewBox="0 0 16 12" class="packet-envelope" fill="none"><rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.1"/><path d="M1.5 1.5L8 6.5L14.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </div>
+
+                            </div>
+
+                            <!-- Live Simulation HUD Badges -->
+                            <div class="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-20 pointer-events-none flex items-center gap-2 bg-[#05070c]/85 border border-brand-cyan/30 backdrop-blur-md px-2.5 py-1 rounded-full shadow-lg">
+                                <span class="relative flex h-2 w-2">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                </span>
+                                <span class="text-[9px] sm:text-[10px] font-mono font-semibold tracking-wider text-slate-200">
+                                    CISCO SIMULATION <span class="text-brand-cyan font-bold">• PDU PACKET FLOW</span>
+                                </span>
+                            </div>
+
+                            <div class="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-20 pointer-events-none hidden sm:flex items-center gap-3 bg-[#05070c]/85 border border-white/10 backdrop-blur-md px-2.5 py-1 rounded-full text-[9px] font-mono text-slate-400 shadow-lg">
+                                <span class="flex items-center gap-1.5">
+                                    <svg viewBox="0 0 14 10" class="size-3 text-[#38bdf8]" fill="none"><rect x="0.5" y="0.5" width="13" height="9" rx="1" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1"/><path d="M1 1l6 4.5 6-4.5" stroke="currentColor" stroke-width="1"/></svg>
+                                    WAN / IPsec VPN
+                                </span>
+                                <span class="flex items-center gap-1.5">
+                                    <svg viewBox="0 0 14 10" class="size-3 text-[#fbbf24]" fill="none"><rect x="0.5" y="0.5" width="13" height="9" rx="1" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1"/><path d="M1 1l6 4.5 6-4.5" stroke="currentColor" stroke-width="1"/></svg>
+                                    Server Farm
+                                </span>
+                                <span class="flex items-center gap-1.5">
+                                    <svg viewBox="0 0 14 10" class="size-3 text-[#34d399]" fill="none"><rect x="0.5" y="0.5" width="13" height="9" rx="1" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1"/><path d="M1 1l6 4.5 6-4.5" stroke="currentColor" stroke-width="1"/></svg>
+                                    Branch Query
+                                </span>
+                            </div>
+
+                            <!-- Hover Action Bar: Click to Inspect Full Diagram -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-bg-deep/90 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity flex items-end justify-between p-4 z-20 pointer-events-none">
+                                <span class="text-xs font-mono font-bold text-brand-cyan bg-brand-cyan/10 px-3 py-1.5 rounded-lg border border-brand-cyan/30 backdrop-blur-md flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-sm">zoom_in</span> Click to Inspect Full Diagram
+                                </span>
+                                <span class="material-symbols-outlined text-brand-cyan bg-white/10 rounded-full p-1.5 text-sm">fullscreen</span>
+                            </div>
                         </div>
+
+                        <!-- Live WAN Ping & Latency Terminal (ping 8.8.8.8 -t) -->
+                        <div class="ping-terminal-container w-full rounded-2xl border border-white/10 bg-[#030712] overflow-hidden shadow-2xl font-mono text-xs select-none">
+                            <!-- Terminal Titlebar -->
+                            <div class="px-3.5 py-2 bg-white/[0.04] border-b border-white/10 flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-2 text-slate-300">
+                                    <span class="material-symbols-outlined text-sm text-brand-cyan">terminal</span>
+                                    <span class="text-[11px] font-semibold text-slate-200 tracking-wide flex items-center gap-1.5">
+                                        C:\Windows\System32\cmd.exe <span class="text-slate-500">—</span> <span class="text-brand-cyan font-bold">ping 8.8.8.8 -t</span>
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold">
+                                        <span class="relative flex h-1.5 w-1.5">
+                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                                        </span>
+                                        <span>0% LOSS • STABLE</span>
+                                    </div>
+                                    <div class="hidden sm:flex items-center gap-1.5">
+                                        <span class="size-2.5 rounded-full bg-white/20"></span>
+                                        <span class="size-2.5 rounded-full bg-amber-400/80"></span>
+                                        <span class="size-2.5 rounded-full bg-emerald-400/80"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Terminal Output Area -->
+                            <div id="ping-terminal-body" class="p-3.5 sm:p-4 text-[11px] sm:text-xs leading-relaxed max-h-[175px] min-h-[165px] overflow-y-auto space-y-0.5 text-slate-300 bg-gradient-to-b from-[#030712] to-[#050917] font-mono scrollbar-thin scrollbar-thumb-white/10">
+                                <div class="text-slate-400">Microsoft Windows [Version 10.0.19045.4291]</div>
+                                <div class="text-slate-500">(c) Microsoft Corporation. All rights reserved.</div>
+                                <div class="pt-1 text-slate-200">
+                                    <span class="text-brand-cyan">C:\Users\SaiDuL&gt;</span> ping 8.8.8.8 -t
+                                </div>
+                                <div class="text-slate-400 pb-1">Pinging 8.8.8.8 with 32 bytes of data:</div>
+                                <div id="ping-replies-stream" class="space-y-0.5"></div>
+                            </div>
+
+                            <!-- Terminal Status Footer -->
+                            <div class="px-3.5 sm:px-4 py-2 bg-white/[0.02] border-t border-white/5 flex flex-wrap items-center justify-between text-[10px] sm:text-[11px] text-slate-400 gap-2 font-mono">
+                                <div class="flex items-center gap-3 sm:gap-4">
+                                    <span>Sent: <strong id="ping-stat-sent" class="text-white">7</strong></span>
+                                    <span>Recv: <strong id="ping-stat-recv" class="text-emerald-400">7</strong></span>
+                                    <span>Loss: <strong class="text-emerald-400">0 (0%)</strong></span>
+                                </div>
+                                <div class="flex items-center gap-2 sm:gap-3">
+                                    <span>Min: <strong class="text-brand-cyan">1ms</strong></span>
+                                    <span>Max: <strong class="text-brand-cyan">9ms</strong></span>
+                                    <span>Avg: <strong id="ping-stat-avg" class="text-brand-cyan">4ms</strong></span>
+                                    <span class="text-emerald-400 font-bold hidden md:inline">• 100% OPERATIONAL FIBER LINK</span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <!-- Right: Architecture Details & Highlights -->
-                    <div class="w-full lg:w-5/12 flex flex-col gap-4">
-                        <div class="flex items-center gap-2">
-                            <span class="size-2 rounded-full bg-brand-cyan animate-ping"></span>
-                            <span class="text-[10px] font-mono font-bold text-brand-cyan px-2.5 py-0.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 uppercase tracking-wider">
-                                Architecture Blueprint
-                            </span>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white font-heading group-hover:text-brand-cyan transition-colors">
-                            Enterprise Multi-Area Network & Server Farm Topology
-                        </h3>
-                        <p class="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">
-                            High-availability enterprise network architecture engineered in Cisco Packet Tracer. Features dual-ISP automatic WAN failover, dynamic Multi-Area OSPF routing, a dedicated DMZ server farm (ERP/DNS/DHCP), 3-tier switching, and department VLANs with VoIP QoS.
-                        </p>
+                    <!-- Bottom: Architecture Details & Key Highlights (Full Width Below Diagram) -->
+                    <div class="w-full flex flex-col gap-6 pt-4 border-t border-white/10">
+                        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                            <div class="flex flex-col gap-2.5 max-w-3xl">
+                                <div class="flex items-center gap-2">
+                                    <span class="size-2 rounded-full bg-brand-cyan animate-ping"></span>
+                                    <span class="text-[10px] font-mono font-bold text-brand-cyan px-2.5 py-0.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 uppercase tracking-wider">
+                                        Architecture Blueprint
+                                    </span>
+                                </div>
+                                <h3 class="text-2xl sm:text-3xl font-bold text-white font-heading group-hover:text-brand-cyan transition-colors">
+                                    Enterprise Multi-Site Architecture & IPsec VPN (Project #7)
+                                </h3>
+                                <p class="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">
+                                    High-availability multi-site enterprise network architecture engineered in Cisco Packet Tracer. Features HQ Network with 6 department VLANs, Dual-ISP WAN failover (Main ISP & Backup ISP), Site-to-Site IPsec VPN Tunnel with ACL Rule-110 Extended, Branch Office Network with 6 department VLANs, and an isolated Server-Side Network farm (DHCP, DNS, Email, Web Server clusters) connected via Single-Area OSPF Area 10.
+                                </p>
+                            </div>
 
-                        <!-- Key Architecture Pillars -->
-                        <div class="grid grid-cols-2 gap-3 pt-2">
-                            <div class="p-3 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col gap-1">
-                                <div class="flex items-center gap-1.5 text-brand-cyan font-bold text-xs font-mono">
-                                    <span class="material-symbols-outlined text-sm">alt_route</span>
+                            <!-- Highlights Tags -->
+                            <div class="flex flex-wrap gap-2 lg:justify-end items-center self-start lg:self-center">
+                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/30 font-semibold flex items-center gap-1.5">
+                                    <span class="size-1.5 rounded-full bg-brand-cyan"></span> Cisco Packet Tracer
+                                </span>
+                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-white/5 text-slate-300 border border-white/10">Dual-WAN Failover</span>
+                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-white/5 text-slate-300 border border-white/10">EtherChannel Core</span>
+                                <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-white/5 text-slate-300 border border-white/10">DMZ Server Farm</span>
+                            </div>
+                        </div>
+
+                        <!-- Key Architecture Pillars (4 Columns Across Full Width) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-brand-cyan/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
+                                <div class="flex items-center gap-2 text-brand-cyan font-bold text-sm font-mono">
+                                    <span class="material-symbols-outlined text-lg">alt_route</span>
                                     <span>Dual-WAN OSPF</span>
                                 </div>
-                                <span class="text-[11px] text-slate-400">Dual ISP WAN Redundancy & Load Balancing</span>
+                                <span class="text-xs text-slate-400 leading-relaxed">Dual ISP WAN Redundancy, dynamic routing failover & multi-path traffic balancing.</span>
                             </div>
-                            <div class="p-3 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col gap-1">
-                                <div class="flex items-center gap-1.5 text-amber-400 font-bold text-xs font-mono">
-                                    <span class="material-symbols-outlined text-sm">dns</span>
+                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-amber-400/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
+                                <div class="flex items-center gap-2 text-amber-400 font-bold text-sm font-mono">
+                                    <span class="material-symbols-outlined text-lg">dns</span>
                                     <span>DMZ Server Farm</span>
                                 </div>
-                                <span class="text-[11px] text-slate-400">ERP, Web, DNS & DHCP Server Clusters</span>
+                                <span class="text-xs text-slate-400 leading-relaxed">ERP, Web, DNS & DHCP isolated high-availability server cluster with perimeter ACLs.</span>
                             </div>
-                            <div class="p-3 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col gap-1">
-                                <div class="flex items-center gap-1.5 text-purple-400 font-bold text-xs font-mono">
-                                    <span class="material-symbols-outlined text-sm">hub</span>
+                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-purple-400/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
+                                <div class="flex items-center gap-2 text-purple-400 font-bold text-sm font-mono">
+                                    <span class="material-symbols-outlined text-lg">hub</span>
                                     <span>3-Tier Multi-VLAN</span>
                                 </div>
-                                <span class="text-[11px] text-slate-400">Core, Distribution & Access Layer Switching</span>
+                                <span class="text-xs text-slate-400 leading-relaxed">Core, Distribution & Access layer switching with L3 inter-VLAN routing & 802.1Q trunking.</span>
                             </div>
-                            <div class="p-3 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col gap-1">
-                                <div class="flex items-center gap-1.5 text-emerald-400 font-bold text-xs font-mono">
-                                    <span class="material-symbols-outlined text-sm">security</span>
+                            <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-emerald-400/40 hover:bg-white/[0.05] transition-all flex flex-col gap-2">
+                                <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm font-mono">
+                                    <span class="material-symbols-outlined text-lg">security</span>
                                     <span>VoIP & Security</span>
                                 </div>
-                                <span class="text-[11px] text-slate-400">IP Telephony, ACL Filtering & Redundancy</span>
+                                <span class="text-xs text-slate-400 leading-relaxed">Voice VLAN priority with QoS queuing, ACL security filtering & port-security hardening.</span>
                             </div>
-                        </div>
-
-                        <!-- Highlights Tags -->
-                        <div class="pt-3 border-t border-white/5 flex flex-wrap gap-1.5">
-                            <span class="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/30">Cisco Packet Tracer</span>
-                            <span class="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-white/5 text-slate-300">Dual-WAN Failover</span>
-                            <span class="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-white/5 text-slate-300">OSPF Multi-Area</span>
-                            <span class="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-white/5 text-slate-300">DMZ Server Farm</span>
                         </div>
                     </div>
 
