@@ -2082,11 +2082,17 @@ html:not(.dark) .arcade-tab-btn[data-game="space"].active {
   }
 
   #printable-cv-area .cv-print-page-header {
-    display: none !important;
+    display: block !important;
   }
 
   #printable-cv-area .html2pdf__page-break {
-    display: none !important;
+    display: block !important;
+    break-before: page;
+    page-break-before: always;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
   }
 
   #printable-cv-area .flex-col.justify-between {
