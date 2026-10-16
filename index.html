@@ -20,14 +20,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-    <!-- HTML2PDF for Ultra-Reliable PDF Generation (Local with CDN Fallback) -->
-    <script src="assets/js/html2pdf.bundle.min.js?v=3.2.0"></script>
-    <script>
-      if (typeof html2pdf === 'undefined') {
-        document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\/script>');
-      }
-    </script>
-
     <!-- Three.js CDN for Interactive 3D Enterprise Network Mesh -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
@@ -1777,58 +1769,76 @@
                     "You've reached the end of my portfolio. Why not play a little? Progress through three interconnected challenges."
                 </p>
 
-                <!-- 3-Tier Interactive Progression Road -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-3xl pt-2">
-                    <!-- Tier 1 -->
-                    <a href="#cat-runner-section" class="p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-orange-500/50 transition-all flex items-center gap-3 text-left group">
-                        <div class="size-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                <!-- 3 Interactive Arcade Game Options / Tabs -->
+                <div id="arcade-tabs-container" class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-3xl pt-2">
+                    <!-- Option 1: Cat Runner -->
+                    <button type="button" id="tab-cat-runner" data-game="cat" class="arcade-tab-btn active p-3.5 rounded-2xl border transition-all flex items-center gap-3 text-left group cursor-pointer w-full relative overflow-hidden" aria-selected="true" role="tab">
+                        <div class="size-11 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
                             🐱
                         </div>
-                        <div class="flex flex-col">
-                            <span class="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
-                                <span>✓</span> UNLOCKED
-                            </span>
-                            <h4 class="text-xs font-bold text-white font-heading">1. Cat Runner</h4>
-                            <span class="text-[9.5px] font-mono text-slate-400">Target: 6,000 pts</span>
+                        <div class="flex flex-col flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-1">
+                                <span class="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
+                                    <span>✓</span> UNLOCKED
+                                </span>
+                                <span class="arcade-active-pill text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-orange-500/25 text-orange-300 border border-orange-500/40 flex items-center gap-1">
+                                    <span class="size-1.5 rounded-full bg-orange-400 animate-ping"></span> PLAYING
+                                </span>
+                            </div>
+                            <h4 class="text-xs sm:text-sm font-bold text-white font-heading truncate">1. Cat Runner</h4>
+                            <span class="text-[9.5px] font-mono text-slate-400 truncate">Target: 6,000 pts &bull; Nature Run</span>
                         </div>
-                    </a>
+                    </button>
 
-                    <!-- Tier 2 -->
-                    <a href="#robot-escape-section" class="p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-orange-500/50 transition-all flex items-center gap-3 text-left group">
-                        <div class="size-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                    <!-- Option 2: Mars Robot Escape -->
+                    <button type="button" id="tab-robot-escape" data-game="robot" class="arcade-tab-btn p-3.5 rounded-2xl border transition-all flex items-center gap-3 text-left group cursor-pointer w-full relative overflow-hidden" aria-selected="false" role="tab">
+                        <div class="size-11 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
                             🪐
                         </div>
-                        <div class="flex flex-col">
-                            <span id="hub-robot-status" class="text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1">
-                                <span>🔒</span> 6,000 pts
-                            </span>
-                            <h4 class="text-xs font-bold text-white font-heading">2. Mars Robot Escape</h4>
-                            <span class="text-[9.5px] font-mono text-slate-400">Target: 10,000 pts</span>
+                        <div class="flex flex-col flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-1">
+                                <span id="hub-robot-status" class="text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1">
+                                    <span>🔒</span> 6,000 pts
+                                </span>
+                                <span class="arcade-active-pill hidden text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-300 border border-amber-500/40 items-center gap-1">
+                                    <span class="size-1.5 rounded-full bg-amber-400 animate-ping"></span> PLAYING
+                                </span>
+                            </div>
+                            <h4 class="text-xs sm:text-sm font-bold text-white font-heading truncate">2. Mars Robot Escape</h4>
+                            <span class="text-[9.5px] font-mono text-slate-400 truncate">Target: 10,000 pts &bull; Titan &amp; Mars</span>
                         </div>
-                    </a>
+                    </button>
 
-                    <!-- Tier 3 -->
-                    <a href="#space-escape-section" class="p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 transition-all flex items-center gap-3 text-left group">
-                        <div class="size-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                    <!-- Option 3: Space Escape -->
+                    <button type="button" id="tab-space-escape" data-game="space" class="arcade-tab-btn p-3.5 rounded-2xl border transition-all flex items-center gap-3 text-left group cursor-pointer w-full relative overflow-hidden" aria-selected="false" role="tab">
+                        <div class="size-11 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
                             🚀
                         </div>
-                        <div class="flex flex-col">
-                            <span id="hub-space-status" class="text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1">
-                                <span>🔒</span> 10,000 Robot pts
-                            </span>
-                            <h4 class="text-xs font-bold text-white font-heading">3. Space Escape</h4>
-                            <span class="text-[9.5px] font-mono text-slate-400">Final Challenge</span>
+                        <div class="flex flex-col flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-1">
+                                <span id="hub-space-status" class="text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1">
+                                    <span>🔒</span> 10,000 pts
+                                </span>
+                                <span class="arcade-active-pill hidden text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-500/25 text-cyan-300 border border-cyan-500/40 items-center gap-1">
+                                    <span class="size-1.5 rounded-full bg-cyan-400 animate-ping"></span> PLAYING
+                                </span>
+                            </div>
+                            <h4 class="text-xs sm:text-sm font-bold text-white font-heading truncate">3. Space Escape</h4>
+                            <span class="text-[9.5px] font-mono text-slate-400 truncate">Final Challenge &bull; Space Flight</span>
                         </div>
-                    </a>
+                    </button>
                 </div>
 
             </div>
         </div>
 
+        <!-- Unified Arcade Showcase Panels (Only Active Game is Displayed & Playable) -->
+        <div id="arcade-game-panels" class="w-full">
+
         <!-- =====================================================================
              10. INTERACTIVE 2D CAT RUNNER MINI-GAME (EASTER EGG BREAK)
              ===================================================================== -->
-        <section id="cat-runner-section" class="w-full flex justify-center py-12 px-4 md:px-8 lg:px-16 relative reveal-on-scroll">
+        <section id="cat-runner-section" class="arcade-game-panel w-full flex justify-center py-6 sm:py-8 px-4 md:px-8 lg:px-16 relative is-revealed">
             <div class="max-w-[1000px] w-full flex flex-col items-center gap-7 relative z-10">
                 
                 <!-- Section Header -->
@@ -1972,7 +1982,7 @@
         <!-- =====================================================================
              11. UNLOCKABLE BONUS MINI-GAME: 2D MARS ROBOT ESCAPE
              ===================================================================== -->
-        <section id="robot-escape-section" class="w-full flex justify-center py-12 px-4 md:px-8 lg:px-16 border-t border-white/5 relative reveal-on-scroll">
+        <section id="robot-escape-section" class="arcade-game-panel hidden w-full flex justify-center py-6 sm:py-8 px-4 md:px-8 lg:px-16 relative is-revealed">
             <div class="max-w-[1000px] w-full flex flex-col items-center gap-7 relative z-10">
                 
                 <!-- Section Header -->
@@ -2161,7 +2171,7 @@
         <!-- =====================================================================
              12. FINAL CHALLENGE MINI-GAME: 2D SPACE ESCAPE
              ===================================================================== -->
-        <section id="space-escape-section" class="w-full flex justify-center py-12 px-4 md:px-8 lg:px-16 border-t border-white/5 relative reveal-on-scroll">
+        <section id="space-escape-section" class="arcade-game-panel hidden w-full flex justify-center py-6 sm:py-8 px-4 md:px-8 lg:px-16 relative is-revealed">
             <div class="max-w-[1000px] w-full flex flex-col items-center gap-7 relative z-10">
                 
                 <!-- Section Header -->
@@ -2350,6 +2360,9 @@
             </div>
         </section>
 
+        </div>
+        <!-- End of #arcade-game-panels -->
+
     </main>
 
     <!-- =========================================================================
@@ -2396,9 +2409,9 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2.5">
-                    <button id="download-cv-pdf-btn" class="btn-signature-cyan px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-lg">
+                    <a id="download-cv-pdf-btn" href="Saidul_CV_Clean_Export.pdf" download="Saidul_CV_Clean_Export.pdf" class="btn-signature-cyan px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-lg">
                         <span class="material-symbols-outlined text-sm">download</span> Download PDF
-                    </button>
+                    </a>
                     <button id="print-cv-btn" class="btn-ghost-glass px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer text-slate-200 hover:text-primary">
                         <span class="material-symbols-outlined text-sm">print</span> Print
                     </button>
@@ -2448,7 +2461,7 @@
                             </div>
                         </div>
                         
-                        <div class="size-20 sm:size-24 rounded-xl overflow-hidden border-2 border-slate-300 shrink-0 shadow-md bg-slate-100 self-center">
+                        <div class="cv-avatar-frame size-20 sm:size-24 rounded-xl overflow-hidden border-2 border-slate-300 shrink-0 shadow-md bg-slate-100 self-center">
                             <img id="cv-avatar-img" src="assets/images/saidul-avatar.jpg" alt="Saidul Islam" class="w-full h-full object-cover object-top">
                         </div>
                     </div>
@@ -2581,7 +2594,7 @@
                             </div>
 
                             <!-- Role 2: AL-Mugni ISP -->
-                            <div class="avoid-break p-2.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
+                            <div class="avoid-break cv-isp-experience p-2.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-200 pb-1">
                                     <div>
                                         <h5 class="font-bold text-slate-900 text-xs sm:text-[13px]">AL-Mugni Information & Technology (ISP)</h5>
@@ -2618,7 +2631,7 @@
                 <div class="cv-page cv-page-2 flex flex-col justify-between space-y-2">
                     
                     <!-- Mini Page 2 Header for Context (With matching top margin) -->
-                    <div class="avoid-break flex items-center justify-between pb-1.5 border-b-2 border-slate-300 text-slate-600 text-[10.5px] font-mono">
+                    <div class="avoid-break cv-print-page-header flex items-center justify-between pb-1.5 border-b-2 border-slate-300 text-slate-600 text-[10.5px] font-mono">
                         <span class="font-bold text-slate-900 tracking-wide text-[11px]">Curriculum Vitae &bull; SAIDUL ISLAM</span>
                         <span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-semibold text-[10px]">Page 2 of 2</span>
                     </div>
@@ -2712,7 +2725,7 @@
                     </div>
 
                     <!-- 8. Education & Certifications (Exact from PDF) -->
-                    <div class="avoid-break space-y-1">
+                    <div class="avoid-break cv-education-section space-y-1">
                         <h4 class="text-[11px] font-bold text-orange-600 uppercase tracking-widest flex items-center gap-1 border-b border-orange-200 pb-0.5">
                             <span class="material-symbols-outlined text-xs">school</span> Education & Certifications
                         </h4>

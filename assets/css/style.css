@@ -1885,3 +1885,284 @@ html:not(.dark) .arcade-hub-card {
 html:not(.dark) .arcade-hub-card h4 {
   color: #0f172a !important;
 }
+
+/* ==========================================================================
+   17. INTERACTIVE ARCADE TRILOGY SELECTOR TABS & PANELS
+   ========================================================================== */
+.arcade-tab-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  user-select: none;
+}
+
+.arcade-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
+}
+
+/* Active Cat Runner Tab */
+.arcade-tab-btn[data-game="cat"].active {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.18) 0%, rgba(245, 158, 11, 0.06) 100%);
+  border-color: rgba(249, 115, 22, 0.7);
+  box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.25), 0 0 20px rgba(249, 115, 22, 0.15);
+}
+
+/* Active Robot Escape Tab */
+.arcade-tab-btn[data-game="robot"].active {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(244, 63, 94, 0.06) 100%);
+  border-color: rgba(245, 158, 11, 0.7);
+  box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.25), 0 0 20px rgba(245, 158, 11, 0.15);
+}
+
+/* Active Space Escape Tab */
+.arcade-tab-btn[data-game="space"].active {
+  background: linear-gradient(135deg, rgba(0, 245, 212, 0.15) 0%, rgba(168, 85, 247, 0.1) 100%);
+  border-color: rgba(0, 245, 212, 0.7);
+  box-shadow: 0 10px 25px -5px rgba(0, 245, 212, 0.22), 0 0 20px rgba(168, 85, 247, 0.18);
+}
+
+.arcade-game-panel {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Light Mode Overrides for Arcade Tabs */
+html:not(.dark) .arcade-tab-btn {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04) !important;
+}
+
+html:not(.dark) .arcade-tab-btn h4 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .arcade-tab-btn:hover {
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+html:not(.dark) .arcade-tab-btn[data-game="cat"].active {
+  background: #fff7ed !important;
+  border-color: #ea580c !important;
+  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.18) !important;
+}
+
+html:not(.dark) .arcade-tab-btn[data-game="robot"].active {
+  background: #fffbeb !important;
+  border-color: #d97706 !important;
+  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.18) !important;
+}
+
+html:not(.dark) .arcade-tab-btn[data-game="space"].active {
+  background: #f0fdf4 !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.18) !important;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 14mm 15mm;
+}
+
+@media print {
+  html,
+  body {
+    width: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    scroll-behavior: auto !important;
+  }
+
+  body > * {
+    display: none !important;
+  }
+
+  body > div.relative.z-10 {
+    display: block !important;
+    min-height: 0 !important;
+  }
+
+  body > div.relative.z-10 > * {
+    display: none !important;
+  }
+
+  body > div.relative.z-10 > #resume-modal {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  #resume-modal > div {
+    display: block !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+  }
+
+  #resume-modal .no-print {
+    display: none !important;
+  }
+
+  #printable-cv-area {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 9pt !important;
+    line-height: 1.25 !important;
+  }
+
+  #printable-cv-area * {
+    color: #111827 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    letter-spacing: normal !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    -webkit-print-color-adjust: economy !important;
+    print-color-adjust: economy !important;
+  }
+
+  #printable-cv-area .cv-page {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #printable-cv-area .cv-page > * + * {
+    margin-top: 1.5pt !important;
+  }
+
+  #printable-cv-area .cv-page-1 {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  #printable-cv-area .cv-page-2 {
+    display: block !important;
+    min-height: 0 !important;
+    break-before: page;
+    page-break-before: always;
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  #printable-cv-area .cv-page-2 > .cv-print-page-header + .avoid-break {
+    margin-top: 0 !important;
+  }
+
+  #printable-cv-area .cv-page-2 > .avoid-break:not(.cv-print-page-header) + .avoid-break {
+    margin-top: 8mm !important;
+  }
+
+  #printable-cv-area .cv-print-page-header {
+    display: none !important;
+  }
+
+  #printable-cv-area .html2pdf__page-break {
+    display: none !important;
+  }
+
+  #printable-cv-area .flex-col.justify-between {
+    justify-content: flex-start !important;
+  }
+
+  #printable-cv-area .avoid-break {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  #printable-cv-area h1 {
+    margin: 0 0 3pt !important;
+    font-size: 19pt !important;
+    line-height: 1.15 !important;
+  }
+
+  #printable-cv-area h4 {
+    margin: 3pt 0 2pt !important;
+    padding-bottom: 2pt !important;
+    border-bottom: 1px solid #9ca3af !important;
+    font-size: 10pt !important;
+    line-height: 1.2 !important;
+  }
+
+  #printable-cv-area h5 {
+    font-size: 9pt !important;
+    line-height: 1.2 !important;
+  }
+
+  #printable-cv-area p,
+  #printable-cv-area li,
+  #printable-cv-area span {
+    font-size: 9pt !important;
+    line-height: 1.25 !important;
+  }
+
+  #printable-cv-area p {
+    margin-top: 1pt !important;
+    margin-bottom: 2pt !important;
+  }
+
+  #printable-cv-area ul {
+    margin: 2pt 0 4pt !important;
+    padding-left: 15pt !important;
+    list-style: disc !important;
+  }
+
+  #printable-cv-area li {
+    display: list-item !important;
+    margin-bottom: 1pt !important;
+  }
+
+  #printable-cv-area .material-symbols-outlined {
+    display: none !important;
+  }
+
+  #printable-cv-area .cv-avatar-frame {
+    display: flex !important;
+    width: 23mm !important;
+    height: 23mm !important;
+    flex: 0 0 23mm !important;
+    overflow: hidden !important;
+    border: 1px solid #9ca3af !important;
+    border-radius: 2mm !important;
+  }
+
+  #printable-cv-area #cv-avatar-img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  #printable-cv-area a {
+    color: #111827 !important;
+    text-decoration: underline !important;
+  }
+}
