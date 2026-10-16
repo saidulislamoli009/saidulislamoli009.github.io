@@ -1797,8 +1797,8 @@
                         </div>
                         <div class="flex flex-col flex-1 min-w-0">
                             <div class="flex items-center justify-between gap-1">
-                                <span id="hub-robot-status" class="text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1">
-                                    <span>🔒</span> 6,000 pts
+                                <span id="hub-robot-status" class="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
+                                    <span>✓</span> UNLOCKED
                                 </span>
                                 <span class="arcade-active-pill hidden text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-300 border border-amber-500/40 items-center gap-1">
                                     <span class="size-1.5 rounded-full bg-amber-400 animate-ping"></span> PLAYING
@@ -1816,8 +1816,8 @@
                         </div>
                         <div class="flex flex-col flex-1 min-w-0">
                             <div class="flex items-center justify-between gap-1">
-                                <span id="hub-space-status" class="text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1">
-                                    <span>🔒</span> 10,000 pts
+                                <span id="hub-space-status" class="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
+                                    <span>✓</span> UNLOCKED
                                 </span>
                                 <span class="arcade-active-pill hidden text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-500/25 text-cyan-300 border border-cyan-500/40 items-center gap-1">
                                     <span class="size-1.5 rounded-full bg-cyan-400 animate-ping"></span> PLAYING
@@ -1987,15 +1987,15 @@
                 
                 <!-- Section Header -->
                 <div class="flex flex-col items-center text-center gap-2.5">
-                    <div id="robot-lock-badge" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400">
-                        <span class="material-symbols-outlined text-xs">lock</span>
-                        <span class="text-xs font-mono font-bold uppercase tracking-wider">Titan & Mars Game Locked</span>
+                    <div id="robot-lock-badge" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-300 shadow-lg">
+                        <span class="material-symbols-outlined text-xs">rocket_launch</span>
+                        <span class="text-xs font-mono font-bold uppercase tracking-wider">Titan Expedition Unlocked!</span>
                     </div>
                     <h2 id="robot-lock-title" class="text-2xl sm:text-4xl font-black text-white tracking-tight font-heading flex items-center gap-2">
                         <span>🪐</span> <span class="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-300 bg-clip-text text-transparent">Titan & Mars Rover Escape</span> <span>⚡</span>
                     </h2>
                     <p id="robot-lock-subtitle" class="text-slate-400 text-xs sm:text-sm font-light max-w-md italic">
-                        "Reach 6,000 points in Cat Runner to explore Titan & Olympus Mons."
+                        "Titan &amp; Olympus Mons orbital trajectory linked. Rover deployed."
                     </p>
                 </div>
 
@@ -2039,7 +2039,7 @@
                         <canvas id="robot-escape-canvas" class="w-full h-full block cursor-pointer"></canvas>
 
                         <!-- LOCKED OVERLAY (Shown when score < 6000) -->
-                        <div id="robot-lock-overlay" class="absolute inset-0 z-40 bg-[#0d0407]/94 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center gap-4 transition-all duration-500">
+                        <div id="robot-lock-overlay" class="hidden absolute inset-0 z-40 bg-[#0d0407]/94 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center gap-4 transition-all duration-500">
                             <div class="size-16 sm:size-20 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-3xl sm:text-4xl shadow-xl animate-pulse text-rose-400">
                                 <span class="material-symbols-outlined text-3xl sm:text-4xl">lock</span>
                             </div>
@@ -2176,15 +2176,15 @@
                 
                 <!-- Section Header -->
                 <div class="flex flex-col items-center text-center gap-2.5">
-                    <div id="space-lock-badge" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400">
-                        <span class="material-symbols-outlined text-xs">lock</span>
-                        <span class="text-xs font-mono font-bold uppercase tracking-wider">Final Challenge Locked</span>
+                    <div id="space-lock-badge" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 shadow-xl">
+                        <span class="material-symbols-outlined text-xs">rocket_launch</span>
+                        <span class="text-xs font-mono font-bold uppercase tracking-wider">Final Challenge Unlocked!</span>
                     </div>
                     <h2 id="space-lock-title" class="text-2xl sm:text-4xl font-black text-white tracking-tight font-heading flex items-center gap-2">
                         <span>🚀</span> <span class="text-gradient-cyan">Space Escape</span> <span>🌌</span>
                     </h2>
                     <p id="space-lock-subtitle" class="text-slate-400 text-xs sm:text-sm font-light max-w-md italic">
-                        "Reach 10,000 points in Robot Escape to unlock the final challenge."
+                        "You've mastered the ground. You've survived the future. Now escape into space."
                     </p>
                 </div>
 
@@ -2228,7 +2228,7 @@
                         <canvas id="space-escape-canvas" class="w-full h-full block cursor-pointer"></canvas>
 
                         <!-- LOCKED OVERLAY (When Robot Escape Score < 10,000) -->
-                        <div id="space-lock-overlay" class="absolute inset-0 z-40 bg-[#030712]/92 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center gap-4 transition-all duration-500">
+                        <div id="space-lock-overlay" class="hidden absolute inset-0 z-40 bg-[#030712]/92 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center gap-4 transition-all duration-500">
                             <div class="size-16 sm:size-20 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-3xl sm:text-4xl shadow-xl animate-pulse text-rose-400">
                                 <span class="material-symbols-outlined text-3xl sm:text-4xl">lock</span>
                             </div>

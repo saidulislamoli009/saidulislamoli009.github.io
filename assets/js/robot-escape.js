@@ -390,6 +390,12 @@
       this.canvas.width = VIRTUAL_WIDTH * dpr;
       this.canvas.height = VIRTUAL_HEIGHT * dpr;
       this.ctx.scale(dpr, dpr);
+      // Resetting canvas.width clears the bitmap. Repaint a static frame when
+      // no animation loop is running (START/GAMEOVER) so a tab switch or
+      // window resize never leaves a blank canvas behind the overlays.
+      if (this.state !== 'PLAYING' && typeof this.render === 'function') {
+        this.render();
+      }
     }
 
     bindEvents() {
@@ -655,8 +661,14 @@
       this.itemSpawnTimer = 35;
       this.robot = this.createRobot();
 
-      if (this.startScreen) this.startScreen.classList.add('hidden');
-      if (this.gameOverScreen) this.gameOverScreen.classList.add('hidden');
+      if (this.startScreen) {
+        this.startScreen.classList.add('hidden');
+        this.startScreen.classList.remove('flex');
+      }
+      if (this.gameOverScreen) {
+        this.gameOverScreen.classList.add('hidden');
+        this.gameOverScreen.classList.remove('flex');
+      }
 
       this.updateHUD();
       this.lastTime = performance.now();
@@ -693,6 +705,7 @@
 
       if (this.gameOverScreen) {
         this.gameOverScreen.classList.remove('hidden');
+        this.gameOverScreen.classList.add('flex');
       }
 
       this.updateHUD();

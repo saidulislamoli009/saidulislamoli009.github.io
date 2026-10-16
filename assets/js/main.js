@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initClipboardActions();
   initBackToTop();
   initLivePingTerminal();
+  initArcadeGameSwitcher();
 });
 
 /* ==========================================================================
@@ -671,75 +672,18 @@ function initCounters() {
 }
 
 /* ==========================================================================
-   1. INTERACTIVE MOUSE CURSOR, TRAILING RING & AMBIENT SPOTLIGHT
+   1. MOUSE CURSOR & AMBIENT SYSTEM (ZERO BLINKING / ZERO LAG)
    ========================================================================== */
 function initInteractiveCursor() {
+  // Trailing ghost lights and lagging lerp rings completely eliminated.
   const glowMesh = document.getElementById('mouse-glow-mesh');
-
-  let mouseX = window.innerWidth / 2;
-  let mouseY = window.innerHeight / 2;
-  let glowX = mouseX;
-  let glowY = mouseY;
-
-  // Check if touch device; skip custom cursor if touch-only
-  const isTouch = window.matchMedia('(pointer: coarse)').matches;
-
-  let dot = null;
-  let ring = null;
-  let ringX = mouseX;
-  let ringY = mouseY;
-
-  if (!isTouch) {
-    dot = document.createElement('div');
-    dot.id = 'custom-cursor-dot';
-    ring = document.createElement('div');
-    ring.id = 'custom-cursor-ring';
-
-    document.body.appendChild(dot);
-    document.body.appendChild(ring);
-  }
-
-  window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-
-    if (dot) {
-      dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-    }
-  });
-
-  function renderAnimationLoop() {
-    // Smooth lerp for background ambient spotlight
-    glowX += (mouseX - glowX) * 0.08;
-    glowY += (mouseY - glowY) * 0.08;
-    
-    if (glowMesh) {
-      glowMesh.style.setProperty('--mouse-x', `${glowX}px`);
-      glowMesh.style.setProperty('--mouse-y', `${glowY}px`);
-    }
-
-    if (ring && !isTouch) {
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
-      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
-    }
-
-    requestAnimationFrame(renderAnimationLoop);
-  }
-  renderAnimationLoop();
-
-  if (!isTouch) {
-    // Hover detection over interactive elements
-    const hoverTargets = document.querySelectorAll('a, button, input, textarea, .bento-card, .app-preview-trigger, .theme-toggle-btn');
-    hoverTargets.forEach(el => {
-      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-    });
+  if (glowMesh) {
+    glowMesh.style.display = 'none';
   }
 }
 
 /* ==========================================================================
-   2. INTERACTIVE FLUID MOUSE PARTICLE CONSTELLATION CANVAS
+   2. INTERACTIVE FLUID MOUSE PARTICLE CONSTELLATION CANVAS (ORIGINAL)
    ========================================================================== */
 function initParticleCanvas() {
   let canvas = document.getElementById('cursor-canvas');
@@ -756,7 +700,7 @@ function initParticleCanvas() {
   window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
-  });
+  }, { passive: true });
 
   let particles = [];
   const maxParticles = 60;
@@ -766,7 +710,7 @@ function initParticleCanvas() {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
 
-    // Spawn 1-2 glowing micro-particles on movement
+    // Spawn glowing micro-particles on cursor movement
     if (particles.length < maxParticles) {
       particles.push(new Particle(mouse.x, mouse.y));
     }
@@ -919,86 +863,6 @@ function initModals() {
   if (printCvBtn) {
     printCvBtn.addEventListener('click', () => {
       window.print();
-    });
-  }
-
-  const downloadPdfBtn = document.getElementById('download-cv-pdf-btn');
-  if (downloadPdfBtn) {
-    downloadPdfBtn.addEventListener('click', async () => {
-      const element = document.getElementById('printable-cv-area');
-      const resumeModalDiv = document.querySelector('#resume-modal > div');
-      if (!element) return;
-
-      const origText = downloadPdfBtn.innerHTML;
-      downloadPdfBtn.disabled = true;
-      downloadPdfBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Generating HD PDF...';
-
-      // Save previous inline styles to restore after export
-      const prevElementOverflow = element.style.overflow;
-      const prevElementMaxHeight = element.style.maxHeight;
-      const prevElementHeight = element.style.height;
-      const prevModalMaxHeight = resumeModalDiv ? resumeModalDiv.style.maxHeight : '';
-      const prevModalOverflow = resumeModalDiv ? resumeModalDiv.style.overflow : '';
-
-      try {
-        // Ensure avatar image uses non-tainting Base64 data URI to support file:// and offline export
-        const avatarImg = document.getElementById('cv-avatar-img') || element.querySelector('img');
-        if (avatarImg && typeof CV_AVATAR_BASE64 !== 'undefined') {
-          avatarImg.src = CV_AVATAR_BASE64;
-        }
-
-        // Expand the element so html2canvas renders the FULL 2 pages without scroll clipping
-        if (resumeModalDiv) {
-          resumeModalDiv.style.maxHeight = 'none';
-          resumeModalDiv.style.overflow = 'visible';
-        }
-        element.style.overflow = 'visible';
-        element.style.maxHeight = 'none';
-        element.style.height = 'auto';
-        element.scrollTop = 0;
-
-        // Wait for all web fonts to load completely to avoid font blurriness / layout shifts
-        if (document.fonts && document.fonts.ready) {
-          await document.fonts.ready;
-        }
-
-        if (typeof html2pdf !== 'undefined') {
-          const opt = {
-            margin:       0,
-            filename:     'Saidul_Islam_Executive_CV.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { 
-              scale: 2.5, 
-              useCORS: true, 
-              letterRendering: true, 
-              logging: false, 
-              scrollY: 0, 
-              scrollX: 0
-            },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak:    { mode: ['css', 'legacy'] }
-          };
-
-          await html2pdf().set(opt).from(element).save();
-        } else {
-          window.print();
-        }
-      } catch (err) {
-        console.error('PDF generation error, falling back to print:', err);
-        window.print();
-      } finally {
-        // Restore previous modal scroll styles
-        if (resumeModalDiv) {
-          resumeModalDiv.style.maxHeight = prevModalMaxHeight;
-          resumeModalDiv.style.overflow = prevModalOverflow;
-        }
-        element.style.overflow = prevElementOverflow;
-        element.style.maxHeight = prevElementMaxHeight;
-        element.style.height = prevElementHeight;
-
-        downloadPdfBtn.disabled = false;
-        downloadPdfBtn.innerHTML = origText;
-      }
     });
   }
 
@@ -1516,8 +1380,8 @@ function hydratePortfolioContent() {
     }
 
     const cvAvatar = document.getElementById('cv-avatar-img');
-    if (cvAvatar && typeof CV_AVATAR_BASE64 !== 'undefined') {
-      cvAvatar.src = CV_AVATAR_BASE64;
+    if (cvAvatar && p.avatar) {
+      cvAvatar.src = p.avatar;
     }
 
     if (p.location) {
@@ -2177,4 +2041,139 @@ function initNetworkDiagnosticsSuite() {
   if (speedBtn) {
     speedBtn.addEventListener('click', runSpeedTest);
   }
+}
+
+/* ==========================================================================
+   18. INTERACTIVE ARCADE TRILOGY GAME SELECTOR SYSTEM
+   ========================================================================== */
+function initArcadeGameSwitcher() {
+  const tabs = document.querySelectorAll('.arcade-tab-btn');
+  const panels = {
+    cat: document.getElementById('cat-runner-section'),
+    robot: document.getElementById('robot-escape-section'),
+    space: document.getElementById('space-escape-section')
+  };
+
+  if (!tabs.length || !panels.cat) return;
+
+  function switchGame(targetGame, smoothScroll = false) {
+    if (!panels[targetGame]) return;
+
+    // 1. Update tab button states & active indicators
+    tabs.forEach(tab => {
+      const isTarget = tab.dataset.game === targetGame;
+      if (isTarget) {
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        const pill = tab.querySelector('.arcade-active-pill');
+        if (pill) {
+          pill.classList.remove('hidden');
+          pill.classList.add('flex');
+        }
+      } else {
+        tab.classList.remove('active');
+        tab.setAttribute('aria-selected', 'false');
+        const pill = tab.querySelector('.arcade-active-pill');
+        if (pill) {
+          pill.classList.add('hidden');
+          pill.classList.remove('flex');
+        }
+      }
+    });
+
+    // 2. Switch visible game panel
+    Object.keys(panels).forEach(key => {
+      const panel = panels[key];
+      if (!panel) return;
+      if (key === targetGame) {
+        panel.classList.remove('hidden');
+        panel.classList.add('is-revealed');
+      } else {
+        panel.classList.add('hidden');
+      }
+    });
+
+    // 3. Dispatch resize event to immediately recalculate canvas DPR and coordinate bounds
+    window.dispatchEvent(new Event('resize'));
+
+    // 4. Update tab unlock badges
+    updateArcadeTabStatuses();
+
+    // 5. Smooth scroll to the game cabinet if requested
+    if (smoothScroll) {
+      const cabinet = panels[targetGame].querySelector('.cat-game-cabinet, .robot-game-cabinet, .space-game-cabinet');
+      if (cabinet) {
+        cabinet.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }
+
+  // Bind click listener on all 3 tabs
+  tabs.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      e.preventDefault();
+      const game = tab.dataset.game;
+      switchGame(game, false);
+    });
+  });
+
+  // Dynamic status update for locked/unlocked badges on tabs
+  function updateArcadeTabStatuses() {
+    const catBest = parseInt(localStorage.getItem('cat_runner_best_score') || '0', 10);
+    const robotUnlocked = localStorage.getItem('robot_escape_unlocked') === 'true' || catBest >= 6000;
+    const robotBest = parseInt(localStorage.getItem('robot_escape_best_score') || '0', 10);
+    const spaceUnlocked = localStorage.getItem('space_escape_unlocked') === 'true' || robotBest >= 10000;
+
+    const hubRobot = document.getElementById('hub-robot-status');
+    if (hubRobot) {
+      if (robotUnlocked) {
+        hubRobot.className = 'text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1';
+        hubRobot.innerHTML = '<span>✓</span> UNLOCKED';
+      } else {
+        hubRobot.className = 'text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1';
+        hubRobot.innerHTML = `<span>🔒</span> ${catBest.toLocaleString()} / 6,000`;
+      }
+    }
+
+    const hubSpace = document.getElementById('hub-space-status');
+    if (hubSpace) {
+      if (spaceUnlocked) {
+        hubSpace.className = 'text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1';
+        hubSpace.innerHTML = '<span>✓</span> UNLOCKED';
+      } else {
+        hubSpace.className = 'text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1';
+        hubSpace.innerHTML = `<span>🔒</span> ${robotBest.toLocaleString()} / 10,000`;
+      }
+    }
+  }
+
+  // Live listen for score updates from games
+  window.addEventListener('cat_score_updated', updateArcadeTabStatuses);
+  window.addEventListener('robot_score_updated', updateArcadeTabStatuses);
+
+  // Deep-link / Hash support
+  const checkHash = () => {
+    const hash = window.location.hash;
+    if (hash === '#robot-escape-section') {
+      switchGame('robot', true);
+    } else if (hash === '#space-escape-section') {
+      switchGame('space', true);
+    } else if (hash === '#cat-runner-section') {
+      switchGame('cat', true);
+    }
+  };
+  window.addEventListener('hashchange', checkHash);
+  if (window.location.hash) {
+    checkHash();
+  }
+
+  // Initial badge refresh must run AFTER the game scripts (cat-runner.js,
+  // robot-escape.js, space-escape.js) have executed their constructors and
+  // written their *_unlocked flags to localStorage. Those scripts register
+  // their DOMContentLoaded handlers AFTER main.js, so a synchronous call here
+  // would read empty storage on a fresh visit and flash a locked badge.
+  // A 0ms macrotask is guaranteed to run once every DOMContentLoaded handler
+  // has completed; the 'load' listener is a final safety net.
+  setTimeout(() => updateArcadeTabStatuses(), 0);
+  window.addEventListener('load', () => updateArcadeTabStatuses(), { once: true });
 }
