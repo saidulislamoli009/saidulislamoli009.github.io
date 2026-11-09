@@ -12,7 +12,7 @@
     "email": "saidulislamoli009@gmail.com",
     "phone1": "+880 1799-239023",
     "whatsapp": "8801799239023",
-    "location": "Hazibari, North Lamchori, Barishal Sadar, Barishal",
+    "location": "272-28/1, 1st Colony, Baten Nagar, Mazar Road, Mirpur 1, Dhaka - 1216",
     "portfolioUrl": "https://saidulislamoli009.github.io",
     "linkedin": "https://www.linkedin.com/in/saidul-islam-8673ba303",
     "github": "https://github.com/saidulislamoli009"
@@ -248,9 +248,25 @@
   "experience": [
     {
       "id": "exp-1",
+      "role": "IT Analyst",
+      "company": "Universal Languages & Skill Assessment Institute (ULSAI)",
+      "duration": "1 November 2026 – Present",
+      "icon": "support_agent",
+      "colorTheme": "primary",
+      "responsibilities": [
+        "Assist in managing day-to-day organizational IT operations, technical support, and troubleshooting to ensure smooth business activities.",
+        "Monitor and maintain IT equipment, hardware, software, and organizational technology resources.",
+        "Coordinate network infrastructure setup, IT-related technical activities, and support communication between relevant teams."
+      ],
+      "promotion": null,
+      "achievements": [],
+      "tags": ["IT Operations", "IT Asset Management", "Network Coordination"]
+    },
+    {
+      "id": "exp-2",
       "role": "IT Officer",
       "company": "MEP Group Limited",
-      "duration": "Aug 2023 – Present",
+      "duration": "14 Aug 2023 - 15 Oct 2026",
       "icon": "apartment",
       "colorTheme": "primary",
       "responsibilities": [
@@ -267,7 +283,7 @@
       "tags": ["Warehouse ERP", "Production ERP", "HRM & Payroll", "MikroTik ROS"]
     },
     {
-      "id": "exp-2",
+      "id": "exp-3",
       "role": "System Administrator",
       "company": "AL-Mugni Information & Tech (ISP)",
       "duration": "Nov 2021 – Jul 2023",
@@ -286,13 +302,12 @@
       "tags": ["GPON / EPON", "FTTx Fiber", "BDIX Peering", "MikroTik BGP"]
     },
     {
-      "id": "exp-3",
+      "id": "exp-4",
       "role": "Mobile App Developer",
       "company": "Flutter & Firebase Solutions",
-      "duration": "2023 – Present",
       "icon": "flutter",
       "isFontAwesome": true,
-      "colorTheme": "primary",
+      "colorTheme": "cyan",
       "responsibilities": [
         "Architected production mobile applications: ZenPDF (Doc Scanner & OCR), ZenWalls (4K Wallpaper Hub), Zen Movie (DhakaFlix BDIX Streaming), and FixBD (On-Demand Home Services & Live Tracking).",
         "Integrated Cloud Firestore real-time database, Firebase Authentication, Cloud Storage, and REST APIs."
@@ -357,7 +372,8 @@
     "nationality": "Bangladeshi",
     "maritalStatus": "Married",
     "nid": "5562375013",
-    "address": "House: Hazibari, Vill: North Lamchori, P.S: Barishal Sadar, Dist: Barishal, P.O: 8200",
+    "address": "272-28/1, 1st Colony, Baten Nagar, Mazar Road, Mirpur 1, Dhaka - 1216",
+    "permanentAddress": "Hazibari, North Lamchori, Barishal Sadar, Barishal",
     "cvSummary": "IT Professional with 4.8+ years of experience in ERP Support, Network Administration, System Administration, ISP Operations, CCTV Systems, Fiber Optic Network Design, and Mobile Application Development. Experienced in MikroTik RouterOS, GPON OLT/ONU Management, ERP Implementation, Network Security, VPN Configuration, and Flutter/Firebase Solutions. Proven ability to troubleshoot complex technical issues and support business operations efficiently.",
     "declaration": "I hereby declare that all the information provided is accurate to the best of my knowledge."
   },

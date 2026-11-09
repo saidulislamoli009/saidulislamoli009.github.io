@@ -1701,6 +1701,7 @@ function hydratePortfolioContent() {
     setText('cv-personal-marital', b.maritalStatus);
     setText('cv-personal-nid', b.nid);
     setText('cv-personal-address', b.address);
+    setText('cv-permanent-address', b.permanentAddress);
   }
 }
 
