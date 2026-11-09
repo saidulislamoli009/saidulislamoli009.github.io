@@ -58,7 +58,7 @@ function updateExperienceLaserPath() {
   if (!container) return;
 
   const cards = container.querySelectorAll('.experience-step-card, .bento-card');
-  if (cards.length < 3) return;
+  if (cards.length < 4) return;
 
   const isDesktop = window.innerWidth >= 768;
   const containerRect = container.getBoundingClientRect();
@@ -66,16 +66,17 @@ function updateExperienceLaserPath() {
   const c1Rect = cards[0].getBoundingClientRect();
   const c2Rect = cards[1].getBoundingClientRect();
   const c3Rect = cards[2].getBoundingClientRect();
+  const c4Rect = cards[3].getBoundingClientRect();
 
   let d = '';
 
   if (isDesktop) {
     // Exact S-curve matching user's architecture:
-    // Starts from right side of Card 1 (MEP Group)
+    // Starts from the first card and follows the alternating timeline through card 4.
     const startX = c1Rect.right - containerRect.left;
     const startY = (c1Rect.top + c1Rect.bottom) / 2 - containerRect.top + 30;
 
-    // Sweeps to the right side of Card 2 (System Admin)
+    // Sweeps to the right side of Card 2
     const c2LeftX = c2Rect.left - containerRect.left;
     const c2RightX = c2Rect.right - containerRect.left;
     const c2TopY = c2Rect.top - containerRect.top;
@@ -85,7 +86,7 @@ function updateExperienceLaserPath() {
     const loopRight = Math.min(containerRect.width - 20, c2RightX + 65);
     const underC2Y = c2BottomY + 40;
 
-    // Sweeps to the left side of Card 3 (Mobile Apps)
+    // Sweeps to the left side of Card 3
     const c3LeftX = c3Rect.left - containerRect.left;
     const c3CenterY = (c3Rect.top + c3Rect.bottom) / 2 - containerRect.top;
     const c3BottomY = c3Rect.bottom - containerRect.top;
@@ -93,6 +94,10 @@ function updateExperienceLaserPath() {
     const loopLeft = Math.max(15, c3LeftX - 60);
     const endX = c3LeftX;
     const endY = c3BottomY - 25;
+
+    // Continue the laser from Card 3 to the timeline-facing side of Card 4.
+    const c4LeftX = c4Rect.left - containerRect.left;
+    const c4CenterY = (c4Rect.top + c4Rect.bottom) / 2 - containerRect.top;
 
     // Smooth bezier coordinates
     const cp1x = startX + (loopRight - startX) * 0.65;
@@ -125,17 +130,20 @@ function updateExperienceLaserPath() {
         `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2x} ${p2y} ` +
         `C ${cp3x} ${cp3y}, ${cp4x} ${cp4y}, ${p3x} ${p3y} ` +
         `C ${cp5x} ${cp5y}, ${cp6x} ${cp6y}, ${p4x} ${p4y} ` +
-        `C ${cp7x} ${cp7y}, ${cp8x} ${cp8y}, ${endX} ${endY}`;
+        `C ${cp7x} ${cp7y}, ${cp8x} ${cp8y}, ${endX} ${endY} ` +
+        `C ${loopLeft} ${c3BottomY + 45}, ${c4LeftX - 40} ${c4CenterY + 70}, ${c4LeftX - 15} ${c4CenterY}`;
   } else {
     // Mobile left laser line with subtle pulse curve
     const leftX = 24;
     const y1 = (c1Rect.top + c1Rect.bottom) / 2 - containerRect.top;
     const y2 = (c2Rect.top + c2Rect.bottom) / 2 - containerRect.top;
     const y3 = (c3Rect.top + c3Rect.bottom) / 2 - containerRect.top;
+    const y4 = (c4Rect.top + c4Rect.bottom) / 2 - containerRect.top;
 
     d = `M ${leftX} ${y1} ` +
         `C ${leftX + 25} ${(y1 + y2) / 2}, ${leftX - 25} ${(y1 + y2) / 2}, ${leftX} ${y2} ` +
-        `C ${leftX + 25} ${(y2 + y3) / 2}, ${leftX - 25} ${(y2 + y3) / 2}, ${leftX} ${y3}`;
+        `C ${leftX + 25} ${(y2 + y3) / 2}, ${leftX - 25} ${(y2 + y3) / 2}, ${leftX} ${y3} ` +
+        `C ${leftX + 25} ${(y3 + y4) / 2}, ${leftX - 25} ${(y3 + y4) / 2}, ${leftX} ${y4}`;
   }
 
   const pathBase = document.getElementById('snake-laser-base-path');
@@ -153,7 +161,7 @@ function updateExperienceLaserPath() {
 
 /**
  * Step-by-Step Interactive Guide:
- * Glides a glowing photon comet along the exact laser line from Card 1 -> Card 2 -> Card 3.
+ * Glides a glowing photon comet along the exact laser line from Card 1 through each experience card.
  * Activates each milestone node and card as the beam moves across them.
  */
 function initStepProgressionGuide() {
@@ -248,7 +256,7 @@ function initStepProgressionGuide() {
 
   // 3. Smooth Photon Comet Head RAF Animation Loop
   let progress = 0;
-  const loopDurationMs = 4000; // 4 second full cycle through steps 1 -> 2 -> 3
+  const loopDurationMs = 4000; // 4 second full cycle through all four steps
   let lastTimestamp = performance.now();
 
   function animateLaserComet(timestamp) {
@@ -264,12 +272,9 @@ function initStepProgressionGuide() {
         cometGroup.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
 
         // Automatically trigger subtle step highlight when photon passes milestones
-        if (progress < 0.33 && currentActiveStep !== 1) {
-          setActiveStep(1, false);
-        } else if (progress >= 0.33 && progress < 0.68 && currentActiveStep !== 2) {
-          setActiveStep(2, false);
-        } else if (progress >= 0.68 && currentActiveStep !== 3) {
-          setActiveStep(3, false);
+        const step = Math.min(4, Math.floor(progress * 4) + 1);
+        if (currentActiveStep !== step) {
+          setActiveStep(step, false);
         }
       }
     }
@@ -863,6 +868,187 @@ function initModals() {
   if (printCvBtn) {
     printCvBtn.addEventListener('click', () => {
       window.print();
+    });
+  }
+
+  // Convert every image inside `container` to a same-origin data URL.
+  // html2canvas draws images onto a canvas and then calls toDataURL();
+  // any cross-origin image (e.g. file://, or an image without CORS headers)
+  // taints that canvas and throws "Tainted canvases may not be exported".
+  // Data URLs are same-origin, so the canvas stays clean in every environment.
+  async function resolveImagesToDataUrls(container) {
+    const images = Array.from(container.querySelectorAll('img'));
+    if (!images.length) return;
+    await Promise.all(images.map((img) => new Promise((resolve) => {
+      const src = img.src || img.getAttribute('src');
+      if (!src) { resolve(); return; }
+      const cvAvatarBase64 = typeof window.CV_AVATAR_BASE64 === 'string' && window.CV_AVATAR_BASE64.startsWith('data:')
+        ? window.CV_AVATAR_BASE64 : null;
+      const isAvatar = img.id === 'cv-avatar-img'
+        || (img.getAttribute('alt') || '').includes('Saidul Islam')
+        || String(src).includes('saidul-avatar');
+      const targetSrc = (cvAvatarBase64 && isAvatar) ? cvAvatarBase64 : src;
+      // Data URLs are same-origin and never taint a canvas.
+      if (targetSrc.startsWith('data:')) {
+        img.src = targetSrc;
+        if (img.complete) { resolve(); return; }
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        return;
+      }
+      const image = new Image();
+      image.crossOrigin = 'anonymous';
+      image.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = image.naturalWidth || image.width;
+          canvas.height = image.naturalHeight || image.height;
+          canvas.getContext('2d').drawImage(image, 0, 0);
+          img.src = canvas.toDataURL('image/jpeg', 0.92);
+        } catch (e) { /* best effort */ }
+        resolve();
+      };
+      image.onerror = () => resolve();
+      image.src = targetSrc;
+    })));
+  }
+
+  const downloadCvBtn = document.getElementById('download-cv-pdf-btn');
+  if (downloadCvBtn && downloadCvBtn.tagName !== 'A') {
+    downloadCvBtn.addEventListener('click', async () => {
+      const cvArea = document.getElementById('printable-cv-area');
+      if (!cvArea) {
+        alert('CV content is unavailable. Please reload the page and try again.');
+        return;
+      }
+      if (typeof window.html2pdf !== 'function') {
+        alert('PDF export is unavailable. Please reload the page and try again.');
+        return;
+      }
+
+      const originalButtonContent = downloadCvBtn.innerHTML;
+      downloadCvBtn.disabled = true;
+      downloadCvBtn.setAttribute('aria-busy', 'true');
+      downloadCvBtn.textContent = 'Preparing PDF...';
+
+      try {
+        const cvPages = Array.from(cvArea.querySelectorAll('.cv-page'));
+        if (cvPages.length !== 2) {
+          throw new Error('The two CV pages could not be found.');
+        }
+
+        const pdf = await window.html2pdf()
+          .set({
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          })
+          .from(document.createElement('div'))
+          .toPdf()
+          .get('pdf');
+
+        const normalizePdfText = (value) => value
+          .replace(/\u00a0/g, ' ')
+          .replace(/[•·]/g, '-')
+          .replace(/[–—]/g, '-')
+          .replace(/[‘’]/g, "'")
+          .replace(/[“”]/g, '"')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        const pageContent = cvPages.map((page, pageIndex) => {
+          const iconNames = new Set(
+            Array.from(page.querySelectorAll('.material-symbols-outlined'))
+              .map((icon) => normalizePdfText(icon.textContent))
+              .filter(Boolean)
+          );
+          const cleanText = (value) => normalizePdfText(value)
+            .split(/\s+/)
+            .filter((word) => !iconNames.has(word))
+            .join(' ');
+          const headingSet = new Set(
+            Array.from(page.querySelectorAll('h1, h2, h3, h4, h5'))
+              .map((heading) => cleanText(heading.innerText))
+              .filter(Boolean)
+          );
+          const pageHeader = page.querySelector('.cv-print-page-header');
+          const pageText = pageHeader
+            ? page.innerText.replace(pageHeader.innerText, '')
+            : page.innerText;
+          const lines = pageText
+            .split(/\n+/)
+            .map(cleanText)
+            .filter(Boolean);
+
+          if (pageIndex === 1) {
+            lines.unshift('SKILLS, PROJECTS AND EDUCATION');
+            headingSet.add('SKILLS, PROJECTS AND EDUCATION');
+          }
+          return { lines, headingSet };
+        });
+
+        const left = 14;
+        const right = 196;
+        const top = 14;
+        const bottom = 283;
+        const bodySize = 7;
+        const headingSize = 8;
+        const lineHeight = 2.8;
+        const sectionGap = 0.8;
+        const plans = pageContent.map(({ lines, headingSet }, pageIndex) => {
+          let y = top;
+          const output = [];
+
+          lines.forEach((line, index) => {
+            const isName = pageIndex === 0 && index === 0;
+            const isHeading = headingSet.has(line);
+            const fontSize = isName ? 15 : isHeading ? headingSize : bodySize;
+            const fontStyle = isName || isHeading ? 'bold' : 'normal';
+            const leading = isName ? 6 : isHeading ? 3.3 : lineHeight;
+            if (isHeading && output.length > 0) y += sectionGap;
+            const wrappedLines = pdf.setFont('helvetica', fontStyle)
+              .setFontSize(fontSize)
+              .splitTextToSize(line, right - left);
+            output.push({ wrappedLines, fontSize, fontStyle, y, leading });
+            y += wrappedLines.length * leading;
+          });
+
+          return { output, endY: y };
+        });
+
+        if (plans.some((plan) => plan.endY > bottom)) {
+          throw new Error('CV text does not fit on two A4 pages at a readable font size.');
+        }
+
+        plans.forEach((plan, pageIndex) => {
+          if (pageIndex > 0) pdf.addPage('a4', 'portrait');
+          pdf.setTextColor(17, 24, 39);
+          plan.output.forEach(({ wrappedLines, fontSize, fontStyle, y, leading }) => {
+            pdf.setFont('helvetica', fontStyle);
+            pdf.setFontSize(fontSize);
+            pdf.text(wrappedLines, left, y, { lineHeightFactor: leading / (fontSize * 0.3528) });
+          });
+        });
+
+        if (pdf.internal.getNumberOfPages() !== 2) {
+          throw new Error('The CV PDF could not be created as exactly two pages.');
+        }
+
+        const pdfUrl = URL.createObjectURL(pdf.output('blob'));
+        const downloadLink = document.createElement('a');
+        downloadLink.href = pdfUrl;
+        downloadLink.download = 'Saidul_CV_Clean_Export.pdf';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
+        window.setTimeout(() => URL.revokeObjectURL(pdfUrl), 1000);
+      } catch (error) {
+        console.error('Unable to generate the CV PDF.', error);
+        const reason = error instanceof Error ? error.message : String(error);
+        alert(`Could not generate the CV PDF. Please reload the page and try again. Details: ${reason}`);
+      } finally {
+        downloadCvBtn.innerHTML = originalButtonContent;
+        downloadCvBtn.disabled = false;
+        downloadCvBtn.removeAttribute('aria-busy');
+      }
     });
   }
 
@@ -1558,7 +1744,7 @@ function hydratePortfolioContent() {
           ? `<svg class="size-6 text-brand-cyan" viewBox="0 0 24 24" fill="currentColor"><path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.37zM6.02 15.688L2.316 19.39 6.923 24h7.371l-4.57-4.609 3.704-3.703H6.02z"/></svg>`
           : `<span class="material-symbols-outlined text-2xl">${exp.icon || 'apartment'}</span>`;
 
-        const themeClass = idx === 1 ? 'theme-purple' : (idx === 2 ? 'theme-cyan' : '');
+        const themeClass = exp.colorTheme === 'purple' ? 'theme-purple' : (exp.colorTheme === 'cyan' ? 'theme-cyan' : '');
         const stepNum = idx + 1;
         const cardContent = `
           <div class="bento-card experience-step-card ${themeClass} ${idx === 0 ? 'is-active-step' : ''} p-6 md:p-8 rounded-3xl border border-white/10 hover:border-primary/50 shadow-2xl relative overflow-hidden group" id="experience-card-${stepNum}" data-step="${stepNum}">
@@ -1575,9 +1761,7 @@ function hydratePortfolioContent() {
                   <div class="text-primary text-xs font-bold font-mono uppercase mt-0.5">${exp.company}</div>
                 </div>
               </div>
-              <span class="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-mono font-bold text-primary whitespace-nowrap">
-                ${exp.duration}
-              </span>
+              ${exp.duration ? `<span class="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-mono font-bold text-primary whitespace-nowrap">${exp.duration}</span>` : ''}
             </div>
             <div class="space-y-2.5 text-slate-300 text-xs sm:text-sm font-light leading-relaxed mb-5">
               ${respHtml}

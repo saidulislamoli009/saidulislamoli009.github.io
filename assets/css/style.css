@@ -162,48 +162,40 @@ body {
   overflow-x: hidden;
 }
 
-/* Deep Space Aurora Multi-Spectral Lighting */
+/* Deep Space Aurora & Elegant Ambient Lighting */
 .aurora-bg {
   background: 
-    radial-gradient(ellipse 65% 45% at 50% -10%, rgba(0, 245, 212, 0.16), transparent 75%),
-    radial-gradient(circle 600px at 90% 15%, rgba(251, 113, 133, 0.14), transparent 70%),
-    radial-gradient(circle 500px at 10% 55%, rgba(129, 140, 248, 0.12), transparent 70%),
-    radial-gradient(circle 700px at 80% 85%, rgba(16, 185, 129, 0.10), transparent 75%),
-    radial-gradient(circle 450px at 20% 90%, rgba(245, 158, 11, 0.08), transparent 70%);
-  filter: blur(55px);
-  will-change: transform;
+    radial-gradient(ellipse 75% 50% at 50% -8%, rgba(0, 245, 212, 0.13), transparent 70%),
+    radial-gradient(circle 650px at 85% 18%, rgba(99, 102, 241, 0.10), transparent 65%),
+    radial-gradient(circle 550px at 12% 48%, rgba(129, 140, 248, 0.08), transparent 65%),
+    radial-gradient(circle 600px at 80% 80%, rgba(16, 185, 129, 0.07), transparent 70%),
+    radial-gradient(circle 450px at 20% 88%, rgba(245, 158, 11, 0.06), transparent 65%);
+  filter: blur(60px);
 }
 
 html:not(.dark) .aurora-bg {
   background: 
-    radial-gradient(ellipse 70% 40% at 50% -10%, rgba(2, 132, 199, 0.09), transparent 70%),
-    radial-gradient(circle 500px at 90% 20%, rgba(225, 29, 72, 0.06), transparent 60%),
-    radial-gradient(circle 500px at 10% 70%, rgba(79, 70, 229, 0.06), transparent 60%);
-  filter: blur(40px);
+    radial-gradient(ellipse 75% 45% at 50% -8%, rgba(2, 132, 199, 0.08), transparent 65%),
+    radial-gradient(circle 550px at 88% 22%, rgba(99, 102, 241, 0.05), transparent 60%),
+    radial-gradient(circle 500px at 12% 65%, rgba(16, 185, 129, 0.04), transparent 60%);
+  filter: blur(45px);
 }
 
-/* Dynamic Interactive Mouse Spotlight */
+/* Mouse Ambient Lighting disabled to prevent background redraw blinking */
 #mouse-glow-mesh {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  background: radial-gradient(750px circle at var(--mouse-x, 50vw) var(--mouse-y, 30vh), rgba(0, 245, 212, 0.075), transparent 65%);
-  transition: background 0.12s ease-out;
+  display: none !important;
 }
 
-html:not(.dark) #mouse-glow-mesh {
-  background: radial-gradient(600px circle at var(--mouse-x, 50vw) var(--mouse-y, 30vh), rgba(2, 132, 199, 0.05), transparent 60%);
-}
-
-/* Cyber Matrix Grid */
+/* Modern High-Tech Micro-Dot Matrix Pattern (Clean & Minimal) */
 .grid-matrix {
-  background-size: 44px 44px;
-  background-image: 
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  mask-image: radial-gradient(ellipse 90% 75% at 50% 35%, black 40%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 90% 75% at 50% 35%, black 40%, transparent 100%);
+  background-size: 32px 32px;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.065) 1.2px, transparent 1.2px);
+  mask-image: radial-gradient(ellipse 85% 70% at 50% 30%, black 35%, transparent 95%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 30%, black 35%, transparent 95%);
+}
+
+html:not(.dark) .grid-matrix {
+  background-image: radial-gradient(circle, rgba(15, 23, 42, 0.055) 1.2px, transparent 1.2px);
 }
 
 /* ==========================================================================
@@ -1253,66 +1245,8 @@ html:not(.dark) #global-3d-canvas-container {
   z-index: 9990;
 }
 
-/* Custom Cursor Dot */
-#custom-cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 7px;
-  height: 7px;
-  background: #00f5d4;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  box-shadow: 0 0 10px #00f5d4, 0 0 20px #00f5d4;
-  transition: transform 0.04s ease-out, background 0.3s;
-}
-
-html:not(.dark) #custom-cursor-dot {
-  background: #0284c7;
-  box-shadow: 0 0 10px #0284c7;
-}
-
-/* Custom Cursor Trailing Magnetic Ring */
-#custom-cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 32px;
-  height: 32px;
-  border: 1.5px solid rgba(0, 245, 212, 0.65);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transition: transform 0.12s ease-out, width 0.25s ease, height 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-}
-
-html:not(.dark) #custom-cursor-ring {
-  border-color: rgba(2, 132, 199, 0.65);
-}
-
-body.cursor-hover #custom-cursor-ring {
-  transform: scale(1.65);
-  border-color: #ff7700 !important;
-  background: rgba(255, 119, 0, 0.16) !important;
-  box-shadow: 0 0 25px rgba(255, 119, 0, 0.85), 0 0 50px rgba(255, 119, 0, 0.45), inset 0 0 12px rgba(255, 119, 0, 0.35) !important;
-}
-
-body.cursor-hover #custom-cursor-dot {
-  background: #ff8800 !important;
-  box-shadow: 0 0 14px #ff7700, 0 0 28px #ff7700 !important;
-}
-
-html:not(.dark) body.cursor-hover #custom-cursor-ring {
-  border-color: #ea580c !important;
-  background: rgba(234, 88, 12, 0.14) !important;
-  box-shadow: 0 0 20px rgba(234, 88, 12, 0.6), 0 0 35px rgba(249, 115, 22, 0.35) !important;
-}
-
-html:not(.dark) body.cursor-hover #custom-cursor-dot {
-  background: #ea580c !important;
-  box-shadow: 0 0 12px #ea580c !important;
-}
+/* Custom cursor dot and trailing magnetic ring removed per user request.
+   Retaining native OS cursor + smooth particle constellation canvas (#cursor-canvas). */
 
 /* Hide default cursor on desktop when interactive cursor is active */
 @media (pointer: fine) {
@@ -1964,7 +1898,153 @@ html:not(.dark) .arcade-tab-btn[data-game="space"].active {
 
 @page {
   size: A4 portrait;
-  margin: 14mm 15mm;
+  margin: 12mm 18mm;
+}
+
+#printable-cv-area.cv-pdf-export {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 174mm !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: #ffffff !important;
+  color: #111827 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 10pt !important;
+  line-height: 1.15 !important;
+}
+
+#printable-cv-area.cv-pdf-export * {
+  color: #111827 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  letter-spacing: normal !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+#printable-cv-area.cv-pdf-export .cv-page {
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#printable-cv-area.cv-pdf-export .cv-page > * + * {
+  margin-top: 0.5pt !important;
+}
+
+#printable-cv-area.cv-pdf-export [class*="space-y-"] > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0.25pt !important;
+}
+
+#printable-cv-area.cv-pdf-export .cv-page-2 {
+  break-before: auto !important;
+  page-break-before: auto !important;
+  break-after: auto !important;
+  page-break-after: auto !important;
+}
+
+#printable-cv-area.cv-pdf-export .cv-page-2 > .cv-print-page-header + .avoid-break {
+  margin-top: 0 !important;
+}
+
+#printable-cv-area.cv-pdf-export .cv-page-2 > .avoid-break:not(.cv-print-page-header) + .avoid-break {
+  margin-top: 0.25mm !important;
+}
+
+#printable-cv-area.cv-pdf-export [class~="p-2.5"] {
+  padding: 2.5pt !important;
+}
+
+#printable-cv-area.cv-pdf-export [class~="p-1.5"] {
+  padding: 1.5pt !important;
+}
+
+#printable-cv-area.cv-pdf-export .html2pdf__page-break {
+  display: none !important;
+}
+
+#printable-cv-area.cv-pdf-export .avoid-break {
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
+}
+
+#printable-cv-area.cv-pdf-export h1 {
+  margin: 0 0 3pt !important;
+  font-size: 19pt !important;
+  line-height: 1.15 !important;
+}
+
+#printable-cv-area.cv-pdf-export h4 {
+  margin: 2pt 0 1pt !important;
+  padding-bottom: 1pt !important;
+  border-bottom: 1px solid #9ca3af !important;
+  font-size: 10pt !important;
+  line-height: 1.1 !important;
+}
+
+#printable-cv-area.cv-pdf-export h5 {
+  font-size: 10pt !important;
+  line-height: 1.1 !important;
+}
+
+#printable-cv-area.cv-pdf-export p,
+#printable-cv-area.cv-pdf-export li,
+#printable-cv-area.cv-pdf-export span {
+  font-size: 10pt !important;
+  line-height: 1.1 !important;
+}
+
+#printable-cv-area.cv-pdf-export .cv-title-subtitle {
+  font-size: 10pt !important;
+  line-height: 1.15 !important;
+}
+
+#printable-cv-area.cv-pdf-export p {
+  margin-top: 0.5pt !important;
+  margin-bottom: 0.5pt !important;
+}
+
+#printable-cv-area.cv-pdf-export ul {
+  margin: 0 !important;
+  padding-left: 9pt !important;
+  list-style: disc !important;
+}
+
+#printable-cv-area.cv-pdf-export li {
+  display: list-item !important;
+  margin-bottom: 0 !important;
+}
+
+#printable-cv-area.cv-pdf-export .material-symbols-outlined {
+  display: none !important;
+}
+
+#printable-cv-area.cv-pdf-export .cv-avatar-frame {
+  display: flex !important;
+  width: 23mm !important;
+  height: 23mm !important;
+  flex: 0 0 23mm !important;
+  overflow: hidden !important;
+  border: 1px solid #9ca3af !important;
+  border-radius: 2mm !important;
+}
+
+#printable-cv-area.cv-pdf-export #cv-avatar-img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+#printable-cv-area.cv-pdf-export a {
+  color: #111827 !important;
+  text-decoration: underline !important;
 }
 
 @media print {
@@ -2023,17 +2103,19 @@ html:not(.dark) .arcade-tab-btn[data-game="space"].active {
 
   #printable-cv-area {
     display: block !important;
-    width: auto !important;
+    box-sizing: border-box !important;
+    width: 174mm !important;
+    max-width: 174mm !important;
     height: auto !important;
     max-height: none !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
     padding: 0 !important;
     overflow: visible !important;
     background: #ffffff !important;
     color: #111827 !important;
     font-family: Arial, Helvetica, sans-serif !important;
-    font-size: 9pt !important;
-    line-height: 1.25 !important;
+    font-size: 10pt !important;
+    line-height: 1.12 !important;
   }
 
   #printable-cv-area * {
@@ -2056,10 +2138,18 @@ html:not(.dark) .arcade-tab-btn[data-game="space"].active {
   }
 
   #printable-cv-area .cv-page > * + * {
-    margin-top: 1.5pt !important;
+    margin-top: 0.5pt !important;
+  }
+
+  #printable-cv-area [class*="space-y-"] > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.25pt !important;
   }
 
   #printable-cv-area .cv-page-1 {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    min-height: 273mm !important;
     break-after: page;
     page-break-after: always;
   }
@@ -2067,8 +2157,8 @@ html:not(.dark) .arcade-tab-btn[data-game="space"].active {
   #printable-cv-area .cv-page-2 {
     display: block !important;
     min-height: 0 !important;
-    break-before: page;
-    page-break-before: always;
+    break-before: auto;
+    page-break-before: auto;
     break-after: auto;
     page-break-after: auto;
   }
@@ -2078,7 +2168,15 @@ html:not(.dark) .arcade-tab-btn[data-game="space"].active {
   }
 
   #printable-cv-area .cv-page-2 > .avoid-break:not(.cv-print-page-header) + .avoid-break {
-    margin-top: 8mm !important;
+    margin-top: 0.25mm !important;
+  }
+
+  #printable-cv-area [class~="p-2.5"] {
+    padding: 2.5pt !important;
+  }
+
+  #printable-cv-area [class~="p-1.5"] {
+    padding: 1.5pt !important;
   }
 
   #printable-cv-area .cv-print-page-header {
@@ -2086,17 +2184,14 @@ html:not(.dark) .arcade-tab-btn[data-game="space"].active {
   }
 
   #printable-cv-area .html2pdf__page-break {
-    display: block !important;
-    break-before: page;
-    page-break-before: always;
-    height: 0;
-    margin: 0;
-    padding: 0;
-    border: none;
+    display: none !important;
   }
 
-  #printable-cv-area .flex-col.justify-between {
-    justify-content: flex-start !important;
+  #printable-cv-area .cv-page-2.flex-col.justify-between {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    min-height: 255mm !important;
   }
 
   #printable-cv-area .avoid-break {
@@ -2111,39 +2206,44 @@ html:not(.dark) .arcade-tab-btn[data-game="space"].active {
   }
 
   #printable-cv-area h4 {
-    margin: 3pt 0 2pt !important;
-    padding-bottom: 2pt !important;
+    margin: 2pt 0 1pt !important;
+    padding-bottom: 1pt !important;
     border-bottom: 1px solid #9ca3af !important;
     font-size: 10pt !important;
-    line-height: 1.2 !important;
+    line-height: 1.1 !important;
   }
 
   #printable-cv-area h5 {
-    font-size: 9pt !important;
-    line-height: 1.2 !important;
+    font-size: 10pt !important;
+    line-height: 1.1 !important;
   }
 
   #printable-cv-area p,
   #printable-cv-area li,
   #printable-cv-area span {
-    font-size: 9pt !important;
-    line-height: 1.25 !important;
+    font-size: 10pt !important;
+    line-height: 1.1 !important;
   }
 
   #printable-cv-area p {
-    margin-top: 1pt !important;
-    margin-bottom: 2pt !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  #printable-cv-area .cv-title-subtitle {
+    font-size: 10pt !important;
+    line-height: 1.15 !important;
   }
 
   #printable-cv-area ul {
-    margin: 2pt 0 4pt !important;
-    padding-left: 15pt !important;
+    margin: 0 !important;
+    padding-left: 9pt !important;
     list-style: disc !important;
   }
 
   #printable-cv-area li {
     display: list-item !important;
-    margin-bottom: 1pt !important;
+    margin-bottom: 0 !important;
   }
 
   #printable-cv-area .material-symbols-outlined {
